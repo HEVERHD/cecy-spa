@@ -27,7 +27,7 @@ const allNavItems = [
   { href: "/clients", label: "Clientes", Icon: Users, roles: ["ADMIN"] },
   { href: "/services", label: "Servicios", Icon: Scissors, roles: ["ADMIN"] },
   { href: "/gallery", label: "Galería", Icon: ImageIcon, roles: ["ADMIN"] },
-  { href: "/waitlist", label: "Lista espera", Icon: Clock, roles: ["ADMIN"] },
+  { href: "/waitlist", label: "Lista espera", Icon: Clock, roles: ["ADMIN", "BARBER"] },
   { href: "/blocked-slots", label: "Bloqueos", Icon: Ban, roles: ["ADMIN", "BARBER"] },
   { href: "/users", label: "Usuarios", Icon: KeyRound, roles: ["ADMIN"] },
   { href: "/profile", label: "Mi Perfil", Icon: UserCircle, roles: ["ADMIN", "BARBER"] },
@@ -38,7 +38,7 @@ const allMobileNavItems = [
   { href: "/dashboard", label: "Dashboard", Icon: LayoutDashboard, roles: ["ADMIN", "BARBER"] },
   { href: "/appointments", label: "Citas", Icon: CalendarDays, roles: ["ADMIN", "BARBER"] },
   { href: "/clients", label: "Clientes", Icon: Users, roles: ["ADMIN"] },
-  { href: "/waitlist", label: "Lista espera", Icon: Clock, roles: ["ADMIN"] },
+  { href: "/waitlist", label: "Lista espera", Icon: Clock, roles: ["ADMIN", "BARBER"] },
   { href: "/services", label: "Servicios", Icon: Scissors, roles: ["ADMIN"] },
   { href: "/blocked-slots", label: "Bloqueos", Icon: Ban, roles: ["BARBER"] },
 ]
