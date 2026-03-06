@@ -100,15 +100,21 @@ export async function GET(req: NextRequest) {
       return slotStart < aptEnd && slotEnd > aptStart
     })
 
-    // Check if slot is blocked (one-time or recurring)
+    // Check if slot is blocked (one-time or recurring) using full interval overlap:
+    // blocked if appointment [slotStart, slotEnd) overlaps block [blockStart, blockEnd)
+    const toMin = (t: string) => { const [h, m] = t.split(":").map(Number); return h * 60 + m }
     const isBlocked =
       blockedSlots.some((blocked) => {
         if (blocked.allDay) return true
-        return timeStr >= blocked.startTime && timeStr < blocked.endTime
+        const blockStart = toMin(blocked.startTime)
+        const blockEnd = toMin(blocked.endTime)
+        return slotStart < blockEnd && slotEnd > blockStart
       }) ||
       recurringBlocks.some((r) => {
         if (r.allDay) return true
-        return timeStr >= r.startTime && timeStr < r.endTime
+        const blockStart = toMin(r.startTime)
+        const blockEnd = toMin(r.endTime)
+        return slotStart < blockEnd && slotEnd > blockStart
       })
 
     // Mark past slots as unavailable when viewing today

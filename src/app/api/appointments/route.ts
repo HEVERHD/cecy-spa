@@ -182,8 +182,12 @@ export async function POST(req: NextRequest) {
   }
 
   // Check for blocked slots for THIS barber only (one-time + recurring)
+  // Use full interval overlap: blocked if [aptStart, aptEnd) overlaps [blockStart, blockEnd)
   const colTime = getColombiaTime(appointmentDate)
-  const timeStr = `${colTime.hours.toString().padStart(2, "0")}:${colTime.minutes.toString().padStart(2, "0")}`
+  const aptStart = colTime.hours * 60 + colTime.minutes
+  const aptEnd = aptStart + service.duration
+  const toMin = (t: string) => { const [h, m] = t.split(":").map(Number); return h * 60 + m }
+
   const [blockedSlots, recurringBlocks] = await Promise.all([
     prisma.blockedSlot.findMany({ where: { date: colombiaDateStr, barberId: body.barberId } }),
     prisma.recurringBlock.findMany({ where: { barberId: body.barberId } }),
@@ -192,11 +196,11 @@ export async function POST(req: NextRequest) {
   const isBlocked =
     blockedSlots.some((blocked) => {
       if (blocked.allDay) return true
-      return timeStr >= blocked.startTime && timeStr < blocked.endTime
+      return aptStart < toMin(blocked.endTime) && aptEnd > toMin(blocked.startTime)
     }) ||
     recurringBlocks.some((r) => {
       if (r.allDay) return true
-      return timeStr >= r.startTime && timeStr < r.endTime
+      return aptStart < toMin(r.endTime) && aptEnd > toMin(r.startTime)
     })
 
   if (isBlocked) {
