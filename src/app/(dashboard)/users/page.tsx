@@ -1,7 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useSession } from "next-auth/react"
 import { useToast } from "@/components/ui/toast"
+import { Trash2 } from "lucide-react"
 
 type User = {
   id: string
@@ -17,7 +19,11 @@ type User = {
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
+  const [confirmDelete, setConfirmDelete] = useState<User | null>(null)
+  const [deleting, setDeleting] = useState(false)
+  const { data: session } = useSession()
   const { toast } = useToast()
+  const myId = (session?.user as any)?.id
 
   useEffect(() => {
     fetchUsers()
@@ -51,8 +57,57 @@ export default function UsersPage() {
     }
   }
 
+  const deleteUser = async () => {
+    if (!confirmDelete) return
+    setDeleting(true)
+    const res = await fetch(`/api/users?id=${confirmDelete.id}`, { method: "DELETE" })
+    setDeleting(false)
+    setConfirmDelete(null)
+    if (res.ok) {
+      toast("Usuario eliminado")
+      fetchUsers()
+    } else {
+      const data = await res.json()
+      toast(data.error || "Error al eliminar", "error")
+    }
+  }
+
   return (
     <div>
+      {/* Confirm delete modal */}
+      {confirmDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="bg-[#111] border border-white/10 rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+            <div className="w-12 h-12 bg-red-900/30 rounded-full flex items-center justify-center mb-4">
+              <Trash2 size={20} className="text-red-400" />
+            </div>
+            <h3 className="text-lg font-bold text-white mb-1">Eliminar usuario</h3>
+            <p className="text-sm text-white/40 mb-1">
+              ¿Seguro que quieres eliminar a <span className="text-white font-medium">{confirmDelete.name || confirmDelete.email || "este usuario"}</span>?
+            </p>
+            <p className="text-xs text-red-400/80 mb-6">
+              Se eliminarán también todas sus citas ({confirmDelete._count.appointments}). Esta acción no se puede deshacer.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setConfirmDelete(null)}
+                disabled={deleting}
+                className="flex-1 px-4 py-2.5 rounded-xl border border-white/10 text-sm text-white/60 hover:bg-white/5 transition"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={deleteUser}
+                disabled={deleting}
+                className="flex-1 px-4 py-2.5 rounded-xl bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition disabled:opacity-50"
+              >
+                {deleting ? "Eliminando..." : "Eliminar"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-white">Usuarios</h1>
@@ -135,8 +190,8 @@ export default function UsersPage() {
                   </div>
                 </div>
 
-                {/* Role toggle */}
-                <div className="flex-shrink-0 flex gap-1.5">
+                {/* Actions */}
+                <div className="flex-shrink-0 flex items-center gap-2">
                   {user.role === "CLIENT" && (
                     <button
                       onClick={() => changeRole(user.id, "BARBER")}
@@ -146,14 +201,21 @@ export default function UsersPage() {
                     </button>
                   )}
                   {user.role === "BARBER" && (
-                    <>
-                      <button
-                        onClick={() => changeRole(user.id, "CLIENT")}
-                        className="px-3 py-2 text-xs font-medium rounded-lg bg-[#3d2020] text-white/50 hover:bg-[#4d2c2c] transition"
-                      >
-                        Quitar
-                      </button>
-                    </>
+                    <button
+                      onClick={() => changeRole(user.id, "CLIENT")}
+                      className="px-3 py-2 text-xs font-medium rounded-lg bg-[#3d2020] text-white/50 hover:bg-[#4d2c2c] transition"
+                    >
+                      Quitar
+                    </button>
+                  )}
+                  {user.id !== myId && (
+                    <button
+                      onClick={() => setConfirmDelete(user)}
+                      className="p-2 rounded-lg text-white/20 hover:text-red-400 hover:bg-red-900/20 transition"
+                      title="Eliminar usuario"
+                    >
+                      <Trash2 size={15} />
+                    </button>
                   )}
                 </div>
               </div>

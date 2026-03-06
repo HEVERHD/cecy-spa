@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
@@ -82,4 +82,39 @@ export async function PATCH(req: Request) {
   }
 
   return NextResponse.json(updated)
+}
+
+export async function DELETE(req: NextRequest) {
+  const session = await getServerSession(authOptions)
+  if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+
+  const currentUser = await prisma.user.findUnique({
+    where: { email: session.user?.email || "" },
+  })
+  if (!currentUser || currentUser.role !== "ADMIN") {
+    return NextResponse.json({ error: "Solo el administrador puede eliminar usuarios" }, { status: 403 })
+  }
+
+  const { searchParams } = new URL(req.url)
+  const userId = searchParams.get("id")
+  if (!userId) return NextResponse.json({ error: "id requerido" }, { status: 400 })
+
+  if (userId === currentUser.id) {
+    return NextResponse.json({ error: "No puedes eliminar tu propia cuenta" }, { status: 400 })
+  }
+
+  const target = await prisma.user.findUnique({ where: { id: userId } })
+  if (!target) return NextResponse.json({ error: "Usuario no encontrado" }, { status: 404 })
+
+  // Delete all related data before removing the user
+  await prisma.$transaction(async (tx) => {
+    await tx.appointment.deleteMany({ where: { userId } })
+    await tx.appointment.deleteMany({ where: { barberId: userId } })
+    await tx.blockedSlot.deleteMany({ where: { barberId: userId } })
+    await tx.recurringBlock.deleteMany({ where: { barberId: userId } })
+    await tx.barberSettings.deleteMany({ where: { userId } })
+    await tx.user.delete({ where: { id: userId } })
+  })
+
+  return NextResponse.json({ ok: true })
 }
