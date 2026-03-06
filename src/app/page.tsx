@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { prisma } from "@/lib/prisma"
 import { to12Hour } from "@/lib/utils"
-import LiveQueueBadge from "@/components/LiveQueueBadge"
+import HeroSection from "@/components/HeroSection"
 import {
   Clock,
   Calendar,
@@ -84,75 +84,7 @@ export default async function Home() {
       </nav>
 
       {/* ── Hero ── */}
-      <section className="relative pt-16 min-h-screen flex items-center">
-        {/* Deep glow effects */}
-        <div className="absolute inset-0 bg-[#0a0a0a]" />
-        <div className="absolute top-0 left-0 right-0 h-[70%] bg-gradient-to-b from-[#1a0808] to-transparent pointer-events-none" />
-        <div className="absolute top-[20%] left-[5%] w-[500px] h-[500px] bg-[#e84118]/8 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute top-[10%] right-[-5%] w-[400px] h-[400px] bg-[#e84118]/5 rounded-full blur-[120px] pointer-events-none" />
-
-        <div className="relative z-10 max-w-6xl mx-auto px-6 py-20 md:py-32 w-full">
-          {/* Location badge */}
-          <div className="inline-flex items-center gap-2 border border-[#e84118]/30 bg-[#e84118]/10 text-[#e84118] text-xs font-semibold px-4 py-2 rounded-full mb-10 tracking-widest uppercase">
-            <MapPin size={12} />
-            Vista Hermosa &nbsp;·&nbsp; Cartagena
-          </div>
-
-          {/* Main headline */}
-          <h1 className="text-6xl md:text-8xl lg:text-[110px] font-black leading-[0.9] tracking-tight mb-8">
-            Tu look
-            <br />
-            habla antes
-            <br />
-            <span className="relative">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e84118] via-[#f0532b] to-[#f0932b]">
-                que tú.
-              </span>
-              <span className="absolute -inset-4 bg-[#e84118]/15 blur-2xl rounded-full pointer-events-none" />
-            </span>
-          </h1>
-
-          <p className="text-lg md:text-xl text-white/40 mb-12 max-w-lg leading-relaxed font-light">
-            Barbería de confianza en Vista Hermosa. Agenda tu cita en segundos, sin llamadas, sin esperas.
-          </p>
-
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-16">
-            <Link
-              href="/booking"
-              className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#e84118] to-[#c0392b] text-white font-bold px-8 py-4 rounded-2xl text-base hover:shadow-2xl hover:shadow-[#e84118]/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
-            >
-              Agendar mi cita
-              <ArrowUpRight size={18} />
-            </Link>
-            <a
-              href="#servicios"
-              className="inline-flex items-center justify-center gap-2 border border-white/10 text-white/60 font-medium px-8 py-4 rounded-2xl text-base hover:bg-white/5 hover:text-white hover:border-white/20 transition-all"
-            >
-              Ver servicios
-            </a>
-          </div>
-
-          {/* Live queue */}
-          <div className="mb-20">
-            <LiveQueueBadge />
-          </div>
-
-          {/* Stats */}
-          <div className="flex gap-12 md:gap-20 pt-8 border-t border-white/5">
-            {[
-              { value: "5+", label: "Años de experiencia" },
-              { value: "1K+", label: "Clientes atendidos" },
-              { value: "4.9", label: "Calificación promedio" },
-            ].map((stat) => (
-              <div key={stat.label}>
-                <p className="text-3xl md:text-4xl font-black text-white">{stat.value}</p>
-                <p className="text-xs text-white/30 mt-1 font-medium">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HeroSection />
 
       {/* ── Services ── */}
       <section id="servicios" className="py-28 border-t border-white/5">
