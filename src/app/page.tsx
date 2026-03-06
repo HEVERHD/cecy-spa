@@ -84,7 +84,7 @@ export default async function Home() {
       </nav>
 
       {/* ── Hero ── */}
-      <HeroSection />
+      <HeroSection galleryImages={gallery.map((item) => item.imageUrl)} />
 
       {/* ── Services ── */}
       <section id="servicios" className="py-28 border-t border-white/5">
@@ -505,9 +505,35 @@ export default async function Home() {
                 </a>
               )}
             </div>
-            <p className="text-xs text-white/15">
-              &copy; {new Date().getFullYear()} Frailin Studio. Cartagena, Colombia.
-            </p>
+            <div className="flex items-center gap-4">
+              <a
+                href="https://www.instagram.com/frailinherrera"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/20 hover:text-[#e84118] transition"
+                aria-label="Instagram"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                  <circle cx="12" cy="12" r="4"/>
+                  <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+                </svg>
+              </a>
+              <a
+                href="https://www.facebook.com/frailin.herreragirado"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/20 hover:text-[#e84118] transition"
+                aria-label="Facebook"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                </svg>
+              </a>
+              <p className="text-xs text-white/15">
+                &copy; {new Date().getFullYear()} Frailin Studio. Cartagena, Colombia.
+              </p>
+            </div>
           </div>
         </div>
       </footer>

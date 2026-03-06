@@ -3,15 +3,44 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, ChevronDown } from "lucide-react"
 import LiveQueueBadge from "@/components/LiveQueueBadge"
 
-const FULL_TEXT = "que tú."
+const PHRASES = [
+  "que tú.",
+  "saliendo, es saliendo.",
+  "toco apretar.",
+  "se fue así.",
+  "Yiaaaaaaaa",
+]
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  galleryImages?: string[]
+}
+
+export default function HeroSection({ galleryImages = [] }: HeroSectionProps) {
+  const [phraseIndex, setPhraseIndex] = useState(0)
   const [displayed, setDisplayed] = useState("")
   const [isDeleting, setIsDeleting] = useState(false)
   const [started, setStarted] = useState(false)
+  const [currentPhoto, setCurrentPhoto] = useState(0)
+  const [scrolled, setScrolled] = useState(false)
+
+  // Hide scroll indicator on scroll
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60)
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
+  // Auto-advance photo slider
+  useEffect(() => {
+    if (galleryImages.length <= 1) return
+    const interval = setInterval(() => {
+      setCurrentPhoto((prev) => (prev + 1) % galleryImages.length)
+    }, 4000)
+    return () => clearInterval(interval)
+  }, [galleryImages.length])
 
   // Start typewriter after entrance animations finish (~1.8s)
   useEffect(() => {
@@ -22,14 +51,19 @@ export default function HeroSection() {
   useEffect(() => {
     if (!started) return
 
-    // Pause before deleting
-    if (!isDeleting && displayed === FULL_TEXT) {
+    const currentPhrase = PHRASES[phraseIndex]
+
+    // Finished typing — pause then start deleting
+    if (!isDeleting && displayed === currentPhrase) {
       const t = setTimeout(() => setIsDeleting(true), 2400)
       return () => clearTimeout(t)
     }
-    // Pause before retyping
+    // Finished deleting — advance to next phrase then retype
     if (isDeleting && displayed === "") {
-      const t = setTimeout(() => setIsDeleting(false), 550)
+      const t = setTimeout(() => {
+        setPhraseIndex((prev) => (prev + 1) % PHRASES.length)
+        setIsDeleting(false)
+      }, 500)
       return () => clearTimeout(t)
     }
 
@@ -38,11 +72,11 @@ export default function HeroSection() {
       setDisplayed(
         isDeleting
           ? displayed.slice(0, -1)
-          : FULL_TEXT.slice(0, displayed.length + 1)
+          : currentPhrase.slice(0, displayed.length + 1)
       )
     }, speed)
     return () => clearTimeout(t)
-  }, [displayed, isDeleting, started])
+  }, [displayed, isDeleting, started, phraseIndex])
 
   return (
     <>
@@ -114,6 +148,16 @@ export default function HeroSection() {
           from { width: 0; opacity: 0; }
           to   { width: 100%; opacity: 1; }
         }
+        @keyframes fs-scroll-dot {
+          0%, 100% { transform: translateY(0); opacity: 0.8; }
+          60%       { transform: translateY(10px); opacity: 0.15; }
+        }
+        @keyframes fs-kenburns {
+          0%   { transform: scale(1.05) translate(0%, 0%); }
+          50%  { transform: scale(1.18) translate(-2%, -1.5%); }
+          100% { transform: scale(1.05) translate(1%, 1%); }
+        }
+        .fs-kenburns { animation: fs-kenburns 8s ease-in-out infinite alternate; }
 
         .fs-float    { animation: fs-float 5.5s ease-in-out infinite; }
         .fs-glow     { animation: fs-glow-pulse 3s ease-in-out infinite; }
@@ -163,6 +207,22 @@ export default function HeroSection() {
         {/* Scan line */}
         <div className="fs-scan absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#e84118]/25 to-transparent pointer-events-none z-10" />
 
+        {/* Scroll indicator */}
+        <div
+          className={`absolute bottom-7 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-1.5 transition-opacity duration-700 pointer-events-none ${
+            scrolled ? "opacity-0" : "opacity-100"
+          }`}
+        >
+          <span className="text-[9px] text-white/20 tracking-[0.3em] font-bold uppercase">Scroll</span>
+          <div className="w-5 h-8 rounded-full border border-white/15 flex items-start justify-center pt-1">
+            <div
+              className="w-[3px] h-[6px] rounded-full bg-[#e84118]/60"
+              style={{ animation: "fs-scroll-dot 1.8s ease-in-out infinite" }}
+            />
+          </div>
+          <ChevronDown size={12} className="text-white/15" />
+        </div>
+
         {/* Top / bottom fades */}
         <div className="absolute top-0 left-0 right-0 h-28 bg-gradient-to-b from-[#0a0a0a] to-transparent pointer-events-none z-10" />
         <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#0a0a0a] to-transparent pointer-events-none z-10" />
@@ -176,6 +236,41 @@ export default function HeroSection() {
               <div
                 className="fs-logo-in fs-hud relative flex items-center justify-center mx-auto w-[240px] h-[240px] lg:w-[400px] lg:h-[400px]"
               >
+
+                {/* ── Photo slider (behind everything) ── */}
+                {galleryImages.length > 0 && (
+                  <div className="absolute rounded-full overflow-hidden z-0" style={{ inset: "14%" }}>
+                    {galleryImages.slice(0, 8).map((url, i) => (
+                      <div
+                        key={i}
+                        className="absolute inset-0"
+                        style={{
+                          opacity: i === currentPhoto ? 1 : 0,
+                          transition: "opacity 1.4s ease-in-out",
+                        }}
+                      >
+                        <Image
+                          src={url}
+                          alt=""
+                          fill
+                          className={`object-cover ${i === currentPhoto ? "fs-kenburns" : ""}`}
+                          style={{ opacity: 0.55, filter: "saturate(0.85) brightness(0.9)" }}
+                          sizes="200px"
+                        />
+                      </div>
+                    ))}
+                    {/* Vignette suave — solo oscurece los bordes, centro más abierto */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          "radial-gradient(circle, rgba(10,10,10,0.2) 0%, rgba(10,10,10,0.05) 45%, rgba(10,10,10,0.55) 100%)",
+                      }}
+                    />
+                    {/* Tinte rojo de marca */}
+                    <div className="absolute inset-0 bg-[#e84118]/10" />
+                  </div>
+                )}
 
                 {/* Same HUD scaled via percentage-based insets */}
 
@@ -248,7 +343,7 @@ export default function HeroSection() {
             </div>
 
             {/* ─── Text — bottom on mobile, left on desktop ─── */}
-            <div className="order-2 lg:order-1">
+            <div className="order-2 lg:order-1 text-center lg:text-left">
 
               {/* Location badge */}
               <div className="fs-badge inline-flex items-center gap-2.5 border border-[#e84118]/25 bg-[#e84118]/8 text-[#e84118] text-[11px] font-bold px-4 py-2 rounded-full mb-6 lg:mb-8 tracking-[0.2em] uppercase">
@@ -268,37 +363,37 @@ export default function HeroSection() {
               </h1>
 
               {/* Thin red divider */}
-              <div className="fs-divline h-px bg-gradient-to-r from-[#e84118]/50 via-[#e84118]/20 to-transparent mb-6 lg:mb-8" />
+              <div className="fs-divline h-px bg-gradient-to-r from-transparent via-[#e84118]/40 to-transparent mb-6 lg:mb-8" />
 
               {/* Subtext */}
-              <p className="fs-sub text-base md:text-lg text-white/35 mb-8 lg:mb-10 max-w-sm leading-relaxed font-light">
+              <p className="fs-sub text-base md:text-lg text-white/35 mb-8 lg:mb-10 max-w-sm leading-relaxed font-light mx-auto lg:mx-0">
                 Barbería de confianza en Vista Hermosa. Agenda tu cita en segundos, sin llamadas, sin esperas.
               </p>
 
               {/* CTAs */}
-              <div className="fs-cta flex flex-col sm:flex-row gap-3 mb-10 lg:mb-12">
+              <div className="fs-cta flex flex-col sm:flex-row items-center lg:items-start gap-3 mb-10 lg:mb-12">
                 <Link
                   href="/booking"
-                  className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#e84118] to-[#c0392b] text-white font-bold px-8 py-4 rounded-2xl text-base hover:shadow-2xl hover:shadow-[#e84118]/40 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#e84118] to-[#c0392b] text-white font-bold px-8 py-4 rounded-2xl text-base hover:shadow-2xl hover:shadow-[#e84118]/40 transition-all hover:scale-[1.02] active:scale-[0.98]"
                 >
                   Agendar mi cita
                   <ArrowUpRight size={18} />
                 </Link>
                 <a
                   href="#servicios"
-                  className="inline-flex items-center justify-center gap-2 border border-white/10 text-white/50 font-medium px-8 py-4 rounded-2xl text-base hover:bg-white/5 hover:text-white hover:border-[#e84118]/30 transition-all"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-white/10 text-white/50 font-medium px-8 py-4 rounded-2xl text-base hover:bg-white/5 hover:text-white hover:border-[#e84118]/30 transition-all"
                 >
                   Ver servicios
                 </a>
               </div>
 
               {/* Live queue badge */}
-              <div className="fs-queue mb-10 lg:mb-12">
+              <div className="fs-queue mb-10 lg:mb-12 flex justify-center lg:justify-start">
                 <LiveQueueBadge />
               </div>
 
               {/* Stats */}
-              <div className="fs-stats flex gap-8 md:gap-14 pt-6 border-t border-white/5">
+              <div className="fs-stats flex justify-center lg:justify-start gap-8 md:gap-14 pt-6 border-t border-white/5">
                 {[
                   { value: "5+",  label: "Años de experiencia" },
                   { value: "1K+", label: "Clientes atendidos" },

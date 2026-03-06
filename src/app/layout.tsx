@@ -14,9 +14,11 @@ export const viewport: Viewport = {
   themeColor: "#e84118",
 }
 
+const BASE_URL = "https://frailinstudio.com"
+
 export const metadata: Metadata = {
-  title: "Frailin Studio - Barberia Premium",
-  description: "Agenda tu cita en Frailin Studio. Reserva en segundos, sin llamadas, sin esperas.",
+  title: "Frailin Studio — Barbería en Vista Hermosa, Cartagena",
+  description: "Barbería de confianza en Vista Hermosa, Cartagena. Agenda tu cita en segundos, confirmación instantánea por WhatsApp.",
   manifest: "/manifest.json",
   icons: {
     icon: "/logo.png",
@@ -29,9 +31,26 @@ export const metadata: Metadata = {
     title: "Frailin Studio",
   },
   openGraph: {
-    title: "Frailin Studio - Barberia Premium",
-    description: "Agenda tu cita en Frailin Studio. Reserva en segundos.",
+    title: "Frailin Studio — Tu look habla antes que tú.",
+    description: "Barbería en Vista Hermosa, Cartagena. Agenda tu cita en segundos, sin llamadas, sin esperas.",
+    url: BASE_URL,
+    siteName: "Frailin Studio",
+    locale: "es_CO",
     type: "website",
+    images: [
+      {
+        url: `${BASE_URL}/logo2.png`,
+        width: 512,
+        height: 512,
+        alt: "Frailin Studio — Barbería en Vista Hermosa, Cartagena",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "Frailin Studio — Tu look habla antes que tú.",
+    description: "Barbería en Vista Hermosa, Cartagena. Agenda tu cita en segundos.",
+    images: [`${BASE_URL}/logo2.png`],
   },
 }
 
