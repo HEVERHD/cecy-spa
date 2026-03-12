@@ -105,6 +105,15 @@ export default function BookingPage() {
     }
   }, [step, services.length])
 
+  // Auto-select today when entering the datetime step (so slots load immediately)
+  useEffect(() => {
+    if (step === "datetime" && !selectedDate) {
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      setSelectedDate(toLocalDateStr(today))
+    }
+  }, [step, selectedDate])
+
   useEffect(() => {
     if (selectedDate && selectedService && selectedBarber) {
       setLoading(true)

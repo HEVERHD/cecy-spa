@@ -9,11 +9,29 @@ import { autoScheduleFromWaitlist } from "@/lib/waitlist"
 
 export const dynamic = "force-dynamic"
 
+/** Fire-and-forget: mark as COMPLETED any appointment whose end time has passed */
+async function autoCompletePastAppointments() {
+  const now = new Date()
+  const past = await prisma.appointment.findMany({
+    where: { status: { in: ["PENDING", "CONFIRMED"] }, date: { lt: now } },
+    select: { id: true, date: true, service: { select: { duration: true } } },
+  })
+  const ids = past
+    .filter((a) => new Date(a.date.getTime() + a.service.duration * 60_000) < now)
+    .map((a) => a.id)
+  if (ids.length > 0) {
+    await prisma.appointment.updateMany({ where: { id: { in: ids } }, data: { status: "COMPLETED" } })
+  }
+}
+
 export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions)
   if (!session) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 })
   }
+
+  // Run in background — doesn't block the response
+  autoCompletePastAppointments().catch(() => {})
 
   const role = (session.user as any).role
   const userId = (session.user as any).id

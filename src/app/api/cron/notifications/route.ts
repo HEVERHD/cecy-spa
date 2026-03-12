@@ -24,10 +24,32 @@ export async function GET(req: NextRequest) {
     console.log(`[Cron] Auto-expired ${expired.count} waitlist entries`)
   }
 
-  const windowStart = new Date(now.getTime() + 40 * 60 * 1000)
-  const windowEnd = new Date(now.getTime() + 80 * 60 * 1000)
+  // Auto-complete appointments whose end time has already passed
+  const pastPending = await prisma.appointment.findMany({
+    where: {
+      status: { in: ["PENDING", "CONFIRMED"] },
+      date: { lt: now },
+    },
+    select: { id: true, date: true, service: { select: { duration: true } } },
+  })
+  const toComplete = pastPending.filter((a) => {
+    const endTime = new Date(a.date.getTime() + a.service.duration * 60 * 1000)
+    return endTime < now
+  })
+  if (toComplete.length > 0) {
+    await prisma.appointment.updateMany({
+      where: { id: { in: toComplete.map((a) => a.id) } },
+      data: { status: "COMPLETED" },
+    })
+    console.log(`[Cron] Auto-completed ${toComplete.length} past appointments`)
+  }
 
-  // Find appointments in the next 40-80 min window that haven't been notified
+  // Window: 55–65 min from now (centered on exactly 1 hour)
+  // Requires cron to run every 5 min to catch all appointments reliably
+  const windowStart = new Date(now.getTime() + 55 * 60 * 1000)
+  const windowEnd = new Date(now.getTime() + 65 * 60 * 1000)
+
+  // Find appointments in the next 55-65 min window that haven't been notified
   const appointments = await prisma.appointment.findMany({
     where: {
       date: { gte: windowStart, lte: windowEnd },
