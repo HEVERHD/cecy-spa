@@ -19,11 +19,13 @@ import {
   LogOut,
   Bell,
   BellOff,
+  ActivitySquare,
 } from "lucide-react"
 
 const allNavItems = [
   { href: "/dashboard", label: "Dashboard", Icon: LayoutDashboard, roles: ["ADMIN", "BARBER"] },
   { href: "/appointments", label: "Citas", Icon: CalendarDays, roles: ["ADMIN", "BARBER"] },
+  { href: "/activity", label: "Historial", Icon: ActivitySquare, roles: ["ADMIN", "BARBER"] },
   { href: "/clients", label: "Clientes", Icon: Users, roles: ["ADMIN"] },
   { href: "/services", label: "Servicios", Icon: Scissors, roles: ["ADMIN"] },
   { href: "/gallery", label: "Galería", Icon: ImageIcon, roles: ["ADMIN", "BARBER"] },
@@ -37,6 +39,7 @@ const allNavItems = [
 const allMobileNavItems = [
   { href: "/dashboard", label: "Dashboard", Icon: LayoutDashboard, roles: ["ADMIN", "BARBER"] },
   { href: "/appointments", label: "Citas", Icon: CalendarDays, roles: ["ADMIN", "BARBER"] },
+  { href: "/activity", label: "Historial", Icon: ActivitySquare, roles: ["ADMIN", "BARBER"] },
   { href: "/clients", label: "Clientes", Icon: Users, roles: ["ADMIN"] },
   { href: "/gallery", label: "Galería", Icon: ImageIcon, roles: ["ADMIN", "BARBER"] },
   { href: "/waitlist", label: "Lista espera", Icon: Clock, roles: ["ADMIN", "BARBER"] },
