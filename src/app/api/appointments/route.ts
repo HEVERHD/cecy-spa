@@ -417,8 +417,16 @@ export async function PATCH(req: NextRequest) {
       ) {
         const settings = await prisma.barberSettings.findFirst({ select: { shopName: true } })
         const shopName = settings?.shopName || "Frailin Studio"
-        const msg = buildLoyaltyMessage(clientUser.name?.split(" ")[0] || "Cliente", shopName)
-        sendWhatsAppMessage(clientUser.phone, msg).catch(() => {})
+        const loyaltyTemplateSid = process.env.TWILIO_TEMPLATE_LOYALTY
+        const clientName = clientUser.name?.split(" ")[0] || "Cliente"
+        if (loyaltyTemplateSid) {
+          sendWhatsAppTemplate(clientUser.phone, loyaltyTemplateSid, {
+            "1": clientName,
+            "2": shopName,
+          }).catch(() => {})
+        } else {
+          sendWhatsAppMessage(clientUser.phone, buildLoyaltyMessage(clientName, shopName)).catch(() => {})
+        }
         await prisma.user.update({
           where: { id: appointment.userId },
           data: { loyaltyNotifiedMonth: currentMonth },

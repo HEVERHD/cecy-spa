@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { sendWhatsAppMessage, buildReengagementMessage } from "@/lib/twilio"
+import { sendWhatsAppMessage, sendWhatsAppTemplate, buildReengagementMessage } from "@/lib/twilio"
 
 export const dynamic = "force-dynamic"
 
@@ -43,6 +43,8 @@ export async function GET(req: NextRequest) {
   const settings = await prisma.barberSettings.findFirst({ select: { shopName: true } })
   const shopName = settings?.shopName || "Frailin Studio"
 
+  const reengagementTemplateSid = process.env.TWILIO_TEMPLATE_REENGAGEMENT
+
   let sent = 0
   const toNotify: string[] = []
 
@@ -57,13 +59,17 @@ export async function GET(req: NextRequest) {
     toNotify.push(client.id)
 
     if (client.phone) {
+      const clientName = client.name?.split(" ")[0] || "Cliente"
       try {
-        const msg = buildReengagementMessage(
-          client.name?.split(" ")[0] || "Cliente",
-          shopName,
-          bookingLink
-        )
-        await sendWhatsAppMessage(client.phone, msg)
+        if (reengagementTemplateSid) {
+          await sendWhatsAppTemplate(client.phone, reengagementTemplateSid, {
+            "1": clientName,
+            "2": shopName,
+            "3": bookingLink,
+          })
+        } else {
+          await sendWhatsAppMessage(client.phone, buildReengagementMessage(clientName, shopName, bookingLink))
+        }
         sent++
       } catch (err) {
         console.error(`[Reengagement] Error sending to ${client.phone}:`, err)
