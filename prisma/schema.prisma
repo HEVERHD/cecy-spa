@@ -61,6 +61,7 @@ model User {
   sessions            Session[]
   loyaltyNotifiedMonth String?            // "YYYY-MM" — last month a loyalty discount was sent
   reengagementSentAt   DateTime?          // last time a re-engagement WhatsApp was sent
+  blocked              Boolean            @default(false) // barber can block client from booking
   createdAt            DateTime           @default(now())
 }
 

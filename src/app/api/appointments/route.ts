@@ -112,6 +112,14 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // Check if client is blocked
+  if ((user as any).blocked) {
+    return NextResponse.json(
+      { error: "No es posible agendar una cita en este momento. Contáctanos para más información." },
+      { status: 403 }
+    )
+  }
+
   const service = await prisma.service.findUnique({ where: { id: body.serviceId } })
   if (!service) {
     return NextResponse.json({ error: "Servicio no encontrado" }, { status: 404 })

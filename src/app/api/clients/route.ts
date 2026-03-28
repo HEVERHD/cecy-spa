@@ -91,6 +91,7 @@ export async function GET(req: NextRequest) {
       name: client.name,
       phone: client.phone,
       email: client.email,
+      blocked: client.blocked,
       totalVisits: completed.length,
       totalSpent: completed.reduce((sum, a) => sum + a.service.price, 0),
       lastVisit: completed.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0]?.date || null,
@@ -100,6 +101,26 @@ export async function GET(req: NextRequest) {
   })
 
   return NextResponse.json(clientsWithStats)
+}
+
+export async function PATCH(req: NextRequest) {
+  const session = await getServerSession(authOptions)
+  if (!session) {
+    return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+  }
+
+  const body = await req.json()
+  if (!body.id) {
+    return NextResponse.json({ error: "id requerido" }, { status: 400 })
+  }
+
+  const updated = await prisma.user.update({
+    where: { id: body.id },
+    data: { blocked: body.blocked },
+    select: { id: true, blocked: true },
+  })
+
+  return NextResponse.json(updated)
 }
 
 export async function POST(req: NextRequest) {

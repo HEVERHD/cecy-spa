@@ -8,6 +8,7 @@ type Client = {
   name: string | null
   phone: string | null
   email: string | null
+  blocked: boolean
   totalVisits: number
   totalSpent: number
   lastVisit: string | null
@@ -17,6 +18,7 @@ type Client = {
 
 type ClientDetail = {
   id: string
+  blocked: boolean
   name: string | null
   phone: string | null
   email: string | null
@@ -111,6 +113,20 @@ export default function ClientsPage() {
     setLoadingDetail(false)
   }
 
+  const toggleBlock = async (id: string, currentlyBlocked: boolean) => {
+    const res = await fetch("/api/clients", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, blocked: !currentlyBlocked }),
+    })
+    if (res.ok) {
+      const action = currentlyBlocked ? "desbloqueado" : "bloqueado"
+      toast(`Cliente ${action}`)
+      setSelectedClient((prev) => prev ? { ...prev, blocked: !currentlyBlocked } : prev)
+      setClients((prev) => prev.map((c) => c.id === id ? { ...c, blocked: !currentlyBlocked } : c))
+    }
+  }
+
   const filteredClients = clients.filter((c) => {
     const q = search.toLowerCase()
     return (
@@ -141,25 +157,42 @@ export default function ClientsPage() {
         </button>
 
         {/* Client header */}
-        <div className="bg-[#2d1515] rounded-xl p-6 border border-[#3d2020] mb-6">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-[#e84118]/20 rounded-full flex items-center justify-center text-2xl font-bold text-[#e84118]">
-              {(selectedClient.name || "?")[0].toUpperCase()}
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-white">{selectedClient.name || "Sin nombre"}</h1>
-              <div className="flex gap-4 mt-1">
-                {selectedClient.phone && (
-                  <span className="text-sm text-white/40">{selectedClient.phone}</span>
-                )}
-                {selectedClient.email && (
-                  <span className="text-sm text-white/40">{selectedClient.email}</span>
-                )}
+        <div className={`rounded-xl p-6 border mb-6 ${selectedClient.blocked ? "bg-[#2d1010] border-red-900/50" : "bg-[#2d1515] border-[#3d2020]"}`}>
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-[#e84118]/20 rounded-full flex items-center justify-center text-2xl font-bold text-[#e84118] flex-shrink-0">
+                {(selectedClient.name || "?")[0].toUpperCase()}
               </div>
-              <p className="text-xs text-white/30 mt-1">
-                Cliente desde {formatDate(selectedClient.createdAt)}
-              </p>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h1 className="text-2xl font-bold text-white">{selectedClient.name || "Sin nombre"}</h1>
+                  {selectedClient.blocked && (
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-red-900/50 text-red-400 border border-red-900">Bloqueado</span>
+                  )}
+                </div>
+                <div className="flex gap-4 mt-1">
+                  {selectedClient.phone && (
+                    <span className="text-sm text-white/40">{selectedClient.phone}</span>
+                  )}
+                  {selectedClient.email && (
+                    <span className="text-sm text-white/40">{selectedClient.email}</span>
+                  )}
+                </div>
+                <p className="text-xs text-white/30 mt-1">
+                  Cliente desde {formatDate(selectedClient.createdAt)}
+                </p>
+              </div>
             </div>
+            <button
+              onClick={() => toggleBlock(selectedClient.id, selectedClient.blocked)}
+              className={`flex-shrink-0 text-xs px-3 py-2 rounded-lg transition font-medium ${
+                selectedClient.blocked
+                  ? "bg-green-900/30 text-green-400 hover:bg-green-900/50"
+                  : "bg-red-900/20 text-red-400 hover:bg-red-900/40"
+              }`}
+            >
+              {selectedClient.blocked ? "Desbloquear" : "Bloquear cliente"}
+            </button>
           </div>
         </div>
 
@@ -328,7 +361,7 @@ export default function ClientsPage() {
             <div
               key={client.id}
               onClick={() => viewClient(client.id)}
-              className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020] cursor-pointer hover:border-[#e84118]/30 transition"
+              className={`rounded-xl p-4 border cursor-pointer transition ${client.blocked ? "bg-[#2d1010] border-red-900/40 hover:border-red-900/60" : "bg-[#2d1515] border-[#3d2020] hover:border-[#e84118]/30"}`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -336,7 +369,10 @@ export default function ClientsPage() {
                     {(client.name || "?")[0].toUpperCase()}
                   </div>
                   <div>
-                    <p className="font-medium text-white">{client.name || "Sin nombre"}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="font-medium text-white">{client.name || "Sin nombre"}</p>
+                      {client.blocked && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-red-900/50 text-red-400">Bloqueado</span>}
+                    </div>
                     <p className="text-xs text-white/40">
                       {client.phone || client.email || "Sin contacto"}
                     </p>
