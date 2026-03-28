@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import { sendWhatsAppMessage, sendWhatsAppTemplate, buildConfirmationMessage, buildBarberNotification, buildStatusConfirmedMessage } from "@/lib/twilio"
+import { sendWhatsAppMessage, sendWhatsAppTemplate, buildConfirmationMessage, buildBarberNotification, buildStatusConfirmedMessage, buildLoyaltyMessage } from "@/lib/twilio"
 import { formatDate, formatTime, formatCurrency, parseColombia, getColombiaTime, getColombiaDateStr, getColombiaDayOfWeek, to12Hour } from "@/lib/utils"
 import { sendPushToBarber } from "@/lib/push"
 import { autoScheduleFromWaitlist } from "@/lib/waitlist"
@@ -370,7 +370,7 @@ export async function PATCH(req: NextRequest) {
     } catch {}
   }
 
-  // When completing, notify the next client in queue
+  // When completing, notify the next client in queue + check loyalty
   if (body.status === "COMPLETED") {
     try {
       const dateStr = getColombiaDateStr(new Date(appointment.date))
@@ -389,6 +389,40 @@ export async function PATCH(req: NextRequest) {
         const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "http://localhost:3000"
         const msg = `¡Hola ${nextApt.user.name?.split(" ")[0] || ""}! 💈 Es casi tu turno en Frailin Studio. Tu cita de *${nextApt.service.name}* está próxima. Ve preparándote. 🙌\n\n📍 ${baseUrl}/cola`
         sendWhatsAppMessage(nextApt.user.phone, msg).catch(() => {})
+      }
+    } catch {}
+
+    // Loyalty: if client has 7 completed appointments this month, send discount WhatsApp
+    try {
+      const now = new Date()
+      const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
+      const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59)
+
+      const [completedThisMonth, clientUser] = await Promise.all([
+        prisma.appointment.count({
+          where: {
+            userId: appointment.userId,
+            status: "COMPLETED",
+            date: { gte: monthStart, lte: monthEnd },
+          },
+        }),
+        prisma.user.findUnique({ where: { id: appointment.userId }, select: { phone: true, name: true, loyaltyNotifiedMonth: true } }),
+      ])
+
+      if (
+        completedThisMonth >= 7 &&
+        clientUser?.phone &&
+        clientUser.loyaltyNotifiedMonth !== currentMonth
+      ) {
+        const settings = await prisma.barberSettings.findFirst({ select: { shopName: true } })
+        const shopName = settings?.shopName || "Frailin Studio"
+        const msg = buildLoyaltyMessage(clientUser.name?.split(" ")[0] || "Cliente", shopName)
+        sendWhatsAppMessage(clientUser.phone, msg).catch(() => {})
+        await prisma.user.update({
+          where: { id: appointment.userId },
+          data: { loyaltyNotifiedMonth: currentMonth },
+        })
       }
     } catch {}
   }

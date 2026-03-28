@@ -120,6 +120,21 @@ export function buildReminderMessage(
   return `⏰ *Recordatorio de Cita*\n\nHola ${clientName}, tu cita es en 1 hora:\n\n📋 Servicio: ${serviceName}\n🕐 Hora: ${time}\n💈 ${shopName}\n\n¡Te esperamos!`
 }
 
+export function buildLoyaltyMessage(
+  clientName: string,
+  shopName: string
+): string {
+  return `🎉 *¡Felicidades ${clientName}!*\n\nAlcanzaste *7 cortes* este mes en ${shopName}. 💈\n\n¡Has ganado un *descuento especial* en tu próxima cita! Menciónalo al llegar y te aplicamos el beneficio.\n\n¡Gracias por tu fidelidad!`
+}
+
+export function buildReengagementMessage(
+  clientName: string,
+  shopName: string,
+  bookingLink: string
+): string {
+  return `¡Hola ${clientName}! 👋 Te echamos de menos en ${shopName}.\n\nHace más de 10 días que no tienes una cita agendada. ¿Cuándo te vemos? 💈\n\n🔗 Reserva aquí: ${bookingLink}`
+}
+
 export function buildReminder24hMessage(
   clientName: string,
   serviceName: string,

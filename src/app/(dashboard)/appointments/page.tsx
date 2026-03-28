@@ -803,6 +803,14 @@ export default function AppointmentsPage() {
                   </button>
                 </>
               )}
+              {actionApt.status === "COMPLETED" && (
+                <button
+                  onClick={() => { updateStatus(actionApt.id, "NO_SHOW"); setActionApt(null) }}
+                  className="w-full py-3 rounded-xl bg-[#2d1515] text-white/40 font-medium text-sm hover:bg-[#3d2020] transition border border-[#3d2020]"
+                >
+                  No asistió (corregir)
+                </button>
+              )}
               <button
                 onClick={() => setActionApt(null)}
                 className="w-full py-3 rounded-xl text-white/30 text-sm hover:text-white/50 transition"
@@ -1251,7 +1259,7 @@ export default function AppointmentsPage() {
                     </div>
 
                     {/* Actions */}
-                    {(apt.status === "PENDING" || apt.status === "CONFIRMED") && (
+                    {(apt.status === "PENDING" || apt.status === "CONFIRMED" || apt.status === "COMPLETED") && (
                       <div className="flex gap-2 mt-3 pt-3 border-t border-[#3d2020]">
                         {apt.status === "PENDING" && (
                           <button
@@ -1261,24 +1269,28 @@ export default function AppointmentsPage() {
                             Confirmar
                           </button>
                         )}
-                        <button
-                          onClick={() => setCompletionApt(apt)}
-                          className="text-xs px-3 py-1.5 rounded-lg bg-green-900/30 text-green-400 hover:bg-green-900/50 transition"
-                        >
-                          Completar
-                        </button>
+                        {(apt.status === "PENDING" || apt.status === "CONFIRMED") && (
+                          <button
+                            onClick={() => setCompletionApt(apt)}
+                            className="text-xs px-3 py-1.5 rounded-lg bg-green-900/30 text-green-400 hover:bg-green-900/50 transition"
+                          >
+                            Completar
+                          </button>
+                        )}
                         <button
                           onClick={() => updateStatus(apt.id, "NO_SHOW")}
                           className="text-xs px-3 py-1.5 rounded-lg bg-[#3d2020] text-white/50 hover:bg-[#4d2c2c] transition"
                         >
-                          No asistio
+                          {apt.status === "COMPLETED" ? "No asistió (corregir)" : "No asistio"}
                         </button>
-                        <button
-                          onClick={() => updateStatus(apt.id, "CANCELLED")}
-                          className="text-xs px-3 py-1.5 rounded-lg bg-red-900/30 text-red-400 hover:bg-red-900/50 transition"
-                        >
-                          Cancelar
-                        </button>
+                        {(apt.status === "PENDING" || apt.status === "CONFIRMED") && (
+                          <button
+                            onClick={() => updateStatus(apt.id, "CANCELLED")}
+                            className="text-xs px-3 py-1.5 rounded-lg bg-red-900/30 text-red-400 hover:bg-red-900/50 transition"
+                          >
+                            Cancelar
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
