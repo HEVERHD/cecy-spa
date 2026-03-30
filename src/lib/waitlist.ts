@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { sendWhatsAppMessage, sendWhatsAppTemplate } from "@/lib/twilio"
 import { sendPushToBarber } from "@/lib/push"
-import { formatDate, formatTime, getColombiaDateStr } from "@/lib/utils"
+import { formatDate, formatTime, formatCurrency, getColombiaDateStr } from "@/lib/utils"
 
 /**
  * When an appointment is cancelled, finds the first WAITING person in the
@@ -115,16 +115,30 @@ export async function autoScheduleFromWaitlist(
   // Notify the barber via WhatsApp + push
   const barberPhone = appointment.barber.barberSettings?.phone || appointment.barber.phone
   if (barberPhone) {
-    const barberMsg =
-      `📋 *Lista de espera — Auto-agendado*\n\n` +
-      `👤 Cliente: ${entry.name}\n` +
-      `📋 Servicio: ${appointment.service.name}\n` +
-      `📅 Fecha: ${formatDate(appointment.date)}\n` +
-      `🕐 Hora: ${formatTime(appointment.date)}\n\n` +
-      `Se liberó un cupo y se agendó automáticamente desde la lista de espera.`
-    sendWhatsAppMessage(barberPhone, barberMsg).catch((err) =>
-      console.error("[Waitlist] Error sending WhatsApp to barber:", err)
-    )
+    const barberTemplateSid = process.env.TWILIO_TEMPLATE_BARBER
+    if (barberTemplateSid) {
+      sendWhatsAppTemplate(barberPhone, barberTemplateSid, {
+        "1": entry.name,
+        "2": appointment.service.name,
+        "3": formatDate(appointment.date),
+        "4": formatTime(appointment.date),
+        "5": formatCurrency(appointment.service.price),
+        "6": appointmentLink,
+      }).catch((err) =>
+        console.error("[Waitlist] Error sending WhatsApp template to barber:", err)
+      )
+    } else {
+      const barberMsg =
+        `📋 *Lista de espera — Auto-agendado*\n\n` +
+        `👤 Cliente: ${entry.name}\n` +
+        `📋 Servicio: ${appointment.service.name}\n` +
+        `📅 Fecha: ${formatDate(appointment.date)}\n` +
+        `🕐 Hora: ${formatTime(appointment.date)}\n\n` +
+        `Se liberó un cupo y se agendó automáticamente desde la lista de espera.`
+      sendWhatsAppMessage(barberPhone, barberMsg).catch((err) =>
+        console.error("[Waitlist] Error sending WhatsApp to barber:", err)
+      )
+    }
   }
 
   sendPushToBarber(barberId, {
