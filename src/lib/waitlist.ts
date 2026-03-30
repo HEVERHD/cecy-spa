@@ -62,7 +62,8 @@ export async function autoScheduleFromWaitlist(
       barber: {
         select: {
           id: true,
-          barberSettings: { select: { shopName: true } },
+          phone: true,
+          barberSettings: { select: { shopName: true, phone: true } },
         },
       },
     },
@@ -80,22 +81,52 @@ export async function autoScheduleFromWaitlist(
   const shopName = appointment.barber.barberSettings?.shopName || "Frailin Studio"
   const appointmentLink = baseUrl ? `${baseUrl}/cita/${appointment.token}` : ""
 
-  // Notify the client via WhatsApp
-  const clientMsg =
-    `🎉 *¡Buenas noticias, ${entry.name}!*\n\n` +
-    `Se liberó un cupo y te agendamos automáticamente:\n\n` +
-    `📋 Servicio: ${appointment.service.name}\n` +
-    `📅 Fecha: ${formatDate(appointment.date)}\n` +
-    `🕐 Hora: ${formatTime(appointment.date)}\n` +
-    `💈 ${shopName}` +
-    (appointmentLink ? `\n\n🔗 Ver o cancelar tu cita:\n${appointmentLink}` : "") +
-    `\n\n¡Te esperamos!`
+  // Notify the client via WhatsApp (must use template for business-initiated messages)
+  const confirmTemplateSid = process.env.TWILIO_TEMPLATE_WAITLIST_CONFIRM || process.env.TWILIO_TEMPLATE_WAITLIST
+  if (confirmTemplateSid) {
+    const [y, m, d] = dateStr.split("-")
+    const dateLabel = new Date(+y, +m - 1, +d).toLocaleDateString("es-CO", {
+      weekday: "long", day: "numeric", month: "long",
+    })
+    sendWhatsAppTemplate(entry.phone, confirmTemplateSid, {
+      "1": entry.name,
+      "2": dateLabel,
+      "3": appointment.service.name,
+      "4": appointmentLink || (baseUrl ? `${baseUrl}/booking` : ""),
+    }).catch((err) =>
+      console.error("[Waitlist] Error sending WhatsApp template to client:", err)
+    )
+  } else {
+    // Free-form fallback — only works if client messaged within last 24h
+    const clientMsg =
+      `🎉 *¡Buenas noticias, ${entry.name}!*\n\n` +
+      `Se liberó un cupo y te agendamos automáticamente:\n\n` +
+      `📋 Servicio: ${appointment.service.name}\n` +
+      `📅 Fecha: ${formatDate(appointment.date)}\n` +
+      `🕐 Hora: ${formatTime(appointment.date)}\n` +
+      `💈 ${shopName}` +
+      (appointmentLink ? `\n\n🔗 Ver o cancelar tu cita:\n${appointmentLink}` : "") +
+      `\n\n¡Te esperamos!`
+    sendWhatsAppMessage(entry.phone, clientMsg).catch((err) =>
+      console.error("[Waitlist] Error sending WhatsApp to client:", err)
+    )
+  }
 
-  sendWhatsAppMessage(entry.phone, clientMsg).catch((err) =>
-    console.error("[Waitlist] Error sending WhatsApp to client:", err)
-  )
+  // Notify the barber via WhatsApp + push
+  const barberPhone = appointment.barber.barberSettings?.phone || appointment.barber.phone
+  if (barberPhone) {
+    const barberMsg =
+      `📋 *Lista de espera — Auto-agendado*\n\n` +
+      `👤 Cliente: ${entry.name}\n` +
+      `📋 Servicio: ${appointment.service.name}\n` +
+      `📅 Fecha: ${formatDate(appointment.date)}\n` +
+      `🕐 Hora: ${formatTime(appointment.date)}\n\n` +
+      `Se liberó un cupo y se agendó automáticamente desde la lista de espera.`
+    sendWhatsAppMessage(barberPhone, barberMsg).catch((err) =>
+      console.error("[Waitlist] Error sending WhatsApp to barber:", err)
+    )
+  }
 
-  // Notify the barber via push
   sendPushToBarber(barberId, {
     title: "📋 Lista de espera — Auto-agendado",
     body: `${entry.name} fue agendado automáticamente · ${appointment.service.name} · ${formatDate(appointment.date)} ${formatTime(appointment.date)}`,
