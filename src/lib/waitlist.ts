@@ -91,8 +91,9 @@ export async function autoScheduleFromWaitlist(
     sendWhatsAppTemplate(entry.phone, confirmTemplateSid, {
       "1": entry.name,
       "2": dateLabel,
-      "3": appointment.service.name,
-      "4": appointmentLink || (baseUrl ? `${baseUrl}/booking` : ""),
+      "3": formatTime(appointment.date),
+      "4": appointment.service.name,
+      "5": appointmentLink || (baseUrl ? `${baseUrl}/booking` : ""),
     }).catch((err) =>
       console.error("[Waitlist] Error sending WhatsApp template to client:", err)
     )
