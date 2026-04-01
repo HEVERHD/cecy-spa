@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { sendWhatsAppMessage, sendWhatsAppTemplate, buildReminder24hMessage } from "@/lib/twilio"
+import { sendWhatsAppMessage, sendWhatsAppTemplateWithSMSFallback, buildReminder24hMessage } from "@/lib/twilio"
 import { formatDate, formatTime } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
@@ -42,14 +42,14 @@ export async function GET(req: NextRequest) {
         const shopName = (appointment.barber as any).barberSettings?.shopName || "Mi Barbería"
         const link = baseUrl ? `${baseUrl}/cita/${appointment.token}` : undefined
         if (templateSid) {
-          await sendWhatsAppTemplate(appointment.user.phone, templateSid, {
+          await sendWhatsAppTemplateWithSMSFallback(appointment.user.phone, templateSid, {
             "1": appointment.user.name || "Cliente",
             "2": appointment.service.name,
             "3": formatDate(appointment.date),
             "4": formatTime(appointment.date),
             "5": shopName,
             ...(link ? { "6": link } : {}),
-          })
+          }, `Recordatorio: mañana tienes cita.\n\nServicio: ${appointment.service.name}\nFecha: ${formatDate(appointment.date)}\nHora: ${formatTime(appointment.date)}\nLugar: ${shopName}${link ? `\n\nVer tu cita: ${link}` : ""}`)
         } else {
           const message = buildReminder24hMessage(
             appointment.user.name || "Cliente",

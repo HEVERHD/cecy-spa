@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { sendWhatsAppMessage, sendWhatsAppTemplate, buildReminderMessage } from "@/lib/twilio"
+import { sendWhatsAppMessage, sendWhatsAppTemplateWithSMSFallback, buildReminderMessage } from "@/lib/twilio"
 import { formatTime, getColombiaDateStr } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
@@ -73,12 +73,12 @@ export async function GET(req: NextRequest) {
       try {
         const shopName = (appointment.barber as any).barberSettings?.shopName || "Mi Barbería"
         if (templateSid) {
-          await sendWhatsAppTemplate(appointment.user.phone, templateSid, {
+          await sendWhatsAppTemplateWithSMSFallback(appointment.user.phone, templateSid, {
             "1": appointment.user.name || "Cliente",
             "2": appointment.service.name,
             "3": formatTime(appointment.date),
             "4": shopName,
-          })
+          }, `Recordatorio: tienes una cita en 1 hora.\n\nServicio: ${appointment.service.name}\nHora: ${formatTime(appointment.date)}\nLugar: ${shopName}`)
         } else {
           const message = buildReminderMessage(
             appointment.user.name || "Cliente",

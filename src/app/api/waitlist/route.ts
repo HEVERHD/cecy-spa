@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import { sendWhatsAppTemplate } from "@/lib/twilio"
+import { sendWhatsAppTemplateWithSMSFallback } from "@/lib/twilio"
 
 export const dynamic = "force-dynamic"
 
@@ -83,13 +83,13 @@ export async function PATCH(req: NextRequest) {
       const dateLabel = new Date(+y, +m - 1, +d).toLocaleDateString("es-CO", {
         weekday: "long", day: "numeric", month: "long",
       })
-      sendWhatsAppTemplate(entry.phone, templateSid, {
+      sendWhatsAppTemplateWithSMSFallback(entry.phone, templateSid, {
         "1": entry.name,
         "2": dateLabel,
         "3": entry.service.name,
         "4": bookingUrl,
-      }).catch((err: unknown) =>
-        console.error("[Waitlist] Error sending WhatsApp template on notify:", err)
+      }, `Hay un cupo disponible para ${dateLabel}.\n\nServicio: ${entry.service.name}\n\nReserva aquí: ${bookingUrl}`).catch((err: unknown) =>
+        console.error("[Waitlist] Error sending notification on notify:", err)
       )
     }
   }

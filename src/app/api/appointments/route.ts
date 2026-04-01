@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import { sendWhatsAppMessage, sendWhatsAppTemplate, sendWhatsAppTemplateWithSMSFallback, buildConfirmationMessage, buildBarberNotification, buildStatusConfirmedMessage, buildLoyaltyMessage } from "@/lib/twilio"
+import { sendWhatsAppMessage, sendWhatsAppTemplateWithSMSFallback, buildConfirmationMessage, buildBarberNotification, buildStatusConfirmedMessage, buildLoyaltyMessage } from "@/lib/twilio"
 import { formatDate, formatTime, formatCurrency, parseColombia, getColombiaTime, getColombiaDateStr, getColombiaDayOfWeek, to12Hour } from "@/lib/utils"
 import { sendPushToBarber } from "@/lib/push"
 import { autoScheduleFromWaitlist } from "@/lib/waitlist"
@@ -429,10 +429,10 @@ export async function PATCH(req: NextRequest) {
         const loyaltyTemplateSid = process.env.TWILIO_TEMPLATE_LOYALTY
         const clientName = clientUser.name?.split(" ")[0] || "Cliente"
         if (loyaltyTemplateSid) {
-          sendWhatsAppTemplate(clientUser.phone, loyaltyTemplateSid, {
+          sendWhatsAppTemplateWithSMSFallback(clientUser.phone, loyaltyTemplateSid, {
             "1": clientName,
             "2": shopName,
-          }).catch(() => {})
+          }, `¡Felicidades ${clientName}! Alcanzaste 7 cortes este mes en ${shopName}. Has ganado un descuento especial en tu proxima cita. ¡Menciónalo al llegar!`).catch(() => {})
         } else {
           sendWhatsAppMessage(clientUser.phone, buildLoyaltyMessage(clientName, shopName)).catch(() => {})
         }

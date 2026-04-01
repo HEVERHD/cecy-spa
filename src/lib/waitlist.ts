@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma"
-import { sendWhatsAppMessage, sendWhatsAppTemplate, sendWhatsAppTemplateWithSMSFallback } from "@/lib/twilio"
+import { sendWhatsAppMessage, sendWhatsAppTemplateWithSMSFallback } from "@/lib/twilio"
 import { sendPushToBarber } from "@/lib/push"
 import { formatDate, formatTime, formatCurrency, getColombiaDateStr } from "@/lib/utils"
 
@@ -176,12 +176,12 @@ export async function autoScheduleFromWaitlist(
           where: { id: next.id },
           data: { status: "NOTIFIED", notified: true },
         })
-        sendWhatsAppTemplate(next.phone, templateSid, {
+        sendWhatsAppTemplateWithSMSFallback(next.phone, templateSid, {
           "1": next.name,
           "2": dateLabel,
           "3": next.service.name,
           "4": bookingUrl,
-        }).catch((err) =>
+        }, `Hay un cupo disponible para ${dateLabel}.\n\nServicio: ${next.service.name}\n\nReserva aquí: ${bookingUrl}`).catch((err) =>
           console.error(`[Waitlist] Error notifying ${next.name}:`, err)
         )
         console.log(`[Waitlist] Notified next-in-line: ${next.name}`)

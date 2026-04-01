@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { sendWhatsAppMessage, sendWhatsAppTemplate } from "@/lib/twilio"
+import { sendWhatsAppMessage, sendWhatsAppTemplateWithSMSFallback } from "@/lib/twilio"
 import { formatDate, formatTime } from "@/lib/utils"
 import { sendPushToBarber } from "@/lib/push"
 import { autoScheduleFromWaitlist } from "@/lib/waitlist"
@@ -50,13 +50,13 @@ export async function POST(req: NextRequest) {
       const freeFormMsg = `❌ *Cita Cancelada*\n\n👤 Cliente: ${clientName}\n📋 Servicio: ${updated.service.name}\n📅 Fecha: ${formatDate(updated.date)}\n🕐 Hora: ${formatTime(updated.date)}\n\nEl cliente canceló su cita.${agendaLink ? `\n\n📅 Ver agenda: ${agendaLink}` : ""}`
 
       if (cancelTemplateSid) {
-        sendWhatsAppTemplate(barberPhone, cancelTemplateSid, {
+        sendWhatsAppTemplateWithSMSFallback(barberPhone, cancelTemplateSid, {
           "1": clientName,
           "2": updated.service.name,
           "3": formatDate(updated.date),
           "4": formatTime(updated.date),
           "5": agendaLink,
-        }).catch((err) =>
+        }, `Cita cancelada.\n\nCliente: ${clientName}\nServicio: ${updated.service.name}\nFecha: ${formatDate(updated.date)}\nHora: ${formatTime(updated.date)}${agendaLink ? `\n\nVer agenda: ${agendaLink}` : ""}`).catch((err) =>
           console.error("Error notifying barber about cancellation:", err)
         )
       } else {
