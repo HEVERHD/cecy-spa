@@ -63,6 +63,44 @@ export async function sendWhatsAppTemplate(
   }
 }
 
+/** Send a plain SMS using the same Twilio number (fallback when WhatsApp fails) */
+export async function sendSMS(to: string, message: string) {
+  if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN) {
+    console.log(`[SMS Mock] To: ${to} | Message: ${message}`)
+    return
+  }
+
+  const smsFrom = (process.env.TWILIO_WHATSAPP_FROM || "whatsapp:+14155238886").replace("whatsapp:", "")
+
+  let phone = to.replace(/\s+/g, "").replace(/^0+/, "")
+  if (!phone.startsWith("+")) {
+    phone = phone.startsWith("57") ? `+${phone}` : `+57${phone}`
+  }
+
+  try {
+    const msg = await client.messages.create({ from: smsFrom, to: phone, body: message })
+    console.log(`[SMS Fallback] Sent to ${phone} | SID: ${msg.sid}`)
+  } catch (error: any) {
+    console.error(`[SMS Fallback Error] ${error.message}`)
+    throw error
+  }
+}
+
+/** Try WhatsApp template first; if it fails, send SMS as fallback */
+export async function sendWhatsAppTemplateWithSMSFallback(
+  to: string,
+  contentSid: string,
+  variables: Record<string, string>,
+  smsFallbackBody: string
+): Promise<void> {
+  try {
+    await sendWhatsAppTemplate(to, contentSid, variables)
+  } catch {
+    console.log(`[WhatsApp→SMS] WhatsApp failed for ${to}, sending SMS fallback`)
+    await sendSMS(to, smsFallbackBody)
+  }
+}
+
 export function buildConfirmationMessage(
   clientName: string,
   serviceName: string,

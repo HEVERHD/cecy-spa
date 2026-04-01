@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma"
-import { sendWhatsAppMessage, sendWhatsAppTemplate } from "@/lib/twilio"
+import { sendWhatsAppMessage, sendWhatsAppTemplate, sendWhatsAppTemplateWithSMSFallback } from "@/lib/twilio"
 import { sendPushToBarber } from "@/lib/push"
 import { formatDate, formatTime, formatCurrency, getColombiaDateStr } from "@/lib/utils"
 
@@ -88,14 +88,14 @@ export async function autoScheduleFromWaitlist(
     const dateLabel = new Date(+y, +m - 1, +d).toLocaleDateString("es-CO", {
       weekday: "long", day: "numeric", month: "long",
     })
-    sendWhatsAppTemplate(entry.phone, confirmTemplateSid, {
+    sendWhatsAppTemplateWithSMSFallback(entry.phone, confirmTemplateSid, {
       "1": entry.name,
       "2": dateLabel,
       "3": formatTime(appointment.date),
       "4": appointment.service.name,
       "5": appointmentLink || (baseUrl ? `${baseUrl}/booking` : ""),
-    }).catch((err) =>
-      console.error("[Waitlist] Error sending WhatsApp template to client:", err)
+    }, `Tu cita ha sido confirmada.\n\nServicio: ${appointment.service.name}\nFecha: ${dateLabel}\nHora: ${formatTime(appointment.date)}\nLugar: ${shopName}${appointmentLink ? `\n\nVer tu cita: ${appointmentLink}` : ""}`).catch((err) =>
+      console.error("[Waitlist] Error sending notification to client:", err)
     )
   } else {
     // Free-form fallback — only works if client messaged within last 24h
@@ -118,15 +118,15 @@ export async function autoScheduleFromWaitlist(
   if (barberPhone) {
     const barberTemplateSid = process.env.TWILIO_TEMPLATE_BARBER
     if (barberTemplateSid) {
-      sendWhatsAppTemplate(barberPhone, barberTemplateSid, {
+      sendWhatsAppTemplateWithSMSFallback(barberPhone, barberTemplateSid, {
         "1": entry.name,
         "2": appointment.service.name,
         "3": formatDate(appointment.date),
         "4": formatTime(appointment.date),
         "5": formatCurrency(appointment.service.price),
         "6": appointmentLink,
-      }).catch((err) =>
-        console.error("[Waitlist] Error sending WhatsApp template to barber:", err)
+      }, `Nueva cita (lista de espera).\n\nCliente: ${entry.name}\nServicio: ${appointment.service.name}\nFecha: ${formatDate(appointment.date)}\nHora: ${formatTime(appointment.date)}\nPrecio: ${formatCurrency(appointment.service.price)}`).catch((err) =>
+        console.error("[Waitlist] Error notifying barber:", err)
       )
     } else {
       const barberMsg =

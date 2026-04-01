@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import { sendWhatsAppMessage, sendWhatsAppTemplate, buildConfirmationMessage, buildBarberNotification, buildStatusConfirmedMessage, buildLoyaltyMessage } from "@/lib/twilio"
+import { sendWhatsAppMessage, sendWhatsAppTemplate, sendWhatsAppTemplateWithSMSFallback, buildConfirmationMessage, buildBarberNotification, buildStatusConfirmedMessage, buildLoyaltyMessage } from "@/lib/twilio"
 import { formatDate, formatTime, formatCurrency, parseColombia, getColombiaTime, getColombiaDateStr, getColombiaDayOfWeek, to12Hour } from "@/lib/utils"
 import { sendPushToBarber } from "@/lib/push"
 import { autoScheduleFromWaitlist } from "@/lib/waitlist"
@@ -280,13 +280,13 @@ export async function POST(req: NextRequest) {
   if (user.phone) {
     try {
       if (confirmationTemplateSid) {
-        await sendWhatsAppTemplate(user.phone, confirmationTemplateSid, {
+        await sendWhatsAppTemplateWithSMSFallback(user.phone, confirmationTemplateSid, {
           "1": appointment.service.name,
           "2": formatDate(appointment.date),
           "3": formatTime(appointment.date),
           "4": shopName,
           "5": appointmentLink,
-        })
+        }, `Tu cita ha sido confirmada.\n\nServicio: ${appointment.service.name}\nFecha: ${formatDate(appointment.date)}\nHora: ${formatTime(appointment.date)}\nLugar: ${shopName}\n\nVer tu cita: ${appointmentLink}`)
       } else {
         const message = buildConfirmationMessage(
           user.name || "Cliente",
@@ -309,14 +309,14 @@ export async function POST(req: NextRequest) {
   if (barberPhone) {
     try {
       if (barberTemplateSid) {
-        sendWhatsAppTemplate(barberPhone, barberTemplateSid, {
+        sendWhatsAppTemplateWithSMSFallback(barberPhone, barberTemplateSid, {
           "1": user.name || "Cliente",
           "2": appointment.service.name,
           "3": formatDate(appointment.date),
           "4": formatTime(appointment.date),
           "5": formatCurrency(appointment.service.price),
           "6": appointmentLink,
-        }).catch((err) => console.error("Error notifying barber:", err))
+        }, `Nueva cita.\n\nCliente: ${user.name || "Cliente"}\nServicio: ${appointment.service.name}\nFecha: ${formatDate(appointment.date)}\nHora: ${formatTime(appointment.date)}\nPrecio: ${formatCurrency(appointment.service.price)}`).catch((err) => console.error("Error notifying barber:", err))
       } else {
         const barberMsg = buildBarberNotification(
           user.name || "Cliente",
