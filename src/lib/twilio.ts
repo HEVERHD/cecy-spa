@@ -85,6 +85,7 @@ export async function sendSMS(to: string, message: string) {
         to: phone,
         from: "Frailin",
         text: message,
+        type: "unicode",
       }),
     })
     const data = await res.json() as any
