@@ -11,12 +11,10 @@ function LoginContent() {
   const wasRedirected = error === "unauthorized"
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1a0a0a] to-[#2d1515]">
-      <div className="bg-[#2d1515] border border-[#3d2020] rounded-2xl shadow-2xl p-8 w-full max-w-md text-center">
-        <Image src="/logo.png" alt="Frailin Studio" width={80} height={80} className="mx-auto mb-4 rounded-xl" />
-        <h1 className="text-2xl font-bold text-white mb-1">
-          <span className="text-[#e84118]">Frailin</span> Studio
-        </h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0a0a0a] to-[#1a1a1a]">
+      <div className="bg-[#111] border border-white/10 rounded-2xl shadow-2xl p-8 w-full max-w-md text-center">
+        <Image src="/logo.png" alt="Barbería" width={80} height={80} className="mx-auto mb-4 rounded-xl" />
+        <h1 className="text-2xl font-bold text-white mb-1">Panel de Administración</h1>
         <p className="text-white/40 mb-8">Acceso para barberos</p>
 
         {wasRedirected && (

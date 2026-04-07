@@ -87,15 +87,14 @@ export default function CitaPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#1a0a0a] to-[#2d1515] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] to-[#1a1a1a] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="relative w-12 h-12">
-            <div className="absolute inset-0 rounded-full border-2 border-[#3d2020]" />
-            <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-[#e84118] animate-spin" />
+            <div className="absolute inset-0 rounded-full border-2 border-white/10" />
+            <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-[#d97706] animate-spin" />
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="text-[#e84118] font-bold text-sm">Frailin</span>
-            <span className="text-white/60 font-medium text-sm">Studio</span>
+            <span className="text-white/40 text-sm">Mi Barbería</span>
           </div>
         </div>
       </div>
@@ -104,8 +103,8 @@ export default function CitaPage() {
 
   if (error && !appointment) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#1a0a0a] to-[#2d1515] flex items-center justify-center p-4">
-        <div className="bg-[#2d1515] border border-[#3d2020] rounded-2xl p-8 text-center max-w-md w-full">
+      <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] to-[#1a1a1a] flex items-center justify-center p-4">
+        <div className="bg-[#111] border border-white/10 rounded-2xl p-8 text-center max-w-md w-full">
           <AlertCircle size={48} className="mx-auto text-red-400 mb-4" />
           <h1 className="text-xl font-bold text-white mb-2">Cita no encontrada</h1>
           <p className="text-white/40">El link puede ser inválido o la cita ya no existe.</p>
@@ -131,32 +130,30 @@ export default function CitaPage() {
   const StatusIcon = status.icon
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1a0a0a] to-[#2d1515] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] to-[#1a1a1a] flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         {/* Header */}
         <div className="text-center mb-6">
-          <img src="/logo.png" alt="Frailin Studio" width={64} height={64} className="mx-auto mb-3 rounded-xl" />
-          <h1 className="text-lg font-bold text-white">
-            <span className="text-[#e84118]">Frailin</span> Studio
-          </h1>
+          <img src="/logo.png" alt="Barbería" width={64} height={64} className="mx-auto mb-3 rounded-xl" />
+          <h1 className="text-lg font-bold text-white">{appointment.shopName}</h1>
           <p className="text-white/40 text-sm mt-1">Detalles de tu cita</p>
         </div>
 
         {/* Status badge */}
         <div className="flex justify-center mb-4">
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-full bg-[#2d1515] border border-[#3d2020] ${status.color}`}>
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-full bg-[#111] border border-white/10 ${status.color}`}>
             <StatusIcon size={16} />
             <span className="text-sm font-medium">{status.label}</span>
           </div>
         </div>
 
         {/* Appointment details card */}
-        <div className="bg-[#2d1515] border border-[#3d2020] rounded-2xl overflow-hidden">
-          <div className="h-2 bg-gradient-to-r from-[#e84118] to-[#f0932b]" />
+        <div className="bg-[#111] border border-white/10 rounded-2xl overflow-hidden">
+          <div className="h-2 bg-gradient-to-r from-[#d97706] to-[#f0932b]" />
           <div className="p-6 space-y-4">
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-[#e84118]/15 flex items-center justify-center flex-shrink-0">
-                <Scissors size={20} className="text-[#e84118]" />
+              <div className="w-10 h-10 rounded-xl bg-[#d97706]/15 flex items-center justify-center flex-shrink-0">
+                <Scissors size={20} className="text-[#d97706]" />
               </div>
               <div>
                 <p className="text-xs text-white/40">Servicio</p>
@@ -165,8 +162,8 @@ export default function CitaPage() {
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-[#e84118]/15 flex items-center justify-center flex-shrink-0">
-                <CalendarDays size={20} className="text-[#e84118]" />
+              <div className="w-10 h-10 rounded-xl bg-[#d97706]/15 flex items-center justify-center flex-shrink-0">
+                <CalendarDays size={20} className="text-[#d97706]" />
               </div>
               <div>
                 <p className="text-xs text-white/40">Fecha</p>
@@ -175,8 +172,8 @@ export default function CitaPage() {
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-[#e84118]/15 flex items-center justify-center flex-shrink-0">
-                <Clock size={20} className="text-[#e84118]" />
+              <div className="w-10 h-10 rounded-xl bg-[#d97706]/15 flex items-center justify-center flex-shrink-0">
+                <Clock size={20} className="text-[#d97706]" />
               </div>
               <div>
                 <p className="text-xs text-white/40">Hora</p>
@@ -185,8 +182,8 @@ export default function CitaPage() {
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-[#e84118]/15 flex items-center justify-center flex-shrink-0">
-                <DollarSign size={20} className="text-[#e84118]" />
+              <div className="w-10 h-10 rounded-xl bg-[#d97706]/15 flex items-center justify-center flex-shrink-0">
+                <DollarSign size={20} className="text-[#d97706]" />
               </div>
               <div>
                 <p className="text-xs text-white/40">Precio</p>
@@ -211,7 +208,7 @@ export default function CitaPage() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => setShowConfirmDialog(false)}
-                      className="flex-1 py-2.5 border border-[#3d2020] rounded-xl text-sm text-white/60 hover:bg-[#1a0a0a] transition"
+                      className="flex-1 py-2.5 border border-white/10 rounded-xl text-sm text-white/60 hover:bg-[#1a0a0a] transition"
                     >
                       No, mantener
                     </button>
@@ -243,7 +240,7 @@ export default function CitaPage() {
         <div className="text-center mt-6">
           <a
             href="/booking"
-            className="text-sm text-[#e84118] hover:underline"
+            className="text-sm text-[#d97706] hover:underline"
           >
             Agendar una nueva cita
           </a>

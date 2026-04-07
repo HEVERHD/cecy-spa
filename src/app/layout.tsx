@@ -11,14 +11,14 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#e84118",
+  themeColor: "#d97706",
 }
 
-const BASE_URL = "https://frailinstudio.com"
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://barberia-demo-eta.vercel.app"
 
 export const metadata: Metadata = {
-  title: "Frailin Studio — Barbería en Vista Hermosa, Cartagena",
-  description: "Barbería de confianza en Vista Hermosa, Cartagena. Agenda tu cita en segundos, confirmación instantánea por WhatsApp.",
+  title: "Mi Barbería — Agenda tu cita online",
+  description: "Agenda tu cita en segundos, confirmación instantánea por WhatsApp. Sin llamadas, sin esperas.",
   manifest: "/manifest.json",
   icons: {
     icon: "/logo.png",
@@ -28,13 +28,13 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Frailin Studio",
+    title: "Mi Barbería",
   },
   openGraph: {
-    title: "Frailin Studio — Tu look habla antes que tú.",
-    description: "Barbería en Vista Hermosa, Cartagena. Agenda tu cita en segundos, sin llamadas, sin esperas.",
+    title: "Mi Barbería — Tu look habla antes que tú.",
+    description: "Agenda tu cita en segundos, sin llamadas, sin esperas.",
     url: BASE_URL,
-    siteName: "Frailin Studio",
+    siteName: "Mi Barbería",
     locale: "es_CO",
     type: "website",
     images: [
@@ -42,14 +42,14 @@ export const metadata: Metadata = {
         url: `${BASE_URL}/logo2.png`,
         width: 512,
         height: 512,
-        alt: "Frailin Studio — Barbería en Vista Hermosa, Cartagena",
+        alt: "Mi Barbería — Agenda tu cita online",
       },
     ],
   },
   twitter: {
     card: "summary",
-    title: "Frailin Studio — Tu look habla antes que tú.",
-    description: "Barbería en Vista Hermosa, Cartagena. Agenda tu cita en segundos.",
+    title: "Mi Barbería — Tu look habla antes que tú.",
+    description: "Agenda tu cita en segundos, sin llamadas, sin esperas.",
     images: [`${BASE_URL}/logo2.png`],
   },
 }

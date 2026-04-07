@@ -34,6 +34,6 @@ export async function GET(req: NextRequest) {
     service: appointment.service,
     user: appointment.user,
     barber: appointment.barber,
-    shopName: settings?.shopName || "Frailin Studio",
+    shopName: settings?.shopName || "Mi Barbería",
   })
 }

@@ -78,7 +78,7 @@ export async function autoScheduleFromWaitlist(
   })
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || ""
-  const shopName = appointment.barber.barberSettings?.shopName || "Frailin Studio"
+  const shopName = appointment.barber.barberSettings?.shopName || "Mi Barbería"
   const appointmentLink = baseUrl ? `${baseUrl}/cita/${appointment.token}` : ""
 
   // Notify the client via WhatsApp (must use template for business-initiated messages)

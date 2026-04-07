@@ -37,7 +37,7 @@ export async function GET() {
     orderBy: { date: "asc" },
   })
 
-  const shopName = appointments[0]?.barber?.barberSettings?.shopName || "Frailin Studio"
+  const shopName = appointments[0]?.barber?.barberSettings?.shopName || "Mi Barbería"
 
   return NextResponse.json(
     {

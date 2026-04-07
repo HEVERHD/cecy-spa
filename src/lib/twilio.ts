@@ -83,7 +83,7 @@ export async function sendSMS(to: string, message: string) {
         api_key: process.env.VONAGE_API_KEY,
         api_secret: process.env.VONAGE_API_SECRET,
         to: phone,
-        from: "Frailin",
+        from: "Barberia",
         text: message,
         type: "unicode",
       }),

@@ -95,14 +95,14 @@ export default function ColaPage() {
   ) ?? []
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1a0a0a] to-[#2d1515] px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] to-[#1a1a1a] px-4 py-8">
       <div className="max-w-sm mx-auto">
 
         {/* Header */}
         <div className="text-center mb-8">
           <div className="text-4xl mb-2">💈</div>
           <h1 className="text-2xl font-bold text-white">
-            <span className="text-[#e84118]">Frailin</span> Studio
+            {data?.shopName || "Mi Barbería"}
           </h1>
           <p className="text-white/40 text-sm mt-1">Cola en vivo</p>
         </div>
@@ -121,16 +121,16 @@ export default function ColaPage() {
                 Peluqueándose ahora
               </p>
               {active ? (
-                <div className="bg-[#2d1515] border border-[#e84118]/50 rounded-2xl p-5 shadow-lg shadow-[#e84118]/10">
+                <div className="bg-[#111] border border-[#d97706]/50 rounded-2xl p-5 shadow-lg shadow-[#d97706]/10">
                   <div className="flex justify-between items-start mb-3">
                     <div>
                       <p className="text-white font-bold text-lg">{active.clientName}</p>
                       <p className="text-white/50 text-sm">{active.serviceName}</p>
                     </div>
-                    <span className="flex items-center gap-1.5 bg-[#e84118]/20 text-[#e84118] text-xs px-2.5 py-1 rounded-full font-medium">
+                    <span className="flex items-center gap-1.5 bg-[#d97706]/20 text-[#d97706] text-xs px-2.5 py-1 rounded-full font-medium">
                       <span className="relative flex h-1.5 w-1.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#e84118] opacity-75" />
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#e84118]" />
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#d97706] opacity-75" />
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#d97706]" />
                       </span>
                       En curso
                     </span>
@@ -139,20 +139,20 @@ export default function ColaPage() {
                   {/* Progress bar */}
                   <div className="h-2 bg-white/10 rounded-full overflow-hidden mb-2">
                     <div
-                      className="h-full bg-[#e84118] rounded-full transition-all duration-1000"
+                      className="h-full bg-[#d97706] rounded-full transition-all duration-1000"
                       style={{ width: `${getProgress(active, now)}%` }}
                     />
                   </div>
                   <div className="flex justify-between text-[11px] text-white/30">
                     <span>{formatTime(active.date)}</span>
-                    <span className="text-[#e84118] font-medium">
+                    <span className="text-[#d97706] font-medium">
                       {getRemainingMin(active, now)} min restantes
                     </span>
                     <span>{formatTime(aptEndTime(active).toISOString())}</span>
                   </div>
                 </div>
               ) : (
-                <div className="bg-[#2d1515] border border-[#3d2020] rounded-2xl p-5 text-center">
+                <div className="bg-[#111] border border-[white/10] rounded-2xl p-5 text-center">
                   <p className="text-white/30 text-sm">Nadie en la silla en este momento</p>
                 </div>
               )}
@@ -165,7 +165,7 @@ export default function ColaPage() {
               </p>
 
               {upcoming.length === 0 ? (
-                <div className="bg-[#2d1515] border border-[#3d2020] rounded-2xl p-5 text-center">
+                <div className="bg-[#111] border border-[white/10] rounded-2xl p-5 text-center">
                   <p className="text-white/30 text-sm">No hay más citas por hoy</p>
                 </div>
               ) : (
@@ -179,9 +179,9 @@ export default function ColaPage() {
                     return (
                       <div
                         key={apt.id}
-                        className="bg-[#2d1515] border border-[#3d2020] rounded-xl p-4 flex items-center gap-3"
+                        className="bg-[#111] border border-[white/10] rounded-xl p-4 flex items-center gap-3"
                       >
-                        <div className="w-8 h-8 rounded-full bg-[#3d2020] flex items-center justify-center flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-[white/10] flex items-center justify-center flex-shrink-0">
                           <span className="text-white/60 text-xs font-bold">{position}</span>
                         </div>
                         <div className="flex-1 min-w-0">
@@ -191,7 +191,7 @@ export default function ColaPage() {
                         <div className="text-right flex-shrink-0">
                           <p className="text-white/70 text-xs font-medium">{formatTime(apt.date)}</p>
                           {i === 0 && (
-                            <p className="text-[#e84118] text-[10px]">
+                            <p className="text-[#d97706] text-[10px]">
                               ~{waitMin} min
                             </p>
                           )}

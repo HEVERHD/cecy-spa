@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
   const bookingLink = `${baseUrl}/booking`
 
   const settings = await prisma.barberSettings.findFirst({ select: { shopName: true } })
-  const shopName = settings?.shopName || "Frailin Studio"
+  const shopName = settings?.shopName || "Mi Barbería"
 
   const reengagementTemplateSid = process.env.TWILIO_TEMPLATE_REENGAGEMENT
 

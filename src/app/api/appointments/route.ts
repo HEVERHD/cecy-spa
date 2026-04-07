@@ -366,7 +366,7 @@ export async function PATCH(req: NextRequest) {
   if (body.status === "CONFIRMED" && appointment.user.phone) {
     try {
       const settings = await prisma.barberSettings.findFirst()
-      const shopName = settings?.shopName || "Frailin Studio"
+      const shopName = settings?.shopName || "Mi Barbería"
       const msg = buildStatusConfirmedMessage(
         appointment.user.name?.split(" ")[0] || "Cliente",
         appointment.service.name,
@@ -396,7 +396,7 @@ export async function PATCH(req: NextRequest) {
       })
       if (nextApt?.user.phone) {
         const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "http://localhost:3000"
-        const msg = `¡Hola ${nextApt.user.name?.split(" ")[0] || ""}! 💈 Es casi tu turno en Frailin Studio. Tu cita de *${nextApt.service.name}* está próxima. Ve preparándote. 🙌\n\n📍 ${baseUrl}/cola`
+        const msg = `¡Hola ${nextApt.user.name?.split(" ")[0] || ""}! 💈 Es casi tu turno. Tu cita de *${nextApt.service.name}* está próxima. Ve preparándote. 🙌\n\n📍 ${baseUrl}/cola`
         sendWhatsAppMessage(nextApt.user.phone, msg).catch(() => {})
       }
     } catch {}
@@ -425,7 +425,7 @@ export async function PATCH(req: NextRequest) {
         clientUser.loyaltyNotifiedMonth !== currentMonth
       ) {
         const settings = await prisma.barberSettings.findFirst({ select: { shopName: true } })
-        const shopName = settings?.shopName || "Frailin Studio"
+        const shopName = settings?.shopName || "Mi Barbería"
         const loyaltyTemplateSid = process.env.TWILIO_TEMPLATE_LOYALTY
         const clientName = clientUser.name?.split(" ")[0] || "Cliente"
         if (loyaltyTemplateSid) {

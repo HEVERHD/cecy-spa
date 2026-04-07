@@ -239,7 +239,7 @@ export default function BookingPage() {
       : ["barber", "service", "datetime", "info", "confirm"]
 
   // ── Input styles ───────────────────────────────────────────
-  const inputCls = "w-full p-3.5 bg-[#151515] border border-white/12 rounded-xl text-white placeholder-white/25 focus:border-[#e84118] focus:outline-none transition text-sm"
+  const inputCls = "w-full p-3.5 bg-[#151515] border border-white/12 rounded-xl text-white placeholder-white/25 focus:border-[#d97706] focus:outline-none transition text-sm"
 
   // ── Render ─────────────────────────────────────────────────
   return (
@@ -251,7 +251,7 @@ export default function BookingPage() {
       </div>
 
       {/* Ambient glow */}
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-[#e84118]/8 rounded-full blur-[120px] pointer-events-none z-10" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-[#d97706]/8 rounded-full blur-[120px] pointer-events-none z-10" />
 
       <div className="relative z-10 max-w-md mx-auto px-4 py-10 pb-20">
 
@@ -262,9 +262,9 @@ export default function BookingPage() {
             <span>Inicio</span>
           </Link>
           <div className="flex items-center gap-2.5">
-            <Image src="/logo2.png" alt="Frailin Studio" width={28} height={28} />
+            <Image src="/logo2.png" alt="Barbería" width={28} height={28} />
             <span className="font-black text-base tracking-wide">
-              <span className="text-[#e84118]">Frailin</span> Studio
+              Mi Barbería
             </span>
           </div>
           <div className="w-16" />
@@ -277,7 +277,7 @@ export default function BookingPage() {
             return (
               <div
                 key={s}
-                className={`h-1.5 rounded-full transition-all duration-500 ${active ? "w-8 bg-[#e84118]" : "w-5 bg-white/10"}`}
+                className={`h-1.5 rounded-full transition-all duration-500 ${active ? "w-8 bg-[#d97706]" : "w-5 bg-white/10"}`}
               />
             )
           })}
@@ -287,7 +287,7 @@ export default function BookingPage() {
         {step === "barber" && (
           <div>
             <div className="mb-8">
-              <p className="text-xs font-bold text-[#e84118] tracking-[0.2em] uppercase mb-2">Paso 1</p>
+              <p className="text-xs font-bold text-[#d97706] tracking-[0.2em] uppercase mb-2">Paso 1</p>
               <h2 className="text-2xl font-black">Elige tu barbero</h2>
             </div>
             <div className="space-y-3">
@@ -295,14 +295,14 @@ export default function BookingPage() {
                 <button
                   key={barber.id}
                   onClick={() => { setSelectedBarber(barber); setStep("service") }}
-                  className="w-full text-left p-4 rounded-2xl border border-white/12 bg-[#1a1a1a] hover:border-[#e84118]/50 hover:bg-[#e84118]/5 transition-all group"
+                  className="w-full text-left p-4 rounded-2xl border border-white/12 bg-[#1a1a1a] hover:border-[#d97706]/50 hover:bg-[#d97706]/5 transition-all group"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="relative w-14 h-14 rounded-full overflow-hidden bg-white/5 flex-shrink-0 ring-2 ring-white/5 group-hover:ring-[#e84118]/30 transition">
+                    <div className="relative w-14 h-14 rounded-full overflow-hidden bg-white/5 flex-shrink-0 ring-2 ring-white/5 group-hover:ring-[#d97706]/30 transition">
                       {barber.avatarUrl || barber.image ? (
                         <Image src={barber.avatarUrl || barber.image || ""} alt={barber.name || ""} fill className="object-cover" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-xl font-black text-[#e84118]">
+                        <div className="w-full h-full flex items-center justify-center text-xl font-black text-[#d97706]">
                           {(barber.name || "B").charAt(0).toUpperCase()}
                         </div>
                       )}
@@ -311,7 +311,7 @@ export default function BookingPage() {
                       <p className="font-bold text-white text-lg">{barber.name || "Barbero"}</p>
                       {barber.specialty && <p className="text-sm text-white/40 mt-0.5">{barber.specialty}</p>}
                     </div>
-                    <div className="ml-auto w-8 h-8 rounded-full bg-white/5 group-hover:bg-[#e84118] flex items-center justify-center transition-all">
+                    <div className="ml-auto w-8 h-8 rounded-full bg-white/5 group-hover:bg-[#d97706] flex items-center justify-center transition-all">
                       <ChevronRight size={14} className="text-white/40 group-hover:text-white transition" />
                     </div>
                   </div>
@@ -325,7 +325,7 @@ export default function BookingPage() {
         {step === "service" && (
           <div>
             <div className="mb-8">
-              <p className="text-xs font-bold text-[#e84118] tracking-[0.2em] uppercase mb-2">
+              <p className="text-xs font-bold text-[#d97706] tracking-[0.2em] uppercase mb-2">
                 {barbers.length > 1 ? "Paso 2" : "Paso 1"}
               </p>
               <h2 className="text-2xl font-black">Elige tu servicio</h2>
@@ -335,7 +335,7 @@ export default function BookingPage() {
                 <button
                   key={service.id}
                   onClick={() => { setSelectedService(service); setStep("datetime") }}
-                  className="w-full text-left p-5 rounded-2xl border border-white/12 bg-[#1a1a1a] hover:border-[#e84118]/50 hover:bg-[#e84118]/5 transition-all group"
+                  className="w-full text-left p-5 rounded-2xl border border-white/12 bg-[#1a1a1a] hover:border-[#d97706]/50 hover:bg-[#d97706]/5 transition-all group"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
@@ -348,7 +348,7 @@ export default function BookingPage() {
                         <span className="text-xs text-white/30">{service.duration} min</span>
                       </div>
                     </div>
-                    <span className="font-black text-[#e84118] text-lg shrink-0">{formatPrice(service.price)}</span>
+                    <span className="font-black text-[#d97706] text-lg shrink-0">{formatPrice(service.price)}</span>
                   </div>
                 </button>
               ))}
@@ -365,7 +365,7 @@ export default function BookingPage() {
         {step === "datetime" && (
           <div>
             <div className="mb-8">
-              <p className="text-xs font-bold text-[#e84118] tracking-[0.2em] uppercase mb-2">
+              <p className="text-xs font-bold text-[#d97706] tracking-[0.2em] uppercase mb-2">
                 {barbers.length > 1 ? "Paso 3" : "Paso 2"}
               </p>
               <h2 className="text-2xl font-black">Fecha y hora</h2>
@@ -400,7 +400,7 @@ export default function BookingPage() {
                       onClick={() => handleDateSelect(day)}
                       disabled={isPast}
                       className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition select-none
-                        ${isSelected ? "bg-[#e84118] text-white shadow-lg shadow-[#e84118]/30"
+                        ${isSelected ? "bg-[#d97706] text-white shadow-lg shadow-[#d97706]/30"
                           : isToday ? "bg-white/8 text-white ring-1 ring-white/20"
                           : isPast ? "text-white/15 cursor-not-allowed"
                           : "text-white/60 hover:bg-white/8 hover:text-white"
@@ -421,7 +421,7 @@ export default function BookingPage() {
               <p className="text-center text-white/25 text-sm py-8">Selecciona un día para ver los horarios</p>
             ) : loading ? (
               <div className="flex flex-col items-center py-10 gap-3">
-                <div className="w-8 h-8 rounded-full border-2 border-[#e84118]/20 border-t-[#e84118] animate-spin" />
+                <div className="w-8 h-8 rounded-full border-2 border-[#d97706]/20 border-t-[#d97706] animate-spin" />
                 <p className="text-sm text-white/30">Cargando horarios...</p>
               </div>
             ) : dayOff ? (
@@ -443,14 +443,14 @@ export default function BookingPage() {
                     <input type="tel" placeholder="+57 3001234567" value={waitlistPhone} onChange={(e) => setWaitlistPhone(e.target.value)} className={inputCls} />
                     <div className="flex gap-3">
                       <button onClick={() => setShowWaitlist(false)} className="flex-1 py-3 rounded-xl border border-white/12 text-white/50 hover:text-white transition text-sm">Cancelar</button>
-                      <button onClick={handleWaitlistSubmit} disabled={waitlistSubmitting || !waitlistName || !waitlistPhone} className="flex-1 py-3 rounded-xl bg-[#e84118] text-white font-medium hover:bg-[#c0392b] transition disabled:opacity-50 text-sm">
+                      <button onClick={handleWaitlistSubmit} disabled={waitlistSubmitting || !waitlistName || !waitlistPhone} className="flex-1 py-3 rounded-xl bg-[#d97706] text-white font-medium hover:bg-[#c0392b] transition disabled:opacity-50 text-sm">
                         {waitlistSubmitting ? "Enviando..." : "Avisarme"}
                       </button>
                     </div>
                     {error && <p className="text-red-400 text-xs">{error}</p>}
                   </div>
                 ) : (
-                  <button onClick={() => setShowWaitlist(true)} className="w-full py-3.5 rounded-xl border border-[#e84118]/40 text-[#e84118] font-medium hover:bg-[#e84118]/10 transition text-sm">
+                  <button onClick={() => setShowWaitlist(true)} className="w-full py-3.5 rounded-xl border border-[#d97706]/40 text-[#d97706] font-medium hover:bg-[#d97706]/10 transition text-sm">
                     Unirme a lista de espera
                   </button>
                 )}
@@ -469,8 +469,8 @@ export default function BookingPage() {
                       onClick={() => setSelectedTime(slot)}
                       className={`py-3 rounded-xl border transition flex flex-col items-center gap-0.5
                         ${isSelected
-                          ? "bg-[#e84118] border-[#e84118] text-white shadow-lg shadow-[#e84118]/25"
-                          : "border-white/12 bg-[#1a1a1a] text-white/70 hover:border-[#e84118]/40 hover:text-white"
+                          ? "bg-[#d97706] border-[#d97706] text-white shadow-lg shadow-[#d97706]/25"
+                          : "border-white/12 bg-[#1a1a1a] text-white/70 hover:border-[#d97706]/40 hover:text-white"
                         }`}
                     >
                       <span className="font-bold text-[13px] leading-tight">{timeStr}</span>
@@ -489,7 +489,7 @@ export default function BookingPage() {
               <button
                 onClick={() => selectedDate && selectedTime && setStep("info")}
                 disabled={!selectedDate || !selectedTime}
-                className="flex-1 py-3.5 rounded-xl bg-[#e84118] text-white font-semibold hover:bg-[#c0392b] transition disabled:opacity-30 text-sm"
+                className="flex-1 py-3.5 rounded-xl bg-[#d97706] text-white font-semibold hover:bg-[#c0392b] transition disabled:opacity-30 text-sm"
               >
                 Siguiente
               </button>
@@ -501,7 +501,7 @@ export default function BookingPage() {
         {step === "info" && (
           <div>
             <div className="mb-8">
-              <p className="text-xs font-bold text-[#e84118] tracking-[0.2em] uppercase mb-2">
+              <p className="text-xs font-bold text-[#d97706] tracking-[0.2em] uppercase mb-2">
                 {barbers.length > 1 ? "Paso 4" : "Paso 3"}
               </p>
               <h2 className="text-2xl font-black">Tus datos</h2>
@@ -527,7 +527,7 @@ export default function BookingPage() {
                         onClick={() => { setClientName(s.name); if (s.phone) setClientPhone(s.phone); setShowSuggestions(false) }}
                         className="w-full text-left px-4 py-3 hover:bg-white/5 transition border-b border-white/5 last:border-0 flex items-center gap-3"
                       >
-                        <div className="w-7 h-7 rounded-full bg-[#e84118]/15 flex items-center justify-center text-[#e84118] font-bold text-xs flex-shrink-0">
+                        <div className="w-7 h-7 rounded-full bg-[#d97706]/15 flex items-center justify-center text-[#d97706] font-bold text-xs flex-shrink-0">
                           {s.name[0].toUpperCase()}
                         </div>
                         <div className="min-w-0">
@@ -555,7 +555,7 @@ export default function BookingPage() {
               <button
                 onClick={() => clientName && clientPhone && setStep("confirm")}
                 disabled={!clientName || !clientPhone}
-                className="flex-1 py-3.5 rounded-xl bg-[#e84118] text-white font-semibold hover:bg-[#c0392b] transition disabled:opacity-30 text-sm"
+                className="flex-1 py-3.5 rounded-xl bg-[#d97706] text-white font-semibold hover:bg-[#c0392b] transition disabled:opacity-30 text-sm"
               >
                 Revisar
               </button>
@@ -567,7 +567,7 @@ export default function BookingPage() {
         {step === "confirm" && (
           <div>
             <div className="mb-8">
-              <p className="text-xs font-bold text-[#e84118] tracking-[0.2em] uppercase mb-2">Último paso</p>
+              <p className="text-xs font-bold text-[#d97706] tracking-[0.2em] uppercase mb-2">Último paso</p>
               <h2 className="text-2xl font-black">Confirma tu cita</h2>
             </div>
 
@@ -575,8 +575,8 @@ export default function BookingPage() {
             <div className="bg-[#1a1a1a] border border-white/12 rounded-2xl overflow-hidden mb-4">
               {/* Header */}
               <div className="px-5 py-4 border-b border-white/5 flex items-center gap-3">
-                <div className="w-8 h-8 bg-[#e84118]/15 rounded-lg flex items-center justify-center">
-                  <Scissors size={15} className="text-[#e84118]" />
+                <div className="w-8 h-8 bg-[#d97706]/15 rounded-lg flex items-center justify-center">
+                  <Scissors size={15} className="text-[#d97706]" />
                 </div>
                 <p className="font-bold text-white">{selectedService?.name}</p>
               </div>
@@ -602,16 +602,16 @@ export default function BookingPage() {
                   <span className="text-sm text-white/40">Duración</span>
                   <span className="text-sm font-semibold text-white">{selectedService?.duration} min</span>
                 </div>
-                <div className="flex justify-between items-center px-5 py-4 bg-[#e84118]/5">
+                <div className="flex justify-between items-center px-5 py-4 bg-[#d97706]/5">
                   <span className="text-sm font-bold text-white">Total</span>
-                  <span className="font-black text-xl text-[#e84118]">{selectedService && formatPrice(selectedService.price)}</span>
+                  <span className="font-black text-xl text-[#d97706]">{selectedService && formatPrice(selectedService.price)}</span>
                 </div>
               </div>
             </div>
 
             {/* Client summary */}
             <div className="bg-[#1a1a1a] border border-white/12 rounded-xl px-5 py-3.5 mb-8 flex items-center gap-3">
-              <div className="w-8 h-8 bg-[#e84118]/15 rounded-full flex items-center justify-center text-[#e84118] font-black text-sm">
+              <div className="w-8 h-8 bg-[#d97706]/15 rounded-full flex items-center justify-center text-[#d97706] font-black text-sm">
                 {clientName[0]?.toUpperCase()}
               </div>
               <div>
@@ -627,7 +627,7 @@ export default function BookingPage() {
               <button
                 onClick={handleSubmit}
                 disabled={submitting}
-                className="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-[#e84118] to-[#c0392b] text-white font-bold hover:shadow-lg hover:shadow-[#e84118]/25 transition-all disabled:opacity-50 text-sm"
+                className="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-[#d97706] to-[#c0392b] text-white font-bold hover:shadow-lg hover:shadow-[#d97706]/25 transition-all disabled:opacity-50 text-sm"
               >
                 {submitting ? "Agendando..." : "Confirmar Cita"}
               </button>
