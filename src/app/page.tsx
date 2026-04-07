@@ -91,7 +91,7 @@ export default async function Home() {
       <div className="relative z-10">
 
       {/* ── Hero ── */}
-      <HeroSection galleryImages={gallery.map((item) => item.imageUrl)} />
+      <HeroSection galleryImages={gallery.map((item) => item.imageUrl)} shopName={shopName} />
 
       {/* ── Services ── */}
       <section id="servicios" className="py-28 border-t border-white/5">

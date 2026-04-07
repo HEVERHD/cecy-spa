@@ -15,9 +15,10 @@ const PHRASES = [
 
 interface HeroSectionProps {
   galleryImages?: string[]
+  shopName?: string
 }
 
-export default function HeroSection({ galleryImages = [] }: HeroSectionProps) {
+export default function HeroSection({ galleryImages = [], shopName = "Mi Barbería" }: HeroSectionProps) {
   const [phraseIndex, setPhraseIndex] = useState(0)
   const [displayed, setDisplayed] = useState("")
   const [isDeleting, setIsDeleting] = useState(false)
@@ -282,10 +283,10 @@ export default function HeroSection({ galleryImages = [] }: HeroSectionProps) {
 
                 {/* HUD labels */}
                 <div className="absolute top-2 left-1/2 -translate-x-1/2 text-[8px] lg:text-[10px] tracking-[0.3em] font-bold text-[#d97706]/35 uppercase whitespace-nowrap">
-                  Mi Barbería
+                  {shopName}
                 </div>
                 <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[8px] lg:text-[10px] tracking-[0.25em] font-bold text-white/20 uppercase whitespace-nowrap">
-                  Tu Barbería
+                  {shopName}
                 </div>
 
                 {/* Side tick marks */}
@@ -333,9 +334,8 @@ export default function HeroSection({ galleryImages = [] }: HeroSectionProps) {
                 {/* Brand line inside HUD */}
                 <div className="absolute bottom-9 left-1/2 -translate-x-1/2 text-center whitespace-nowrap">
                   <div className="h-px w-16 lg:w-24 mx-auto mb-1.5 bg-gradient-to-r from-transparent via-[#d97706]/40 to-transparent" />
-                  <p className="text-[9px] lg:text-[11px] tracking-[0.35em] font-black uppercase">
-                    <span className="text-[#d97706]">Mi</span>
-                    <span className="text-white/45"> Barbería</span>
+                  <p className="text-[9px] lg:text-[11px] tracking-[0.35em] font-black text-white/45 uppercase">
+                    {shopName}
                   </p>
                 </div>
               </div>
