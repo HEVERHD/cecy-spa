@@ -1,11 +1,21 @@
 import webpush from "web-push"
 import { prisma } from "@/lib/prisma"
 
-webpush.setVapidDetails(
-  process.env.VAPID_MAILTO!,
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-  process.env.VAPID_PRIVATE_KEY!
-)
+function initVapid() {
+  if (
+    process.env.VAPID_MAILTO &&
+    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY &&
+    process.env.VAPID_PRIVATE_KEY
+  ) {
+    webpush.setVapidDetails(
+      process.env.VAPID_MAILTO,
+      process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+      process.env.VAPID_PRIVATE_KEY
+    )
+    return true
+  }
+  return false
+}
 
 interface PushPayload {
   title: string
@@ -16,6 +26,7 @@ interface PushPayload {
 
 // Send push notification to all subscriptions of a specific user
 export async function sendPushToUser(userId: string, payload: PushPayload) {
+  if (!initVapid()) return
   const subscriptions = await prisma.pushSubscription.findMany({ where: { userId } })
   if (subscriptions.length === 0) return
 
