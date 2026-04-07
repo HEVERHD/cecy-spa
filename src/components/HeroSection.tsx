@@ -7,11 +7,10 @@ import { ArrowUpRight, ChevronDown } from "lucide-react"
 import LiveQueueBadge from "@/components/LiveQueueBadge"
 
 const PHRASES = [
-  "que tú.",
-  "saliendo, es saliendo.",
-  "toco apretar.",
-  "se fue así.",
-  "Yiaaaaaaaa",
+  "sin esperas.",
+  "en segundos.",
+  "desde tu celular.",
+  "fácil y rápido.",
 ]
 
 interface HeroSectionProps {
@@ -354,8 +353,8 @@ export default function HeroSection({ galleryImages = [] }: HeroSectionProps) {
 
               {/* Headline — staggered lines */}
               <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[84px] font-black leading-[0.88] tracking-tight mb-6 lg:mb-8">
-                <span className="fs-t1 block">Tu look</span>
-                <span className="fs-t2 block">habla antes</span>
+                <span className="fs-t1 block">Agenda</span>
+                <span className="fs-t2 block">tu cita</span>
                 {/* Typewriter line */}
                 <span className="fs-t3 block min-h-[1em]">
                   <span className="fs-accent">{displayed}</span>
@@ -368,7 +367,7 @@ export default function HeroSection({ galleryImages = [] }: HeroSectionProps) {
 
               {/* Subtext */}
               <p className="fs-sub text-base md:text-lg text-white/35 mb-8 lg:mb-10 max-w-sm leading-relaxed font-light mx-auto lg:mx-0">
-                Agenda tu cita en segundos, sin llamadas, sin esperas.
+                Reserva en línea, confirmación instantánea por WhatsApp. Sin llamadas, sin filas.
               </p>
 
               {/* CTAs */}
