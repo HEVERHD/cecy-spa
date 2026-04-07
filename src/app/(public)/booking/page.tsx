@@ -82,8 +82,16 @@ export default function BookingPage() {
   const [waitlistSubmitting, setWaitlistSubmitting] = useState(false)
   const [waitlistDone, setWaitlistDone] = useState(false)
   const [weekStart, setWeekStart] = useState(() => getWeekStart(new Date()))
+  const [shopName, setShopName] = useState("Mi Barbería")
 
   // ── Data fetching ──────────────────────────────────────────
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((s) => { if (s?.shopName) setShopName(s.shopName) })
+      .catch(() => {})
+  }, [])
+
   useEffect(() => {
     fetch("/api/barbers")
       .then((r) => r.json())
@@ -264,7 +272,7 @@ export default function BookingPage() {
           <div className="flex items-center gap-2.5">
             <Image src="/logo2.png" alt="Barbería" width={28} height={28} />
             <span className="font-black text-base tracking-wide">
-              Mi Barbería
+              {shopName}
             </span>
           </div>
           <div className="w-16" />
