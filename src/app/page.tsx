@@ -93,8 +93,7 @@ export default async function Home() {
       <div className="relative z-10">
 
       {/* ── Hero ── */}
-      {/* galleryImages=[] keeps the HUD clean — upload your own photos via /gallery */}
-      <HeroSection galleryImages={[]} shopName={shopName} />
+      <HeroSection galleryImages={gallery.map((item: (typeof gallery)[number]) => item.imageUrl)} shopName={shopName} />
 
       {/* ── Services ── */}
       <section id="servicios" className="py-28 border-t border-white/5">
