@@ -395,7 +395,7 @@ export default function SettingsPage() {
                 ctx.fillText("Escanea para agendar tu cita", 300, 550)
                 ctx.fillText(window.location.origin + "/booking", 300, 590)
                 const link = document.createElement("a")
-                link.download = "frailin-studio-qr.png"
+                link.download = "stylecut-studio-qr.png"
                 link.href = canvas.toDataURL("image/png")
                 link.click()
               }

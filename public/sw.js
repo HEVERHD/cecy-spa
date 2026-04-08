@@ -1,4 +1,4 @@
-const CACHE_NAME = "frailin-v2"
+const CACHE_NAME = "stylecut-v1"
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -31,14 +31,14 @@ self.addEventListener("push", (event) => {
   if (!event.data) return
 
   let data = {}
-  try { data = event.data.json() } catch { data = { title: "Frailin Studio", body: event.data.text() } }
+  try { data = event.data.json() } catch { data = { title: "StyleCut Studio", body: event.data.text() } }
 
-  const title = data.title || "Frailin Studio"
+  const title = data.title || "StyleCut Studio"
   const options = {
     body: data.body || "",
     icon: "/logo.png",
     badge: "/logo.png",
-    tag: data.tag || "frailin-notification",
+    tag: data.tag || "stylecut-notification",
     renotify: true,
     data: { url: data.url || "/dashboard" },
     vibrate: [200, 100, 200],

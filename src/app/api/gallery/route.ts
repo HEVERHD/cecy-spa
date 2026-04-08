@@ -86,7 +86,7 @@ export async function DELETE(req: NextRequest) {
 
   // Extract publicId from Cloudinary URL
   const urlParts = item.imageUrl.split("/")
-  const folderAndFile = urlParts.slice(urlParts.indexOf("frailin-studio")).join("/")
+  const folderAndFile = urlParts.slice(urlParts.indexOf("stylecut-studio")).join("/")
   const publicId = folderAndFile.replace(/\.[^.]+$/, "")
 
   try {

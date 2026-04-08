@@ -34,7 +34,7 @@ async function main() {
     console.log("No BarberSettings found. Creating default for ADMIN user")
     await prisma.barberSettings.create({
       data: {
-        shopName: "Frailin Studio",
+        shopName: "StyleCut Studio",
         openTime: "09:00",
         closeTime: "19:00",
         slotDuration: 30,

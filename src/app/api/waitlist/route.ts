@@ -78,7 +78,7 @@ export async function PATCH(req: NextRequest) {
     const templateSid = process.env.TWILIO_TEMPLATE_WAITLIST
     if (templateSid) {
       const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || ""
-      const bookingUrl = baseUrl ? `${baseUrl}/booking` : "frailinstudio.com/booking"
+      const bookingUrl = baseUrl ? `${baseUrl}/booking` : "stylecutstudio.com/booking"
       const [y, m, d] = entry.date.split("-")
       const dateLabel = new Date(+y, +m - 1, +d).toLocaleDateString("es-CO", {
         weekday: "long", day: "numeric", month: "long",

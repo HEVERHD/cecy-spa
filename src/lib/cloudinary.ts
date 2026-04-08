@@ -8,7 +8,7 @@ cloudinary.config({
 
 export async function uploadImage(base64: string): Promise<{ url: string; publicId: string }> {
   const result = await cloudinary.uploader.upload(base64, {
-    folder: "frailin-studio/gallery",
+    folder: "stylecut-studio/gallery",
     transformation: [{ width: 800, height: 800, crop: "limit", quality: "auto" }],
   })
   return { url: result.secure_url, publicId: result.public_id }

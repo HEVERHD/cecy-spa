@@ -182,7 +182,7 @@ export default function HeroSection({ galleryImages = [], shopName = "Mi Barber√
         .fs-divline { animation: fs-line-grow 1s ease 0.75s both; }
 
         .fs-accent {
-          background: linear-gradient(90deg, #d97706 0%, #f05428 35%, #ff7a50 65%, #d97706 100%);
+          background: linear-gradient(90deg, #c9a227 0%, #e8c547 35%, #f5d76e 65%, #c9a227 100%);
           background-size: 200% 100%;
           -webkit-background-clip: text;
           background-clip: text;
@@ -201,12 +201,12 @@ export default function HeroSection({ galleryImages = [], shopName = "Mi Barber√
         {/* Gradient vignette so hero text stays readable over parallax bg */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/20 to-black/55 pointer-events-none" />
         <div className="absolute inset-0 fs-dot-grid pointer-events-none" />
-        <div className="fs-orb-1 absolute -top-[15%] -left-[5%]  w-[700px] h-[700px] rounded-full bg-[#d97706]/6 blur-[140px] pointer-events-none" />
-        <div className="fs-orb-2 absolute  top-[5%]  right-[-10%] w-[550px] h-[550px] rounded-full bg-[#d97706]/4 blur-[110px] pointer-events-none" />
-        <div className="absolute bottom-[15%] right-[20%]          w-[350px] h-[350px] rounded-full bg-[#d97706]/3 blur-[90px]  pointer-events-none" />
+        <div className="fs-orb-1 absolute -top-[15%] -left-[5%]  w-[700px] h-[700px] rounded-full bg-[#c9a227]/6 blur-[140px] pointer-events-none" />
+        <div className="fs-orb-2 absolute  top-[5%]  right-[-10%] w-[550px] h-[550px] rounded-full bg-[#c9a227]/4 blur-[110px] pointer-events-none" />
+        <div className="absolute bottom-[15%] right-[20%]          w-[350px] h-[350px] rounded-full bg-[#c9a227]/3 blur-[90px]  pointer-events-none" />
 
         {/* Scan line */}
-        <div className="fs-scan absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#d97706]/25 to-transparent pointer-events-none z-10" />
+        <div className="fs-scan absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c9a227]/25 to-transparent pointer-events-none z-10" />
 
         {/* Scroll indicator */}
         <div
@@ -217,7 +217,7 @@ export default function HeroSection({ galleryImages = [], shopName = "Mi Barber√
           <span className="text-[9px] text-white/20 tracking-[0.3em] font-bold uppercase">Scroll</span>
           <div className="w-5 h-8 rounded-full border border-white/15 flex items-start justify-center pt-1">
             <div
-              className="w-[3px] h-[6px] rounded-full bg-[#d97706]/60"
+              className="w-[3px] h-[6px] rounded-full bg-[#c9a227]/60"
               style={{ animation: "fs-scroll-dot 1.8s ease-in-out infinite" }}
             />
           </div>
@@ -225,8 +225,8 @@ export default function HeroSection({ galleryImages = [], shopName = "Mi Barber√
         </div>
 
         {/* Top / bottom fades */}
-        <div className="absolute top-0 left-0 right-0 h-28 bg-gradient-to-b from-[#0a0a0a] to-transparent pointer-events-none z-10" />
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#0a0a0a] to-transparent pointer-events-none z-10" />
+        <div className="absolute top-0 left-0 right-0 h-28 bg-gradient-to-b from-[#060c17] to-transparent pointer-events-none z-10" />
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#060c17] to-transparent pointer-events-none z-10" />
 
         {/* ‚îÄ‚îÄ Content ‚îÄ‚îÄ */}
         <div className="relative z-20 max-w-6xl mx-auto px-6 py-10 md:py-20 w-full">
@@ -269,20 +269,20 @@ export default function HeroSection({ galleryImages = [], shopName = "Mi Barber√
                       }}
                     />
                     {/* Tinte rojo de marca */}
-                    <div className="absolute inset-0 bg-[#d97706]/10" />
+                    <div className="absolute inset-0 bg-[#c9a227]/10" />
                   </div>
                 )}
 
                 {/* Same HUD scaled via percentage-based insets */}
 
                 {/* Corner brackets */}
-                <div className="absolute top-0 left-0   w-7 h-7 lg:w-10 lg:h-10 border-t-2 border-l-2 border-[#d97706]/45" />
-                <div className="absolute top-0 right-0  w-7 h-7 lg:w-10 lg:h-10 border-t-2 border-r-2 border-[#d97706]/45" />
-                <div className="absolute bottom-0 left-0  w-7 h-7 lg:w-10 lg:h-10 border-b-2 border-l-2 border-[#d97706]/45" />
-                <div className="absolute bottom-0 right-0 w-7 h-7 lg:w-10 lg:h-10 border-b-2 border-r-2 border-[#d97706]/45" />
+                <div className="absolute top-0 left-0   w-7 h-7 lg:w-10 lg:h-10 border-t-2 border-l-2 border-[#c9a227]/45" />
+                <div className="absolute top-0 right-0  w-7 h-7 lg:w-10 lg:h-10 border-t-2 border-r-2 border-[#c9a227]/45" />
+                <div className="absolute bottom-0 left-0  w-7 h-7 lg:w-10 lg:h-10 border-b-2 border-l-2 border-[#c9a227]/45" />
+                <div className="absolute bottom-0 right-0 w-7 h-7 lg:w-10 lg:h-10 border-b-2 border-r-2 border-[#c9a227]/45" />
 
                 {/* HUD labels */}
-                <div className="absolute top-2 left-1/2 -translate-x-1/2 text-[8px] lg:text-[10px] tracking-[0.3em] font-bold text-[#d97706]/35 uppercase whitespace-nowrap">
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 text-[8px] lg:text-[10px] tracking-[0.3em] font-bold text-[#c9a227]/35 uppercase whitespace-nowrap">
                   {shopName}
                 </div>
                 <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[8px] lg:text-[10px] tracking-[0.25em] font-bold text-white/20 uppercase whitespace-nowrap">
@@ -292,22 +292,22 @@ export default function HeroSection({ galleryImages = [], shopName = "Mi Barber√
                 {/* Side tick marks */}
                 <div className="absolute left-1.5 top-1/2 -translate-y-1/2 flex flex-col gap-1">
                   {[5, 3, 10, 3, 5].map((w, i) => (
-                    <div key={i} className="h-px bg-[#d97706]/30" style={{ width: w }} />
+                    <div key={i} className="h-px bg-[#c9a227]/30" style={{ width: w }} />
                   ))}
                 </div>
                 <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex flex-col gap-1 items-end">
                   {[5, 3, 10, 3, 5].map((w, i) => (
-                    <div key={i} className="h-px bg-[#d97706]/30" style={{ width: w }} />
+                    <div key={i} className="h-px bg-[#c9a227]/30" style={{ width: w }} />
                   ))}
                 </div>
 
                 {/* Spinning rings (% inset so they scale with parent) */}
                 <div
-                  className="fs-ring-cw absolute rounded-full border border-[#d97706]/12 border-dashed"
+                  className="fs-ring-cw absolute rounded-full border border-[#c9a227]/12 border-dashed"
                   style={{ inset: "5%" }}
                 />
                 <div
-                  className="fs-ring-ccw absolute rounded-full border border-[#d97706]/18"
+                  className="fs-ring-ccw absolute rounded-full border border-[#c9a227]/18"
                   style={{ inset: "13%" }}
                 />
 
@@ -333,7 +333,7 @@ export default function HeroSection({ galleryImages = [], shopName = "Mi Barber√
 
                 {/* Brand line inside HUD */}
                 <div className="absolute bottom-9 left-1/2 -translate-x-1/2 text-center whitespace-nowrap">
-                  <div className="h-px w-16 lg:w-24 mx-auto mb-1.5 bg-gradient-to-r from-transparent via-[#d97706]/40 to-transparent" />
+                  <div className="h-px w-16 lg:w-24 mx-auto mb-1.5 bg-gradient-to-r from-transparent via-[#c9a227]/40 to-transparent" />
                   <p className="text-[9px] lg:text-[11px] tracking-[0.35em] font-black text-white/45 uppercase">
                     {shopName}
                   </p>
@@ -346,8 +346,8 @@ export default function HeroSection({ galleryImages = [], shopName = "Mi Barber√
             <div className="order-2 lg:order-1 text-center lg:text-left">
 
               {/* Location badge */}
-              <div className="fs-badge inline-flex items-center gap-2.5 border border-[#d97706]/25 bg-[#d97706]/8 text-[#d97706] text-[11px] font-bold px-4 py-2 rounded-full mb-6 lg:mb-8 tracking-[0.2em] uppercase">
-                <span className="fs-dot inline-block w-1.5 h-1.5 rounded-full bg-[#d97706]" />
+              <div className="fs-badge inline-flex items-center gap-2.5 border border-[#c9a227]/25 bg-[#c9a227]/8 text-[#c9a227] text-[11px] font-bold px-4 py-2 rounded-full mb-6 lg:mb-8 tracking-[0.2em] uppercase">
+                <span className="fs-dot inline-block w-1.5 h-1.5 rounded-full bg-[#c9a227]" />
                 Tu ciudad
               </div>
 
@@ -358,12 +358,12 @@ export default function HeroSection({ galleryImages = [], shopName = "Mi Barber√
                 {/* Typewriter line */}
                 <span className="fs-t3 block min-h-[1em]">
                   <span className="fs-accent">{displayed}</span>
-                  <span className="fs-cursor inline-block w-[3px] h-[0.7em] bg-[#d97706] align-middle rounded-sm ml-0.5" />
+                  <span className="fs-cursor inline-block w-[3px] h-[0.7em] bg-[#c9a227] align-middle rounded-sm ml-0.5" />
                 </span>
               </h1>
 
               {/* Thin red divider */}
-              <div className="fs-divline h-px bg-gradient-to-r from-transparent via-[#d97706]/40 to-transparent mb-6 lg:mb-8" />
+              <div className="fs-divline h-px bg-gradient-to-r from-transparent via-[#c9a227]/40 to-transparent mb-6 lg:mb-8" />
 
               {/* Subtext */}
               <p className="fs-sub text-base md:text-lg text-white/35 mb-8 lg:mb-10 max-w-sm leading-relaxed font-light mx-auto lg:mx-0">
@@ -374,14 +374,14 @@ export default function HeroSection({ galleryImages = [], shopName = "Mi Barber√
               <div className="fs-cta flex flex-col sm:flex-row items-center lg:items-start gap-3 mb-10 lg:mb-12">
                 <Link
                   href="/booking"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#d97706] to-[#b45309] text-white font-bold px-8 py-4 rounded-2xl text-base hover:shadow-2xl hover:shadow-[#d97706]/40 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#c9a227] to-[#a88520] text-white font-bold px-8 py-4 rounded-2xl text-base hover:shadow-2xl hover:shadow-[#c9a227]/40 transition-all hover:scale-[1.02] active:scale-[0.98]"
                 >
                   Agendar mi cita
                   <ArrowUpRight size={18} />
                 </Link>
                 <a
                   href="#servicios"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-white/10 text-white/50 font-medium px-8 py-4 rounded-2xl text-base hover:bg-white/5 hover:text-white hover:border-[#d97706]/30 transition-all"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-white/10 text-white/50 font-medium px-8 py-4 rounded-2xl text-base hover:bg-white/5 hover:text-white hover:border-[#c9a227]/30 transition-all"
                 >
                   Ver servicios
                 </a>

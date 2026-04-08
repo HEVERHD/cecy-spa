@@ -1,11 +1,11 @@
 {
-  "name": "Frailin Studio",
-  "short_name": "Frailin",
-  "description": "Barberia Premium - Agenda tu cita",
+  "name": "StyleCut Studio",
+  "short_name": "StyleCut",
+  "description": "Barbería Premium — Agenda tu cita online",
   "start_url": "/dashboard",
   "display": "standalone",
-  "background_color": "#1a0a0a",
-  "theme_color": "#e84118",
+  "background_color": "#0a0f1e",
+  "theme_color": "#c9a227",
   "orientation": "portrait",
   "icons": [
     {
