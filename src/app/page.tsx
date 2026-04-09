@@ -591,6 +591,12 @@ export default async function Home() {
                   )}
                 </div>
               </div>
+              <div>
+                <p className="text-[10px] font-bold text-white/25 uppercase tracking-widest mb-3">Plataforma</p>
+                <div className="flex flex-col gap-2.5">
+                  <Link href="/planes" className="text-sm text-white/55 hover:text-white transition">Planes y precios</Link>
+                </div>
+              </div>
             </div>
           </div>
 
