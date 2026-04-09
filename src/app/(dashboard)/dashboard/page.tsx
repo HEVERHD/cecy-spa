@@ -29,6 +29,16 @@ import {
   Star,
 } from "lucide-react"
 
+type BarberStat = {
+  id: string
+  name: string | null
+  image: string | null
+  specialty: string | null
+  thisMonth: { completedCount: number; revenue: number; uniqueClients: number }
+  prevMonth: { completedCount: number; revenue: number }
+  revenueTrend: number | null
+}
+
 type Stats = {
   monthRevenue: number
   prevMonthRevenue: number
@@ -141,11 +151,23 @@ const SkeletonCard = () => (
 export default function DashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [loading, setLoading] = useState(true)
+  const [barberStats, setBarberStats] = useState<BarberStat[]>([])
+  const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
     fetch("/api/stats")
       .then((r) => r.json())
       .then((d) => { setStats(d); setLoading(false) })
+
+    // Fetch barber stats — the API returns 403 for non-admins, we just ignore it
+    fetch("/api/stats/barbers")
+      .then((r) => r.ok ? r.json() : [])
+      .then((d) => {
+        if (Array.isArray(d) && d.length > 0) {
+          setBarberStats(d)
+          setIsAdmin(true)
+        }
+      })
   }, [])
 
   if (loading) {
@@ -458,6 +480,106 @@ export default function DashboardPage() {
           )}
         </div>
       </div>
+
+      {/* ── Barber performance (ADMIN only) ── */}
+      {isAdmin && barberStats.length > 1 && (
+        <div className="mt-6 bg-[#111] rounded-2xl p-6 border border-white/8">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <p className="font-bold text-white">Rendimiento por barbero</p>
+              <p className="text-xs text-white/30 mt-0.5">Mes actual · citas completadas</p>
+            </div>
+            <div className="text-right">
+              <p className="text-xs text-white/30">Total del equipo</p>
+              <p className="text-sm font-bold text-[#c9a227]">
+                {fmtShort(barberStats.reduce((s, b) => s + b.thisMonth.revenue, 0))}
+              </p>
+            </div>
+          </div>
+
+          {/* Top barber highlight */}
+          {barberStats[0] && barberStats[0].thisMonth.completedCount > 0 && (
+            <div className="flex items-center gap-4 p-4 bg-[#c9a227]/8 border border-[#c9a227]/20 rounded-2xl mb-5">
+              <div className="w-12 h-12 rounded-full bg-[#c9a227]/20 border-2 border-[#c9a227]/40 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                {barberStats[0].image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={barberStats[0].image} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-lg font-black text-[#c9a227]">
+                    {(barberStats[0].name || "?")[0].toUpperCase()}
+                  </span>
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className="text-base">👑</span>
+                  <p className="font-bold text-white truncate">{barberStats[0].name || "Barbero"}</p>
+                  <span className="text-[10px] bg-[#c9a227]/20 text-[#c9a227] font-bold px-2 py-0.5 rounded-full">Top</span>
+                </div>
+                <p className="text-xs text-white/40">
+                  {barberStats[0].specialty || "Barbero profesional"} · {barberStats[0].thisMonth.uniqueClients} clientes únicos
+                </p>
+              </div>
+              <div className="text-right flex-shrink-0">
+                <p className="text-xl font-black text-[#c9a227]">{fmtShort(barberStats[0].thisMonth.revenue)}</p>
+                <p className="text-xs text-white/30">{barberStats[0].thisMonth.completedCount} citas</p>
+              </div>
+            </div>
+          )}
+
+          {/* Ranking table */}
+          <div className="space-y-3">
+            {(() => {
+              const maxRevenue = Math.max(...barberStats.map((b) => b.thisMonth.revenue), 1)
+              return barberStats.map((barber, i) => (
+                <div key={barber.id} className="flex items-center gap-3">
+                  <span className="text-xs text-white/20 w-4 text-right flex-shrink-0 font-bold">{i + 1}</span>
+                  <div className="w-9 h-9 rounded-full bg-white/8 border border-white/10 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    {barber.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={barber.image} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-sm font-bold text-white/60">{(barber.name || "?")[0].toUpperCase()}</span>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <p className="text-sm font-semibold text-white truncate">{barber.name || "Barbero"}</p>
+                      <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+                        <span className="text-xs text-white/35">{barber.thisMonth.completedCount} citas</span>
+                        <span className="text-white/20 text-xs">·</span>
+                        <span className="text-xs text-white/35">{barber.thisMonth.uniqueClients} clientes</span>
+                        {barber.revenueTrend !== null && (
+                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                            barber.revenueTrend > 0 ? "bg-emerald-900/40 text-emerald-400"
+                            : barber.revenueTrend < 0 ? "bg-red-900/40 text-red-400"
+                            : "bg-white/5 text-white/30"
+                          }`}>
+                            {barber.revenueTrend > 0 ? "+" : ""}{barber.revenueTrend}%
+                          </span>
+                        )}
+                        <span className="text-sm font-bold text-[#c9a227] w-14 text-right tabular-nums">
+                          {fmtShort(barber.thisMonth.revenue)}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-[#c9a227] to-[#a88520] transition-all duration-700"
+                        style={{ width: `${(barber.thisMonth.revenue / maxRevenue) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))
+            })()}
+          </div>
+
+          {barberStats.every((b) => b.thisMonth.completedCount === 0) && (
+            <p className="text-center text-white/20 text-sm py-4">Sin citas completadas este mes todavía</p>
+          )}
+        </div>
+      )}
     </div>
   )
 }
