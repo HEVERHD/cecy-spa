@@ -72,6 +72,40 @@ function aptEndTime(apt: { date: string; service: { duration: number } }): Date 
   return new Date(new Date(apt.date).getTime() + apt.service.duration * 60000)
 }
 
+// ── Column layout for overlapping appointments ───────────────
+function computeColumns(apts: Appointment[]): Map<string, { col: number; totalCols: number }> {
+  const sorted = [...apts].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+  const colEnds: number[] = [] // end time (ms) of the last apt in each column
+  const aptCol = new Map<string, number>()
+
+  for (const apt of sorted) {
+    const start = new Date(apt.date).getTime()
+    const end = aptEndTime(apt).getTime()
+    let col = 0
+    while (col < colEnds.length && colEnds[col] > start) col++
+    aptCol.set(apt.id, col)
+    colEnds[col] = end
+  }
+
+  const result = new Map<string, { col: number; totalCols: number }>()
+  for (const apt of sorted) {
+    const col = aptCol.get(apt.id)!
+    const start = new Date(apt.date).getTime()
+    const end = aptEndTime(apt).getTime()
+    let maxCol = col
+    for (const other of sorted) {
+      if (other.id === apt.id) continue
+      const oStart = new Date(other.date).getTime()
+      const oEnd = aptEndTime(other).getTime()
+      if (start < oEnd && end > oStart) {
+        maxCol = Math.max(maxCol, aptCol.get(other.id)!)
+      }
+    }
+    result.set(apt.id, { col, totalCols: maxCol + 1 })
+  }
+  return result
+}
+
 export default function AppointmentsPage() {
   const [appointments, setAppointments] = useState<Appointment[]>([])
   const [weekAppointments, setWeekAppointments] = useState<Appointment[]>([])
@@ -660,7 +694,9 @@ export default function AppointmentsPage() {
               })()}
 
               {/* Appointment blocks */}
-              {dayAppointments.map((apt) => {
+              {(() => {
+                const colMap = computeColumns(dayAppointments)
+                return dayAppointments.map((apt) => {
                 const { h, m } = { h: colombiaHour(new Date(apt.date)), m: getColombiaMinute(new Date(apt.date)) }
                 const top = timeToY(h, m)
                 const height = Math.max((apt.service.duration / 60) * HOUR_HEIGHT, 36)
@@ -668,16 +704,20 @@ export default function AppointmentsPage() {
                 const past = isPast(apt)
                 const progress = active ? getProgress(apt) : 0
                 const remaining = active ? getRemainingMin(apt) : 0
-
-                // Necesita botón manual: activo O pasado-sin-completar
-                const needsAction = (apt.status === "PENDING" || apt.status === "CONFIRMED") &&
-                  (active || past)
+                const { col, totalCols } = colMap.get(apt.id) ?? { col: 0, totalCols: 1 }
+                const widthPct = 100 / totalCols
+                const leftPct = col * widthPct
 
                 return (
                   <div
                     key={apt.id}
-                    className="absolute left-1"
-                    style={{ top: top + 1, height: height - 2, right: "4px" }}
+                    className="absolute"
+                    style={{
+                      top: top + 1,
+                      height: height - 2,
+                      left: `calc(${leftPct}% + 2px)`,
+                      width: `calc(${widthPct}% - 4px)`,
+                    }}
                   >
                     {/* Bloque principal — toca para abrir actions */}
                     <div
@@ -720,7 +760,8 @@ export default function AppointmentsPage() {
                     </div>
                   </div>
                 )
-              })}
+              })
+              })()}
 
               {/* Empty state overlay when no appointments but viewing today */}
               {dayAppointments.length === 0 && (
@@ -1009,7 +1050,9 @@ export default function AppointmentsPage() {
                   })()}
 
                   {/* Appointment blocks */}
-                  {dayAppointments.map((apt) => {
+                  {(() => {
+                    const colMap = computeColumns(dayAppointments)
+                    return dayAppointments.map((apt) => {
                     const h = colombiaHour(new Date(apt.date))
                     const m = getColombiaMinute(new Date(apt.date))
                     const top = timeToY(h, m)
@@ -1018,12 +1061,20 @@ export default function AppointmentsPage() {
                     const past = isPast(apt)
                     const progress = active ? getProgress(apt) : 0
                     const remaining = active ? getRemainingMin(apt) : 0
+                    const { col, totalCols } = colMap.get(apt.id) ?? { col: 0, totalCols: 1 }
+                    const widthPct = 100 / totalCols
+                    const leftPct = col * widthPct
 
                     return (
                       <div
                         key={apt.id}
-                        className="absolute left-1"
-                        style={{ top: top + 1, height: height - 2, right: "8px" }}
+                        className="absolute"
+                        style={{
+                          top: top + 1,
+                          height: height - 2,
+                          left: `calc(${leftPct}% + 2px)`,
+                          width: `calc(${widthPct}% - 4px)`,
+                        }}
                       >
                         <div
                           onClick={() => setActionApt(apt)}
@@ -1070,7 +1121,8 @@ export default function AppointmentsPage() {
                         </div>
                       </div>
                     )
-                  })}
+                  })
+                  })()}
 
                   {dayAppointments.length === 0 && (
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
