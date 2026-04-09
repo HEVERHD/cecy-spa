@@ -1,8 +1,6 @@
 import { Resend } from "resend"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
-const FROM = process.env.RESEND_FROM || "citas@stylecut.studio"
+const FROM = process.env.RESEND_FROM || "onboarding@resend.dev"
 
 // ── HTML email template ────────────────────────────────────────────────────
 function buildConfirmationHtml({
@@ -177,6 +175,8 @@ export async function sendConfirmationEmail({
   appointmentLink: string
 }) {
   if (!process.env.RESEND_API_KEY) return
+
+  const resend = new Resend(process.env.RESEND_API_KEY)
 
   await resend.emails.send({
     from: FROM,
