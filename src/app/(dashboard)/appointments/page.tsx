@@ -58,7 +58,7 @@ function getWeekDays(dateStr: string) {
 }
 
 // ── Real-time timeline constants ────────────────────────────
-const HOUR_HEIGHT = 64 // px per hour
+const HOUR_HEIGHT = 84 // px per hour
 const TL_START = 7    // 7 AM
 const TL_END = 24     // 12 AM (midnight)
 
@@ -699,7 +699,7 @@ export default function AppointmentsPage() {
                 return dayAppointments.map((apt) => {
                 const { h, m } = { h: colombiaHour(new Date(apt.date)), m: getColombiaMinute(new Date(apt.date)) }
                 const top = timeToY(h, m)
-                const height = Math.max((apt.service.duration / 60) * HOUR_HEIGHT, 36)
+                const height = Math.max((apt.service.duration / 60) * HOUR_HEIGHT, 44)
                 const active = isActive(apt)
                 const past = isPast(apt)
                 const progress = active ? getProgress(apt) : 0
@@ -707,6 +707,7 @@ export default function AppointmentsPage() {
                 const { col, totalCols } = colMap.get(apt.id) ?? { col: 0, totalCols: 1 }
                 const widthPct = 100 / totalCols
                 const leftPct = col * widthPct
+                const narrow = totalCols > 1
 
                 return (
                   <div
@@ -719,7 +720,6 @@ export default function AppointmentsPage() {
                       width: `calc(${widthPct}% - 4px)`,
                     }}
                   >
-                    {/* Bloque principal — toca para abrir actions */}
                     <div
                       onClick={() => setActionApt(apt)}
                       className={`h-full rounded-xl overflow-hidden border transition-opacity cursor-pointer active:brightness-125 ${
@@ -730,32 +730,40 @@ export default function AppointmentsPage() {
                           : "border-[#3d2020]"
                       }`}
                     >
-                      {/* Progress bar fill for active appointment */}
+                      {/* Left accent bar */}
+                      <div className={`absolute left-0 top-0 bottom-0 w-1 ${
+                        active ? "bg-[#e84118]"
+                        : apt.status === "COMPLETED" ? "bg-green-500/60"
+                        : apt.status === "CONFIRMED" ? "bg-blue-500/60"
+                        : "bg-yellow-500/60"
+                      }`} />
+
+                      {/* Progress fill */}
                       {active && (
                         <div
-                          className="absolute inset-0 bg-[#e84118]/20 transition-all duration-1000"
+                          className="absolute inset-0 bg-[#e84118]/15 transition-all duration-1000"
                           style={{ width: `${progress}%` }}
                         />
                       )}
 
                       {/* Content */}
-                      <div className="relative z-10 flex flex-col h-full p-2 bg-[#1a0a0a]/60">
-                        <div className="flex items-start justify-between gap-1">
-                          <div className="flex-1 min-w-0">
-                            <p className={`font-semibold text-xs leading-tight truncate ${active ? "text-white" : "text-white/80"}`}>
-                              {apt.user?.name || "Cliente"}
-                            </p>
-                            <p className="text-[10px] text-white/40 truncate">{apt.service.name}</p>
-                            {active && (
-                              <p className="text-[10px] text-[#e84118] font-medium mt-0.5">
-                                {remaining} min restantes
-                              </p>
-                            )}
-                          </div>
-                          <span className={`text-[9px] px-1.5 py-0.5 rounded-full flex-shrink-0 ${STATUS_MAP[apt.status]?.color}`}>
+                      <div className="relative z-10 h-full flex flex-col justify-center pl-3 pr-2 py-1.5 bg-[#1a0a0a]/60">
+                        <p className={`font-bold leading-tight text-[11px] ${active ? "text-white" : "text-white/85"}`}
+                          style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
+                          {apt.user?.name || "Cliente"}
+                        </p>
+                        <p className="text-[10px] text-white/50 leading-tight mt-0.5"
+                          style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: narrow ? 1 : 2, WebkitBoxOrient: "vertical" }}>
+                          {apt.service.name}
+                        </p>
+                        {active && (
+                          <p className="text-[9px] text-[#e84118] font-semibold mt-0.5">{remaining}min</p>
+                        )}
+                        {!narrow && (
+                          <span className={`self-start text-[8px] px-1.5 py-0.5 rounded-full mt-1 ${STATUS_MAP[apt.status]?.color}`}>
                             {STATUS_MAP[apt.status]?.label}
                           </span>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -1056,7 +1064,7 @@ export default function AppointmentsPage() {
                     const h = colombiaHour(new Date(apt.date))
                     const m = getColombiaMinute(new Date(apt.date))
                     const top = timeToY(h, m)
-                    const height = Math.max((apt.service.duration / 60) * HOUR_HEIGHT, 40)
+                    const height = Math.max((apt.service.duration / 60) * HOUR_HEIGHT, 48)
                     const active = isActive(apt)
                     const past = isPast(apt)
                     const progress = active ? getProgress(apt) : 0
@@ -1064,6 +1072,7 @@ export default function AppointmentsPage() {
                     const { col, totalCols } = colMap.get(apt.id) ?? { col: 0, totalCols: 1 }
                     const widthPct = 100 / totalCols
                     const leftPct = col * widthPct
+                    const narrow = totalCols > 1
 
                     return (
                       <div
@@ -1088,36 +1097,70 @@ export default function AppointmentsPage() {
                               : "border-[#3d2020]"
                           }`}
                         >
+                          {/* Left accent bar */}
+                          <div className={`absolute left-0 top-0 bottom-0 w-1 ${
+                            active ? "bg-[#e84118]"
+                            : apt.status === "COMPLETED" ? "bg-green-500/70"
+                            : apt.status === "CONFIRMED" ? "bg-blue-500/70"
+                            : "bg-yellow-500/70"
+                          }`} />
+
                           {active && (
                             <div
-                              className="absolute inset-0 bg-[#e84118]/20 transition-all duration-1000"
+                              className="absolute inset-0 bg-[#e84118]/15 transition-all duration-1000"
                               style={{ width: `${progress}%` }}
                             />
                           )}
-                          <div className="relative z-10 flex items-center h-full px-4 gap-4 bg-[#1a0a0a]/60">
-                            <div className="w-9 h-9 rounded-full bg-[#e84118]/20 flex items-center justify-center text-[#e84118] font-bold text-sm flex-shrink-0">
-                              {(apt.user?.name || "?")[0].toUpperCase()}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className={`font-semibold text-sm truncate ${active ? "text-white" : "text-white/80"}`}>
+
+                          {narrow ? (
+                            /* Narrow (multi-column) — compact vertical layout */
+                            <div className="relative z-10 h-full flex flex-col justify-center pl-3 pr-2 py-2 bg-[#1a0a0a]/60">
+                              <p className={`font-bold text-xs leading-tight ${active ? "text-white" : "text-white/85"}`}
+                                style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
                                 {apt.user?.name || "Cliente"}
                               </p>
-                              <p className="text-xs text-white/40 truncate">{apt.service.name}</p>
-                              {active && (
-                                <p className="text-xs text-[#e84118] font-medium">{remaining} min restantes</p>
-                              )}
-                            </div>
-                            <div className="flex-shrink-0 text-right">
-                              <p className="text-xs text-white/50">
-                                {new Date(apt.date).toLocaleTimeString("es-CO", {
-                                  hour: "2-digit", minute: "2-digit", hour12: true, timeZone: COL_TZ,
-                                })}
+                              <p className="text-[10px] text-white/50 leading-tight mt-0.5"
+                                style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                                {apt.service.name}
                               </p>
-                              <span className={`text-[10px] px-2 py-0.5 rounded-full ${STATUS_MAP[apt.status]?.color}`}>
+                              {active && (
+                                <p className="text-[9px] text-[#e84118] font-semibold mt-0.5">{remaining}min</p>
+                              )}
+                              <span className={`self-start text-[8px] px-1.5 py-0.5 rounded-full mt-1 ${STATUS_MAP[apt.status]?.color}`}>
                                 {STATUS_MAP[apt.status]?.label}
                               </span>
                             </div>
-                          </div>
+                          ) : (
+                            /* Full width — horizontal layout with avatar */
+                            <div className="relative z-10 flex items-center h-full pl-4 pr-3 gap-3 bg-[#1a0a0a]/60">
+                              <div className="w-8 h-8 rounded-full bg-[#e84118]/20 flex items-center justify-center text-[#e84118] font-bold text-sm flex-shrink-0">
+                                {(apt.user?.name || "?")[0].toUpperCase()}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className={`font-semibold text-sm leading-tight ${active ? "text-white" : "text-white/80"}`}
+                                  style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
+                                  {apt.user?.name || "Cliente"}
+                                </p>
+                                <p className="text-xs text-white/45 leading-tight mt-0.5"
+                                  style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                                  {apt.service.name}
+                                </p>
+                                {active && (
+                                  <p className="text-xs text-[#e84118] font-medium mt-0.5">{remaining} min restantes</p>
+                                )}
+                              </div>
+                              <div className="flex-shrink-0 text-right">
+                                <p className="text-xs text-white/50 mb-1">
+                                  {new Date(apt.date).toLocaleTimeString("es-CO", {
+                                    hour: "2-digit", minute: "2-digit", hour12: true, timeZone: COL_TZ,
+                                  })}
+                                </p>
+                                <span className={`text-[10px] px-2 py-0.5 rounded-full ${STATUS_MAP[apt.status]?.color}`}>
+                                  {STATUS_MAP[apt.status]?.label}
+                                </span>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     )
