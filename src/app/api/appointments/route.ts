@@ -105,10 +105,9 @@ export async function POST(req: NextRequest) {
       },
     })
   } else {
-    // Update phone and/or email if newly provided
-    const updateData: { phone?: string; email?: string; name?: string } = {}
+    // Update phone and/or name if newly provided
+    const updateData: { phone?: string; name?: string } = {}
     if (!user.phone && body.phone) updateData.phone = body.phone
-    if (!user.email && body.email) updateData.email = body.email
     if (!user.name && body.clientName) updateData.name = body.clientName
     if (Object.keys(updateData).length > 0) {
       user = await prisma.user.update({ where: { id: user.id }, data: updateData })
@@ -338,10 +337,11 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // Email confirmation to client (if they provided email)
-  if (user.email) {
+  // Email confirmation to client (use body.email as fallback if user.email conflicts with another account)
+  const emailTo = user.email || body.email || null
+  if (emailTo) {
     sendConfirmationEmail({
-      to: user.email,
+      to: emailTo,
       clientName: user.name || "Cliente",
       serviceName: appointment.service.name,
       date: formatDate(appointment.date),
