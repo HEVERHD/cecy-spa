@@ -116,7 +116,7 @@ export default function AppointmentsPage() {
   const [view, setView] = useState<"list" | "week" | "day">("day")
 
   const [services, setServices] = useState<any[]>([])
-  const [businessHours, setBusinessHours] = useState({ openTime: "09:00", closeTime: "19:00" })
+  const [, setBusinessHours] = useState({ openTime: "09:00", closeTime: "19:00" })
   const [newApt, setNewApt] = useState({
     clientName: "",
     phone: "",
@@ -699,7 +699,7 @@ export default function AppointmentsPage() {
                 return dayAppointments.map((apt) => {
                 const { h, m } = { h: colombiaHour(new Date(apt.date)), m: getColombiaMinute(new Date(apt.date)) }
                 const top = timeToY(h, m)
-                const height = Math.max((apt.service.duration / 60) * HOUR_HEIGHT, 44)
+                const height = Math.max((apt.service.duration / 60) * HOUR_HEIGHT, 52)
                 const active = isActive(apt)
                 const past = isPast(apt)
                 const progress = active ? getProgress(apt) : 0
@@ -747,22 +747,36 @@ export default function AppointmentsPage() {
                       )}
 
                       {/* Content */}
-                      <div className="relative z-10 h-full flex flex-col justify-center pl-3 pr-2 py-1.5 bg-[#1a0a0a]/60">
-                        <p className={`font-bold leading-tight text-[11px] ${active ? "text-white" : "text-white/85"}`}
-                          style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
-                          {apt.user?.name || "Cliente"}
-                        </p>
-                        <p className="text-[10px] text-white/50 leading-tight mt-0.5"
-                          style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: narrow ? 1 : 2, WebkitBoxOrient: "vertical" }}>
-                          {apt.service.name}
-                        </p>
-                        {active && (
-                          <p className="text-[9px] text-[#e84118] font-semibold mt-0.5">{remaining}min</p>
-                        )}
-                        {!narrow && (
-                          <span className={`self-start text-[8px] px-1.5 py-0.5 rounded-full mt-1 ${STATUS_MAP[apt.status]?.color}`}>
-                            {STATUS_MAP[apt.status]?.label}
-                          </span>
+                      <div className="relative z-10 h-full flex flex-col justify-start pl-3 pr-2 py-1.5 bg-[#1a0a0a]/60">
+                        {narrow ? (
+                          /* Narrow (overlapping): only service name, 2 lines */
+                          <>
+                            <p className={`font-semibold leading-tight text-[10px] ${active ? "text-white" : "text-white/85"}`}
+                              style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                              {apt.service.name}
+                            </p>
+                            {active && (
+                              <p className="text-[9px] text-[#e84118] font-semibold mt-0.5">{remaining}min</p>
+                            )}
+                          </>
+                        ) : (
+                          /* Wide (single column): client name + service + badge */
+                          <>
+                            <p className={`font-bold leading-tight text-[11px] ${active ? "text-white" : "text-white/85"}`}
+                              style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
+                              {apt.user?.name || "Cliente"}
+                            </p>
+                            <p className="text-[10px] text-white/50 leading-tight mt-0.5"
+                              style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                              {apt.service.name}
+                            </p>
+                            {active && (
+                              <p className="text-[9px] text-[#e84118] font-semibold mt-0.5">{remaining}min</p>
+                            )}
+                            <span className={`self-start text-[8px] px-1.5 py-0.5 rounded-full mt-1 ${STATUS_MAP[apt.status]?.color}`}>
+                              {STATUS_MAP[apt.status]?.label}
+                            </span>
+                          </>
                         )}
                       </div>
                     </div>
