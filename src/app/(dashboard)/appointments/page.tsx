@@ -23,7 +23,7 @@ const STATUS_MAP: Record<string, { label: string; color: string; dot: string }> 
   CONFIRMED: { label: "Confirmada", color: "bg-blue-900/50 text-blue-400", dot: "bg-blue-400" },
   COMPLETED: { label: "Completada", color: "bg-green-900/50 text-green-400", dot: "bg-green-400" },
   CANCELLED: { label: "Cancelada", color: "bg-red-900/50 text-red-400", dot: "bg-red-400" },
-  NO_SHOW: { label: "No asistio", color: "bg-[#3d2020] text-white/60", dot: "bg-white/40" },
+  NO_SHOW: { label: "No asistio", color: "bg-[#0e2530] text-white/60", dot: "bg-white/40" },
 }
 
 const DAYS_ES = ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"]
@@ -421,11 +421,11 @@ export default function AppointmentsPage() {
       <div className="flex items-center justify-between gap-3 mb-4">
         <h1 className="text-xl sm:text-2xl font-bold text-white">Citas</h1>
         <div className="flex gap-2">
-          <div className="hidden sm:flex bg-[#1a0a0a] rounded-xl p-1 border border-[#3d2020]">
+          <div className="hidden sm:flex bg-[#080f16] rounded-xl p-1 border border-[#0e2530]">
             <button
               onClick={() => setView("day")}
               className={`px-3 py-1.5 rounded-lg text-sm transition ${
-                view === "day" ? "bg-[#e84118] text-white" : "text-white/50 hover:text-white"
+                view === "day" ? "bg-[#00bcd4] text-white" : "text-white/50 hover:text-white"
               }`}
             >
               Día
@@ -433,7 +433,7 @@ export default function AppointmentsPage() {
             <button
               onClick={() => setView("week")}
               className={`px-3 py-1.5 rounded-lg text-sm transition ${
-                view === "week" ? "bg-[#e84118] text-white" : "text-white/50 hover:text-white"
+                view === "week" ? "bg-[#00bcd4] text-white" : "text-white/50 hover:text-white"
               }`}
             >
               Semana
@@ -441,7 +441,7 @@ export default function AppointmentsPage() {
             <button
               onClick={() => setView("list")}
               className={`px-3 py-1.5 rounded-lg text-sm transition ${
-                view === "list" ? "bg-[#e84118] text-white" : "text-white/50 hover:text-white"
+                view === "list" ? "bg-[#00bcd4] text-white" : "text-white/50 hover:text-white"
               }`}
             >
               Lista
@@ -449,7 +449,7 @@ export default function AppointmentsPage() {
           </div>
           <button
             onClick={() => setShowNewForm(!showNewForm)}
-            className="bg-[#e84118] text-white px-3 sm:px-4 py-2 rounded-xl font-medium hover:bg-[#c0392b] transition text-sm"
+            className="bg-[#00bcd4] text-white px-3 sm:px-4 py-2 rounded-xl font-medium hover:bg-[#c0392b] transition text-sm"
           >
             + Nueva
           </button>
@@ -458,7 +458,7 @@ export default function AppointmentsPage() {
 
       {/* New appointment form */}
       {showNewForm && (
-        <div className="bg-[#2d1515] rounded-xl p-4 sm:p-6 border border-[#3d2020] mb-4">
+        <div className="bg-[#0a1520] rounded-xl p-4 sm:p-6 border border-[#0e2530] mb-4">
           <h3 className="font-semibold mb-3 text-white text-sm">Agendar cita manual</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="relative">
@@ -469,10 +469,10 @@ export default function AppointmentsPage() {
                 onChange={(e) => setNewApt({ ...newApt, clientName: e.target.value })}
                 onFocus={() => clientResults.length > 0 && setShowClientDropdown(true)}
                 onBlur={() => setTimeout(() => setShowClientDropdown(false), 200)}
-                className="w-full p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white placeholder-white/40 text-sm"
+                className="w-full p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40 text-sm"
               />
               {showClientDropdown && (
-                <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-[#2d1515] border border-[#3d2020] rounded-xl overflow-hidden shadow-xl max-h-56 overflow-y-auto">
+                <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-[#0a1520] border border-[#0e2530] rounded-xl overflow-hidden shadow-xl max-h-56 overflow-y-auto">
                   {clientResults.map((c: any) => (
                     <button
                       key={c.id}
@@ -486,9 +486,9 @@ export default function AppointmentsPage() {
                         })
                         setShowClientDropdown(false)
                       }}
-                      className="w-full text-left px-4 py-3 hover:bg-[#3d2020] transition border-b border-[#3d2020] last:border-0 flex items-center gap-3"
+                      className="w-full text-left px-4 py-3 hover:bg-[#0e2530] transition border-b border-[#0e2530] last:border-0 flex items-center gap-3"
                     >
-                      <div className="w-8 h-8 rounded-full bg-[#e84118]/20 flex items-center justify-center text-[#e84118] font-bold text-sm flex-shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-[#00bcd4]/20 flex items-center justify-center text-[#00bcd4] font-bold text-sm flex-shrink-0">
                         {(c.name || "?")[0].toUpperCase()}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -507,12 +507,12 @@ export default function AppointmentsPage() {
               placeholder="WhatsApp (+57...)"
               value={newApt.phone}
               onChange={(e) => setNewApt({ ...newApt, phone: e.target.value })}
-              className="p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white placeholder-white/40 text-sm"
+              className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40 text-sm"
             />
             <select
               value={newApt.serviceId}
               onChange={(e) => setNewApt({ ...newApt, serviceId: e.target.value })}
-              className="p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white text-sm"
+              className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white text-sm"
             >
               <option value="">Seleccionar servicio</option>
               {services.map((s: any) => (
@@ -525,7 +525,7 @@ export default function AppointmentsPage() {
               <select
                 value={selectedBarberId}
                 onChange={(e) => setSelectedBarberId(e.target.value)}
-                className="p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white text-sm"
+                className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white text-sm"
               >
                 {barbers.map((b: any) => (
                   <option key={b.id} value={b.id}>
@@ -555,8 +555,8 @@ export default function AppointmentsPage() {
                       onClick={() => setNewApt({ ...newApt, time: slot })}
                       className={`py-2 rounded-xl border text-xs font-medium transition ${
                         newApt.time === slot
-                          ? "border-[#e84118] bg-[#e84118] text-white"
-                          : "border-[#3d2020] text-white/70 hover:border-[#e84118] hover:text-white"
+                          ? "border-[#00bcd4] bg-[#00bcd4] text-white"
+                          : "border-[#0e2530] text-white/70 hover:border-[#00bcd4] hover:text-white"
                       }`}
                     >
                       {to12Hour(slot)}
@@ -570,7 +570,7 @@ export default function AppointmentsPage() {
               placeholder="Notas (opcional)"
               value={newApt.notes}
               onChange={(e) => setNewApt({ ...newApt, notes: e.target.value })}
-              className="p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white placeholder-white/40 sm:col-span-2 text-sm"
+              className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40 sm:col-span-2 text-sm"
             />
           </div>
           {formError && (
@@ -581,14 +581,14 @@ export default function AppointmentsPage() {
           <div className="flex gap-2 mt-3">
             <button
               onClick={() => { setShowNewForm(false); setFormError("") }}
-              className="px-4 py-2 rounded-xl border border-[#3d2020] text-sm hover:bg-[#1a0a0a] transition text-white"
+              className="px-4 py-2 rounded-xl border border-[#0e2530] text-sm hover:bg-[#080f16] transition text-white"
             >
               Cancelar
             </button>
             <button
               onClick={createAppointment}
               disabled={creating}
-              className="px-4 py-2 rounded-xl bg-[#e84118] text-white text-sm hover:bg-[#c0392b] transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 rounded-xl bg-[#00bcd4] text-white text-sm hover:bg-[#c0392b] transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {creating ? "Agendando..." : "Agendar"}
             </button>
@@ -602,13 +602,13 @@ export default function AppointmentsPage() {
         <div className="flex items-center justify-between mb-3">
           <button
             onClick={() => navigateWeek(-1)}
-            className="p-2 rounded-lg bg-[#1a0a0a] border border-[#3d2020] text-white/60 text-sm"
+            className="p-2 rounded-lg bg-[#080f16] border border-[#0e2530] text-white/60 text-sm"
           >
             &larr;
           </button>
           <button
             onClick={goToToday}
-            className="px-3 py-1.5 rounded-lg bg-[#1a0a0a] border border-[#3d2020] text-xs text-white/60"
+            className="px-3 py-1.5 rounded-lg bg-[#080f16] border border-[#0e2530] text-xs text-white/60"
           >
             Hoy
           </button>
@@ -617,7 +617,7 @@ export default function AppointmentsPage() {
           </p>
           <button
             onClick={() => navigateWeek(1)}
-            className="p-2 rounded-lg bg-[#1a0a0a] border border-[#3d2020] text-white/60 text-sm"
+            className="p-2 rounded-lg bg-[#080f16] border border-[#0e2530] text-white/60 text-sm"
           >
             &rarr;
           </button>
@@ -634,17 +634,17 @@ export default function AppointmentsPage() {
                 onClick={() => setSelectedDate(day.date)}
                 className={`flex-1 min-w-[46px] flex flex-col items-center py-2 px-1 rounded-xl transition relative ${
                   isSelected
-                    ? "bg-[#e84118] text-white"
+                    ? "bg-[#00bcd4] text-white"
                     : day.isToday
-                    ? "bg-[#e84118]/20 text-[#e84118] border border-[#e84118]/40"
-                    : "bg-[#1a0a0a] text-white/60 border border-[#3d2020]"
+                    ? "bg-[#00bcd4]/20 text-[#00bcd4] border border-[#00bcd4]/40"
+                    : "bg-[#080f16] text-white/60 border border-[#0e2530]"
                 }`}
               >
                 <span className="text-[10px] uppercase">{day.dayName}</span>
                 <span className="text-lg font-bold leading-tight">{day.dayNum}</span>
                 {count > 0 && (
                   <span className={`w-1.5 h-1.5 rounded-full mt-0.5 ${
-                    isSelected ? "bg-white" : "bg-[#e84118]"
+                    isSelected ? "bg-white" : "bg-[#00bcd4]"
                   }`} />
                 )}
               </button>
@@ -653,7 +653,7 @@ export default function AppointmentsPage() {
         </div>
 
         {/* ── Proportional real-time timeline ── */}
-        <div className="bg-[#2d1515] rounded-xl border border-[#3d2020] overflow-hidden">
+        <div className="bg-[#0a1520] rounded-xl border border-[#0e2530] overflow-hidden">
           {dayAppointments.length === 0 && selectedDate !== colombiaDateStr(now) ? (
             <div className="text-center py-10">
               <p className="text-3xl mb-2">📅</p>
@@ -668,7 +668,7 @@ export default function AppointmentsPage() {
               {Array.from({ length: TL_END - TL_START + 1 }, (_, i) => i + TL_START).map((hour) => (
                 <div
                   key={hour}
-                  className="absolute left-0 right-0 border-t border-[#3d2020]/60"
+                  className="absolute left-0 right-0 border-t border-[#0e2530]/60"
                   style={{ top: (hour - TL_START) * HOUR_HEIGHT }}
                 >
                   <span className="absolute -left-11 -top-2.5 text-[10px] text-white/25 w-10 text-right pr-1">
@@ -688,7 +688,7 @@ export default function AppointmentsPage() {
                   <div className="absolute left-0 right-0 z-20 flex items-center" style={{ top: y }}>
                     <div className="w-2 h-2 rounded-full bg-red-500 -ml-1 flex-shrink-0" />
                     <div className="flex-1 h-px bg-red-500" />
-                    <span className="text-[9px] text-red-400 px-1 bg-[#2d1515] flex-shrink-0">{timeLabel}</span>
+                    <span className="text-[9px] text-red-400 px-1 bg-[#0a1520] flex-shrink-0">{timeLabel}</span>
                   </div>
                 )
               })()}
@@ -724,15 +724,15 @@ export default function AppointmentsPage() {
                       onClick={() => setActionApt(apt)}
                       className={`h-full rounded-xl overflow-hidden border transition-opacity cursor-pointer active:brightness-125 ${
                         past && apt.status !== "COMPLETED" && apt.status !== "CANCELLED"
-                          ? "opacity-50 border-[#3d2020]"
+                          ? "opacity-50 border-[#0e2530]"
                           : active
-                          ? "border-[#e84118] shadow-lg shadow-[#e84118]/20"
-                          : "border-[#3d2020]"
+                          ? "border-[#00bcd4] shadow-lg shadow-[#00bcd4]/20"
+                          : "border-[#0e2530]"
                       }`}
                     >
                       {/* Left accent bar */}
                       <div className={`absolute left-0 top-0 bottom-0 w-1 ${
-                        active ? "bg-[#e84118]"
+                        active ? "bg-[#00bcd4]"
                         : apt.status === "COMPLETED" ? "bg-green-500/60"
                         : apt.status === "CONFIRMED" ? "bg-blue-500/60"
                         : "bg-yellow-500/60"
@@ -741,13 +741,13 @@ export default function AppointmentsPage() {
                       {/* Progress fill */}
                       {active && (
                         <div
-                          className="absolute inset-0 bg-[#e84118]/15 transition-all duration-1000"
+                          className="absolute inset-0 bg-[#00bcd4]/15 transition-all duration-1000"
                           style={{ width: `${progress}%` }}
                         />
                       )}
 
                       {/* Content */}
-                      <div className="relative z-10 h-full flex flex-col justify-start pl-3 pr-2 py-1.5 bg-[#1a0a0a]/60">
+                      <div className="relative z-10 h-full flex flex-col justify-start pl-3 pr-2 py-1.5 bg-[#080f16]/60">
                         {narrow ? (
                           /* Narrow (overlapping): only service name, 2 lines */
                           <>
@@ -756,7 +756,7 @@ export default function AppointmentsPage() {
                               {apt.service.name}
                             </p>
                             {active && (
-                              <p className="text-[9px] text-[#e84118] font-semibold mt-0.5">{remaining}min</p>
+                              <p className="text-[9px] text-[#00bcd4] font-semibold mt-0.5">{remaining}min</p>
                             )}
                           </>
                         ) : (
@@ -771,7 +771,7 @@ export default function AppointmentsPage() {
                               {apt.service.name}
                             </p>
                             {active && (
-                              <p className="text-[9px] text-[#e84118] font-semibold mt-0.5">{remaining}min</p>
+                              <p className="text-[9px] text-[#00bcd4] font-semibold mt-0.5">{remaining}min</p>
                             )}
                           </>
                         )}
@@ -807,7 +807,7 @@ export default function AppointmentsPage() {
 
           {/* Sheet */}
           <div
-            className="relative w-full sm:max-w-sm bg-[#1a0a0a] rounded-t-3xl sm:rounded-2xl border border-[#3d2020] overflow-hidden z-10"
+            className="relative w-full sm:max-w-sm bg-[#080f16] rounded-t-3xl sm:rounded-2xl border border-[#0e2530] overflow-hidden z-10"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Handle */}
@@ -816,9 +816,9 @@ export default function AppointmentsPage() {
             </div>
 
             {/* Appointment info */}
-            <div className="px-5 py-3 border-b border-[#3d2020]">
+            <div className="px-5 py-3 border-b border-[#0e2530]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#e84118]/20 flex items-center justify-center text-[#e84118] font-bold text-base flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-[#00bcd4]/20 flex items-center justify-center text-[#00bcd4] font-bold text-base flex-shrink-0">
                   {(actionApt.user?.name || "?")[0].toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -851,7 +851,7 @@ export default function AppointmentsPage() {
                   </button>
                   <button
                     onClick={() => { updateStatus(actionApt.id, "NO_SHOW"); setActionApt(null) }}
-                    className="w-full py-3 rounded-xl bg-[#2d1515] text-white/40 font-medium text-sm hover:bg-[#3d2020] transition border border-[#3d2020]"
+                    className="w-full py-3 rounded-xl bg-[#0a1520] text-white/40 font-medium text-sm hover:bg-[#0e2530] transition border border-[#0e2530]"
                   >
                     No asistió
                   </button>
@@ -866,7 +866,7 @@ export default function AppointmentsPage() {
               {actionApt.status === "COMPLETED" && (
                 <button
                   onClick={() => { updateStatus(actionApt.id, "NO_SHOW"); setActionApt(null) }}
-                  className="w-full py-3 rounded-xl bg-[#2d1515] text-white/40 font-medium text-sm hover:bg-[#3d2020] transition border border-[#3d2020]"
+                  className="w-full py-3 rounded-xl bg-[#0a1520] text-white/40 font-medium text-sm hover:bg-[#0e2530] transition border border-[#0e2530]"
                 >
                   No asistió (corregir)
                 </button>
@@ -893,7 +893,7 @@ export default function AppointmentsPage() {
         >
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
           <div
-            className="relative w-full sm:max-w-sm bg-[#1a0a0a] rounded-t-3xl sm:rounded-2xl border border-[#3d2020] overflow-hidden z-10"
+            className="relative w-full sm:max-w-sm bg-[#080f16] rounded-t-3xl sm:rounded-2xl border border-[#0e2530] overflow-hidden z-10"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Handle */}
@@ -902,7 +902,7 @@ export default function AppointmentsPage() {
             </div>
 
             {/* Header */}
-            <div className="px-5 pt-2 pb-4 border-b border-[#3d2020]">
+            <div className="px-5 pt-2 pb-4 border-b border-[#0e2530]">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-bold text-white text-base">💈 ¡Listo el corte!</p>
@@ -933,7 +933,7 @@ export default function AppointmentsPage() {
                   <img
                     src={uploadPhoto}
                     alt="Preview"
-                    className="w-full h-48 object-cover rounded-xl border border-[#3d2020]"
+                    className="w-full h-48 object-cover rounded-xl border border-[#0e2530]"
                   />
                   <button
                     onClick={() => setUploadPhoto(null)}
@@ -945,7 +945,7 @@ export default function AppointmentsPage() {
               ) : (
                 <button
                   onClick={() => photoInputRef.current?.click()}
-                  className="w-full h-36 rounded-xl border-2 border-dashed border-[#3d2020] flex flex-col items-center justify-center gap-2 hover:border-[#e84118]/50 hover:bg-[#e84118]/5 transition"
+                  className="w-full h-36 rounded-xl border-2 border-dashed border-[#0e2530] flex flex-col items-center justify-center gap-2 hover:border-[#00bcd4]/50 hover:bg-[#00bcd4]/5 transition"
                 >
                   <Camera size={28} className="text-white/30" />
                   <span className="text-sm text-white/40">Tomar foto / elegir imagen</span>
@@ -958,7 +958,7 @@ export default function AppointmentsPage() {
                   placeholder="Título (opcional)"
                   value={uploadTitle}
                   onChange={(e) => setUploadTitle(e.target.value)}
-                  className="w-full p-3 border border-[#3d2020] rounded-xl bg-[#0d0404] text-white placeholder-white/30 text-sm focus:border-[#e84118] focus:outline-none"
+                  className="w-full p-3 border border-[#0e2530] rounded-xl bg-[#0d0404] text-white placeholder-white/30 text-sm focus:border-[#00bcd4] focus:outline-none"
                 />
               )}
 
@@ -968,7 +968,7 @@ export default function AppointmentsPage() {
                   <button
                     onClick={handleCompleteWithPhoto}
                     disabled={uploadUploading}
-                    className="w-full py-3 rounded-xl bg-[#e84118] text-white font-medium text-sm hover:bg-[#c0392b] transition disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="w-full py-3 rounded-xl bg-[#00bcd4] text-white font-medium text-sm hover:bg-[#c0392b] transition disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {uploadUploading ? (
                       <span>Subiendo...</span>
@@ -1004,19 +1004,19 @@ export default function AppointmentsPage() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => navigateDay(-1)}
-                  className="p-2 rounded-lg bg-[#1a0a0a] border border-[#3d2020] text-white/60 hover:text-white transition"
+                  className="p-2 rounded-lg bg-[#080f16] border border-[#0e2530] text-white/60 hover:text-white transition"
                 >
                   &larr;
                 </button>
                 <button
                   onClick={goToToday}
-                  className="px-3 py-2 rounded-lg bg-[#1a0a0a] border border-[#3d2020] text-sm text-white/60 hover:text-white transition"
+                  className="px-3 py-2 rounded-lg bg-[#080f16] border border-[#0e2530] text-sm text-white/60 hover:text-white transition"
                 >
                   Hoy
                 </button>
                 <button
                   onClick={() => navigateDay(1)}
-                  className="p-2 rounded-lg bg-[#1a0a0a] border border-[#3d2020] text-white/60 hover:text-white transition"
+                  className="p-2 rounded-lg bg-[#080f16] border border-[#0e2530] text-white/60 hover:text-white transition"
                 >
                   &rarr;
                 </button>
@@ -1029,7 +1029,7 @@ export default function AppointmentsPage() {
             </div>
 
             {/* Proportional timeline */}
-            <div className="bg-[#2d1515] rounded-xl border border-[#3d2020] overflow-hidden">
+            <div className="bg-[#0a1520] rounded-xl border border-[#0e2530] overflow-hidden">
               {dayAppointments.length === 0 && selectedDate !== colombiaDateStr(now) ? (
                 <div className="text-center py-16">
                   <p className="text-4xl mb-2">📅</p>
@@ -1041,7 +1041,7 @@ export default function AppointmentsPage() {
                   {Array.from({ length: TL_END - TL_START + 1 }, (_, i) => i + TL_START).map((hour) => (
                     <div
                       key={hour}
-                      className="absolute left-0 right-0 border-t border-[#3d2020]/60"
+                      className="absolute left-0 right-0 border-t border-[#0e2530]/60"
                       style={{ top: (hour - TL_START) * HOUR_HEIGHT }}
                     >
                       <span className="absolute -left-14 -top-2.5 text-xs text-white/25 w-12 text-right pr-2">
@@ -1063,7 +1063,7 @@ export default function AppointmentsPage() {
                       <div className="absolute left-0 right-0 z-20 flex items-center" style={{ top: y }}>
                         <div className="w-2.5 h-2.5 rounded-full bg-red-500 -ml-1.5 flex-shrink-0" />
                         <div className="flex-1 h-px bg-red-500" />
-                        <span className="text-xs text-red-400 px-2 bg-[#2d1515] flex-shrink-0">{timeLabel}</span>
+                        <span className="text-xs text-red-400 px-2 bg-[#0a1520] flex-shrink-0">{timeLabel}</span>
                       </div>
                     )
                   })()}
@@ -1100,17 +1100,17 @@ export default function AppointmentsPage() {
                           onClick={() => setActionApt(apt)}
                           className={`h-full rounded-xl overflow-hidden border transition cursor-pointer hover:brightness-110 ${
                             past && apt.status !== "COMPLETED" && apt.status !== "CANCELLED"
-                              ? "opacity-50 border-[#3d2020]"
+                              ? "opacity-50 border-[#0e2530]"
                               : active
-                              ? "border-[#e84118] shadow-lg shadow-[#e84118]/20"
+                              ? "border-[#00bcd4] shadow-lg shadow-[#00bcd4]/20"
                               : apt.status === "COMPLETED"
                               ? "border-green-800/50"
-                              : "border-[#3d2020]"
+                              : "border-[#0e2530]"
                           }`}
                         >
                           {/* Left accent bar */}
                           <div className={`absolute left-0 top-0 bottom-0 w-1 ${
-                            active ? "bg-[#e84118]"
+                            active ? "bg-[#00bcd4]"
                             : apt.status === "COMPLETED" ? "bg-green-500/70"
                             : apt.status === "CONFIRMED" ? "bg-blue-500/70"
                             : "bg-yellow-500/70"
@@ -1118,26 +1118,26 @@ export default function AppointmentsPage() {
 
                           {active && (
                             <div
-                              className="absolute inset-0 bg-[#e84118]/15 transition-all duration-1000"
+                              className="absolute inset-0 bg-[#00bcd4]/15 transition-all duration-1000"
                               style={{ width: `${progress}%` }}
                             />
                           )}
 
                           {narrow ? (
                             /* Narrow (multi-column) — service name only */
-                            <div className="relative z-10 h-full flex flex-col justify-start pl-3 pr-2 py-2 bg-[#1a0a0a]/70">
+                            <div className="relative z-10 h-full flex flex-col justify-start pl-3 pr-2 py-2 bg-[#080f16]/70">
                               <p className={`font-semibold text-[11px] leading-tight ${active ? "text-white" : "text-white/85"}`}
                                 style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
                                 {apt.service.name}
                               </p>
                               {active && (
-                                <p className="text-[9px] text-[#e84118] font-semibold mt-0.5">{remaining}min</p>
+                                <p className="text-[9px] text-[#00bcd4] font-semibold mt-0.5">{remaining}min</p>
                               )}
                             </div>
                           ) : (
                             /* Full width — horizontal layout with avatar */
-                            <div className="relative z-10 flex items-center h-full pl-4 pr-3 gap-3 bg-[#1a0a0a]/60">
-                              <div className="w-8 h-8 rounded-full bg-[#e84118]/20 flex items-center justify-center text-[#e84118] font-bold text-sm flex-shrink-0">
+                            <div className="relative z-10 flex items-center h-full pl-4 pr-3 gap-3 bg-[#080f16]/60">
+                              <div className="w-8 h-8 rounded-full bg-[#00bcd4]/20 flex items-center justify-center text-[#00bcd4] font-bold text-sm flex-shrink-0">
                                 {(apt.user?.name || "?")[0].toUpperCase()}
                               </div>
                               <div className="flex-1 min-w-0">
@@ -1150,7 +1150,7 @@ export default function AppointmentsPage() {
                                   {apt.service.name}
                                 </p>
                                 {active && (
-                                  <p className="text-xs text-[#e84118] font-medium mt-0.5">{remaining} min restantes</p>
+                                  <p className="text-xs text-[#00bcd4] font-medium mt-0.5">{remaining} min restantes</p>
                                 )}
                               </div>
                               <div className="flex-shrink-0 text-right">
@@ -1192,19 +1192,19 @@ export default function AppointmentsPage() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => navigateWeek(-1)}
-                  className="p-2 rounded-lg bg-[#1a0a0a] border border-[#3d2020] text-white/60 hover:text-white transition"
+                  className="p-2 rounded-lg bg-[#080f16] border border-[#0e2530] text-white/60 hover:text-white transition"
                 >
                   &larr;
                 </button>
                 <button
                   onClick={goToToday}
-                  className="px-3 py-2 rounded-lg bg-[#1a0a0a] border border-[#3d2020] text-sm text-white/60 hover:text-white transition"
+                  className="px-3 py-2 rounded-lg bg-[#080f16] border border-[#0e2530] text-sm text-white/60 hover:text-white transition"
                 >
                   Hoy
                 </button>
                 <button
                   onClick={() => navigateWeek(1)}
-                  className="p-2 rounded-lg bg-[#1a0a0a] border border-[#3d2020] text-white/60 hover:text-white transition"
+                  className="p-2 rounded-lg bg-[#080f16] border border-[#0e2530] text-white/60 hover:text-white transition"
                 >
                   &rarr;
                 </button>
@@ -1215,21 +1215,21 @@ export default function AppointmentsPage() {
             </div>
 
             {/* Calendar grid */}
-            <div className="bg-[#2d1515] rounded-xl border border-[#3d2020] overflow-hidden">
+            <div className="bg-[#0a1520] rounded-xl border border-[#0e2530] overflow-hidden">
               {/* Day headers */}
-              <div className="grid grid-cols-[50px_repeat(7,1fr)] border-b border-[#3d2020]">
+              <div className="grid grid-cols-[50px_repeat(7,1fr)] border-b border-[#0e2530]">
                 <div className="p-2" />
                 {weekDays.map((day) => (
                   <div
                     key={day.date}
                     onClick={() => { setSelectedDate(day.date); setView("list") }}
-                    className={`p-2 text-center cursor-pointer hover:bg-white/5 transition border-l border-[#3d2020] ${
-                      day.isToday ? "bg-[#e84118]/10" : ""
+                    className={`p-2 text-center cursor-pointer hover:bg-white/5 transition border-l border-[#0e2530] ${
+                      day.isToday ? "bg-[#00bcd4]/10" : ""
                     }`}
                   >
                     <p className="text-[10px] text-white/40">{day.dayName}</p>
                     <p className={`text-base font-bold ${
-                      day.isToday ? "text-[#e84118]" : "text-white"
+                      day.isToday ? "text-[#00bcd4]" : "text-white"
                     }`}>
                       {day.dayNum}
                     </p>
@@ -1239,7 +1239,7 @@ export default function AppointmentsPage() {
 
               {/* Time slots */}
               {HOURS.map((hour) => (
-                <div key={hour} className="grid grid-cols-[50px_repeat(7,1fr)] border-b border-[#3d2020]/50">
+                <div key={hour} className="grid grid-cols-[50px_repeat(7,1fr)] border-b border-[#0e2530]/50">
                   <div className="p-1 text-[10px] text-white/30 text-right pr-2 pt-2">
                     {hourTo12(hour)}
                   </div>
@@ -1248,8 +1248,8 @@ export default function AppointmentsPage() {
                     return (
                       <div
                         key={`${day.date}-${hour}`}
-                        className={`border-l border-[#3d2020]/50 min-h-[50px] p-0.5 ${
-                          day.isToday ? "bg-[#e84118]/5" : ""
+                        className={`border-l border-[#0e2530]/50 min-h-[50px] p-0.5 ${
+                          day.isToday ? "bg-[#00bcd4]/5" : ""
                         }`}
                       >
                         {aptsInSlot.map((apt) => (
@@ -1289,7 +1289,7 @@ export default function AppointmentsPage() {
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="p-2 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white"
+                className="p-2 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white"
               />
               <div className="flex gap-2 flex-wrap">
                 {[
@@ -1303,8 +1303,8 @@ export default function AppointmentsPage() {
                     onClick={() => setFilter(f.value)}
                     className={`px-3 py-1.5 rounded-lg text-sm transition ${
                       filter === f.value
-                        ? "bg-[#e84118] text-white"
-                        : "bg-[#1a0a0a] text-white/50 hover:bg-[#3d2020]"
+                        ? "bg-[#00bcd4] text-white"
+                        : "bg-[#080f16] text-white/50 hover:bg-[#0e2530]"
                     }`}
                   >
                     {f.label}
@@ -1317,7 +1317,7 @@ export default function AppointmentsPage() {
             {loading ? (
               <Loader />
             ) : appointments.length === 0 ? (
-              <div className="text-center py-12 bg-[#2d1515] rounded-xl border border-[#3d2020]">
+              <div className="text-center py-12 bg-[#0a1520] rounded-xl border border-[#0e2530]">
                 <p className="text-4xl mb-3">📅</p>
                 <p className="text-white/30">No hay citas para esta fecha</p>
               </div>
@@ -1326,11 +1326,11 @@ export default function AppointmentsPage() {
                 {appointments.map((apt) => (
                   <div
                     key={apt.id}
-                    className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020]"
+                    className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-[#e84118]/20 rounded-full flex items-center justify-center text-lg font-bold text-[#e84118]">
+                        <div className="w-12 h-12 bg-[#00bcd4]/20 rounded-full flex items-center justify-center text-lg font-bold text-[#00bcd4]">
                           {(apt.user?.name || "?")[0].toUpperCase()}
                         </div>
                         <div>
@@ -1361,7 +1361,7 @@ export default function AppointmentsPage() {
 
                     {/* Actions */}
                     {(apt.status === "PENDING" || apt.status === "CONFIRMED" || apt.status === "COMPLETED") && (
-                      <div className="flex gap-2 mt-3 pt-3 border-t border-[#3d2020]">
+                      <div className="flex gap-2 mt-3 pt-3 border-t border-[#0e2530]">
                         {apt.status === "PENDING" && (
                           <button
                             onClick={() => updateStatus(apt.id, "CONFIRMED")}
@@ -1380,7 +1380,7 @@ export default function AppointmentsPage() {
                         )}
                         <button
                           onClick={() => updateStatus(apt.id, "NO_SHOW")}
-                          className="text-xs px-3 py-1.5 rounded-lg bg-[#3d2020] text-white/50 hover:bg-[#4d2c2c] transition"
+                          className="text-xs px-3 py-1.5 rounded-lg bg-[#0e2530] text-white/50 hover:bg-[#4d2c2c] transition"
                         >
                           {apt.status === "COMPLETED" ? "No asistió (corregir)" : "No asistio"}
                         </button>

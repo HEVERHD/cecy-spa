@@ -94,7 +94,7 @@ export default function LiveQueueBadge() {
       className={`inline-block text-left w-full max-w-xs rounded-2xl overflow-hidden transition-all group ${
         almostBusy
           ? "bg-amber-500/10 border border-amber-500/40 hover:bg-amber-500/15 hover:border-amber-500/60"
-          : "bg-white/5 border border-white/10 hover:border-[#e84118]/30 hover:bg-white/8"
+          : "bg-white/5 border border-white/10 hover:border-[#00bcd4]/30 hover:bg-white/8"
       }`}
     >
       {/* Estado principal */}
@@ -103,8 +103,8 @@ export default function LiveQueueBadge() {
           {/* Header row */}
           <div className="flex items-center gap-3 px-4 pt-3 pb-2">
             <span className="relative flex h-2 w-2 flex-shrink-0">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#e84118] opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#e84118]" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00bcd4] opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00bcd4]" />
             </span>
             <div className="flex-1 min-w-0">
               <p className="text-white text-sm font-semibold truncate leading-tight">
@@ -112,7 +112,7 @@ export default function LiveQueueBadge() {
               </p>
               <p className="text-white/40 text-xs truncate">{active.serviceName}</p>
             </div>
-            <span className="text-[#e84118] text-xs font-bold flex-shrink-0 tabular-nums">
+            <span className="text-[#00bcd4] text-xs font-bold flex-shrink-0 tabular-nums">
               {remaining} min
             </span>
           </div>
@@ -124,7 +124,7 @@ export default function LiveQueueBadge() {
                 className="absolute inset-y-0 left-0 rounded-full"
                 style={{
                   width: `${progress}%`,
-                  background: "linear-gradient(90deg, #c0392b, #e84118, #ff6b35)",
+                  background: "linear-gradient(90deg, #c0392b, #00bcd4, #ff6b35)",
                   boxShadow: "0 0 10px rgba(232,65,24,0.7)",
                   transition: "width 2s ease",
                 }}
@@ -183,7 +183,7 @@ export default function LiveQueueBadge() {
           {almostBusy ? "Toca para agendar ahora →" : "Cola en vivo · actualiza cada 30s"}
         </p>
         <svg
-          className={`w-3 h-3 transition ${almostBusy ? "text-amber-400/60 group-hover:text-amber-300" : "text-white/20 group-hover:text-[#e84118]"}`}
+          className={`w-3 h-3 transition ${almostBusy ? "text-amber-400/60 group-hover:text-amber-300" : "text-white/20 group-hover:text-[#00bcd4]"}`}
           fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />

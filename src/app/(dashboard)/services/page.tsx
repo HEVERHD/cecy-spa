@@ -89,7 +89,7 @@ export default function ServicesPage() {
         <h1 className="text-2xl font-bold text-white">Servicios</h1>
         <button
           onClick={openNew}
-          className="bg-[#e84118] text-white px-4 py-2 rounded-xl font-medium hover:bg-[#c0392b] transition text-sm"
+          className="bg-[#00bcd4] text-white px-4 py-2 rounded-xl font-medium hover:bg-[#c0392b] transition text-sm"
         >
           + Nuevo Servicio
         </button>
@@ -97,7 +97,7 @@ export default function ServicesPage() {
 
       {/* Form */}
       {showForm && (
-        <div className="bg-[#2d1515] rounded-xl p-6 border border-[#3d2020] mb-6">
+        <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530] mb-6">
           <h3 className="font-semibold mb-4 text-white">
             {editing ? "Editar servicio" : "Nuevo servicio"}
           </h3>
@@ -107,28 +107,28 @@ export default function ServicesPage() {
               placeholder="Nombre del servicio"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white placeholder-white/40"
+              className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40"
             />
             <input
               type="text"
               placeholder="Descripción (opcional)"
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white placeholder-white/40"
+              className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40"
             />
             <input
               type="number"
               placeholder="Precio (USD)"
               value={form.price}
               onChange={(e) => setForm({ ...form, price: e.target.value })}
-              className="p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white placeholder-white/40"
+              className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40"
             />
             <input
               type="number"
               placeholder="Duración (minutos)"
               value={form.duration}
               onChange={(e) => setForm({ ...form, duration: e.target.value })}
-              className="p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white placeholder-white/40"
+              className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40"
             />
           </div>
           <div className="flex gap-3 mt-4">
@@ -137,13 +137,13 @@ export default function ServicesPage() {
                 setShowForm(false)
                 setEditing(null)
               }}
-              className="px-4 py-2 rounded-xl border border-[#3d2020] text-sm hover:bg-[#1a0a0a] transition text-white"
+              className="px-4 py-2 rounded-xl border border-[#0e2530] text-sm hover:bg-[#080f16] transition text-white"
             >
               Cancelar
             </button>
             <button
               onClick={handleSubmit}
-              className="px-4 py-2 rounded-xl bg-[#e84118] text-white text-sm hover:bg-[#c0392b] transition"
+              className="px-4 py-2 rounded-xl bg-[#00bcd4] text-white text-sm hover:bg-[#c0392b] transition"
             >
               {editing ? "Guardar" : "Crear"}
             </button>
@@ -155,16 +155,16 @@ export default function ServicesPage() {
       {loading ? (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="bg-[#2d1515] rounded-xl p-5 border border-[#3d2020] animate-pulse">
+            <div key={i} className="bg-[#0a1520] rounded-xl p-5 border border-[#0e2530] animate-pulse">
               <div className="flex justify-between mb-3">
-                <div className="h-5 w-28 bg-[#3d2020] rounded" />
-                <div className="h-5 w-20 bg-[#3d2020] rounded" />
+                <div className="h-5 w-28 bg-[#0e2530] rounded" />
+                <div className="h-5 w-20 bg-[#0e2530] rounded" />
               </div>
-              <div className="h-3 w-full bg-[#3d2020] rounded mb-2" />
-              <div className="h-3 w-16 bg-[#3d2020] rounded mb-4" />
+              <div className="h-3 w-full bg-[#0e2530] rounded mb-2" />
+              <div className="h-3 w-16 bg-[#0e2530] rounded mb-4" />
               <div className="flex gap-2">
-                <div className="h-7 w-16 bg-[#3d2020] rounded-lg" />
-                <div className="h-7 w-20 bg-[#3d2020] rounded-lg" />
+                <div className="h-7 w-16 bg-[#0e2530] rounded-lg" />
+                <div className="h-7 w-20 bg-[#0e2530] rounded-lg" />
               </div>
             </div>
           ))}
@@ -174,13 +174,13 @@ export default function ServicesPage() {
           {services.map((service) => (
             <div
               key={service.id}
-              className={`bg-[#2d1515] rounded-xl p-5 border border-[#3d2020] transition ${
+              className={`bg-[#0a1520] rounded-xl p-5 border border-[#0e2530] transition ${
                 !service.active ? "opacity-50" : ""
               }`}
             >
               <div className="flex justify-between items-start mb-3">
                 <h3 className="font-semibold text-white">{service.name}</h3>
-                <span className="text-lg font-bold text-[#e84118]">
+                <span className="text-lg font-bold text-[#00bcd4]">
                   {formatPrice(service.price)}
                 </span>
               </div>
@@ -191,7 +191,7 @@ export default function ServicesPage() {
               <div className="flex gap-2">
                 <button
                   onClick={() => openEdit(service)}
-                  className="text-xs px-3 py-1.5 rounded-lg bg-[#3d2020] text-white/50 hover:bg-[#4d2c2c] transition"
+                  className="text-xs px-3 py-1.5 rounded-lg bg-[#0e2530] text-white/50 hover:bg-[#4d2c2c] transition"
                 >
                   Editar
                 </button>

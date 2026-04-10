@@ -64,8 +64,8 @@ export default function ProfilePage() {
       <h1 className="text-2xl font-bold text-white mb-6">Mi Perfil</h1>
 
       {/* Profile card */}
-      <div className="bg-[#2d1515] rounded-2xl border border-[#3d2020] overflow-hidden mb-6">
-        <div className="h-28 bg-gradient-to-r from-[#d97706] to-[#f0932b]" />
+      <div className="bg-[#0a1520] rounded-2xl border border-[#0e2530] overflow-hidden mb-6">
+        <div className="h-28 bg-gradient-to-r from-[#00bcd4] to-[#f0932b]" />
         <div className="flex flex-col items-center text-center px-6 pb-6">
           <div className="-mt-14 mb-3">
             {session?.user?.image ? (
@@ -74,17 +74,17 @@ export default function ProfilePage() {
                 alt={session.user.name || ""}
                 width={96}
                 height={96}
-                className="w-24 h-24 rounded-full border-[3px] border-[#2d1515] object-cover bg-[#2d1515]"
+                className="w-24 h-24 rounded-full border-[3px] border-[#0a1520] object-cover bg-[#0a1520]"
               />
             ) : (
-              <div className="w-24 h-24 rounded-full border-[3px] border-[#2d1515] bg-[#d97706] flex items-center justify-center text-3xl font-bold text-white">
+              <div className="w-24 h-24 rounded-full border-[3px] border-[#0a1520] bg-[#00bcd4] flex items-center justify-center text-3xl font-bold text-white">
                 {(session?.user?.name || "A")[0].toUpperCase()}
               </div>
             )}
           </div>
           <h2 className="text-xl font-bold text-white">{session?.user?.name || "Admin"}</h2>
           <p className="text-sm text-white/40 mt-0.5">{session?.user?.email}</p>
-          <span className="inline-block mt-2 text-[10px] px-3 py-1 rounded-full bg-[#d97706]/20 text-[#d97706] font-medium">
+          <span className="inline-block mt-2 text-[10px] px-3 py-1 rounded-full bg-[#00bcd4]/20 text-[#00bcd4] font-medium">
             Barbero Admin
           </span>
         </div>
@@ -94,39 +94,39 @@ export default function ProfilePage() {
       {loading ? (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020] animate-pulse">
-              <div className="h-3 w-16 bg-[#3d2020] rounded mb-2" />
-              <div className="h-7 w-20 bg-[#3d2020] rounded" />
+            <div key={i} className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530] animate-pulse">
+              <div className="h-3 w-16 bg-[#0e2530] rounded mb-2" />
+              <div className="h-7 w-20 bg-[#0e2530] rounded" />
             </div>
           ))}
         </div>
       ) : stats && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-          <div className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020]">
+          <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
             <p className="text-xs text-white/40">Citas totales</p>
             <p className="text-2xl font-bold text-white mt-1">{stats.totalAppointments}</p>
           </div>
-          <div className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020]">
+          <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
             <p className="text-xs text-white/40">Ingresos del mes</p>
-            <p className="text-2xl font-bold text-[#d97706] mt-1">{formatCurrency(stats.monthRevenue)}</p>
+            <p className="text-2xl font-bold text-[#00bcd4] mt-1">{formatCurrency(stats.monthRevenue)}</p>
           </div>
-          <div className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020]">
+          <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
             <p className="text-xs text-white/40">Total clientes</p>
             <p className="text-2xl font-bold text-white mt-1">{stats.totalClients}</p>
           </div>
-          <div className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020]">
+          <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
             <p className="text-xs text-white/40">Tasa completadas</p>
             <p className="text-2xl font-bold text-green-400 mt-1">{stats.completionRate}%</p>
           </div>
-          <div className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020]">
+          <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
             <p className="text-xs text-white/40">Completadas hoy</p>
             <p className="text-2xl font-bold text-white mt-1">{stats.completedToday}</p>
           </div>
-          <div className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020]">
+          <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
             <p className="text-xs text-white/40">Promedio diario</p>
             <p className="text-2xl font-bold text-white mt-1">{stats.avgPerDay}</p>
           </div>
-          <div className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020] col-span-2">
+          <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530] col-span-2">
             <p className="text-xs text-white/40">Servicio mas popular</p>
             <p className="text-2xl font-bold text-[#f0932b] mt-1">{stats.topService}</p>
           </div>
@@ -134,25 +134,25 @@ export default function ProfilePage() {
       )}
 
       {/* Invitation link */}
-      <div className="bg-[#2d1515] rounded-xl p-6 border border-[#3d2020] mb-6">
+      <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530] mb-6">
         <h3 className="font-semibold text-white mb-2">Link de reservas</h3>
         <p className="text-sm text-white/40 mb-4">
           Comparte este link con tus clientes para que agenden citas
         </p>
         <div className="flex gap-2">
-          <div className="flex-1 bg-[#1a0a0a] border border-[#3d2020] rounded-xl px-4 py-3 text-sm text-white/60 truncate">
+          <div className="flex-1 bg-[#080f16] border border-[#0e2530] rounded-xl px-4 py-3 text-sm text-white/60 truncate">
             {bookingUrl}
           </div>
           <button
             onClick={copyLink}
-            className="px-4 py-3 bg-[#d97706] text-white rounded-xl text-sm font-medium hover:bg-[#c0392b] transition flex-shrink-0"
+            className="px-4 py-3 bg-[#00bcd4] text-white rounded-xl text-sm font-medium hover:bg-[#c0392b] transition flex-shrink-0"
           >
             Copiar
           </button>
         </div>
         <button
           onClick={shareLink}
-          className="mt-3 w-full py-3 border border-[#3d2020] rounded-xl text-sm text-white/60 hover:text-white hover:bg-[#1a0a0a] transition flex items-center justify-center gap-2"
+          className="mt-3 w-full py-3 border border-[#0e2530] rounded-xl text-sm text-white/60 hover:text-white hover:bg-[#080f16] transition flex items-center justify-center gap-2"
         >
           <span suppressHydrationWarning>📤</span>
           Compartir link
@@ -160,47 +160,47 @@ export default function ProfilePage() {
       </div>
 
       {/* Quick actions */}
-      <div className="bg-[#2d1515] rounded-xl p-6 border border-[#3d2020] mb-6">
+      <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530] mb-6">
         <h3 className="font-semibold text-white mb-4">Accesos rapidos</h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           <a
             href="/appointments"
-            className="flex flex-col items-center gap-2 p-4 bg-[#1a0a0a] border border-[#3d2020] rounded-xl hover:border-[#d97706]/50 transition"
+            className="flex flex-col items-center gap-2 p-4 bg-[#080f16] border border-[#0e2530] rounded-xl hover:border-[#00bcd4]/50 transition"
           >
             <span className="text-2xl" suppressHydrationWarning>📅</span>
             <span className="text-xs text-white/60">Ver citas</span>
           </a>
           <a
             href="/clients"
-            className="flex flex-col items-center gap-2 p-4 bg-[#1a0a0a] border border-[#3d2020] rounded-xl hover:border-[#d97706]/50 transition"
+            className="flex flex-col items-center gap-2 p-4 bg-[#080f16] border border-[#0e2530] rounded-xl hover:border-[#00bcd4]/50 transition"
           >
             <span className="text-2xl" suppressHydrationWarning>👥</span>
             <span className="text-xs text-white/60">Clientes</span>
           </a>
           <a
             href="/services"
-            className="flex flex-col items-center gap-2 p-4 bg-[#1a0a0a] border border-[#3d2020] rounded-xl hover:border-[#d97706]/50 transition"
+            className="flex flex-col items-center gap-2 p-4 bg-[#080f16] border border-[#0e2530] rounded-xl hover:border-[#00bcd4]/50 transition"
           >
             <span className="text-2xl" suppressHydrationWarning>✂️</span>
             <span className="text-xs text-white/60">Servicios</span>
           </a>
           <a
             href="/users"
-            className="flex flex-col items-center gap-2 p-4 bg-[#1a0a0a] border border-[#3d2020] rounded-xl hover:border-[#d97706]/50 transition"
+            className="flex flex-col items-center gap-2 p-4 bg-[#080f16] border border-[#0e2530] rounded-xl hover:border-[#00bcd4]/50 transition"
           >
             <span className="text-2xl" suppressHydrationWarning>🔑</span>
             <span className="text-xs text-white/60">Usuarios</span>
           </a>
           <a
             href="/blocked-slots"
-            className="flex flex-col items-center gap-2 p-4 bg-[#1a0a0a] border border-[#3d2020] rounded-xl hover:border-[#d97706]/50 transition"
+            className="flex flex-col items-center gap-2 p-4 bg-[#080f16] border border-[#0e2530] rounded-xl hover:border-[#00bcd4]/50 transition"
           >
             <span className="text-2xl" suppressHydrationWarning>🚫</span>
             <span className="text-xs text-white/60">Bloqueos</span>
           </a>
           <a
             href="/settings"
-            className="flex flex-col items-center gap-2 p-4 bg-[#1a0a0a] border border-[#3d2020] rounded-xl hover:border-[#d97706]/50 transition"
+            className="flex flex-col items-center gap-2 p-4 bg-[#080f16] border border-[#0e2530] rounded-xl hover:border-[#00bcd4]/50 transition"
           >
             <span className="text-2xl" suppressHydrationWarning>⚙️</span>
             <span className="text-xs text-white/60">Configuracion</span>
@@ -211,7 +211,7 @@ export default function ProfilePage() {
       {/* Logout */}
       <button
         onClick={() => signOut({ callbackUrl: "/login" })}
-        className="w-full flex items-center justify-center gap-3 py-4 bg-[#2d1515] border border-[#3d2020] rounded-xl text-red-400 hover:bg-red-500/10 hover:border-red-500/30 transition font-medium"
+        className="w-full flex items-center justify-center gap-3 py-4 bg-[#0a1520] border border-[#0e2530] rounded-xl text-red-400 hover:bg-red-500/10 hover:border-red-500/30 transition font-medium"
       >
         <LogOut size={18} />
         Cerrar Sesión

@@ -119,11 +119,11 @@ export default function SettingsPage() {
         <h1 className="text-2xl font-bold mb-6 text-white">Configuración</h1>
         <div className="max-w-2xl space-y-6">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="bg-[#2d1515] rounded-xl p-6 border border-[#3d2020] animate-pulse">
-              <div className="h-5 w-40 bg-[#3d2020] rounded mb-4" />
+            <div key={i} className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530] animate-pulse">
+              <div className="h-5 w-40 bg-[#0e2530] rounded mb-4" />
               <div className="space-y-3">
-                <div className="h-12 w-full bg-[#3d2020] rounded-xl" />
-                {i < 2 && <div className="h-12 w-full bg-[#3d2020] rounded-xl" />}
+                <div className="h-12 w-full bg-[#0e2530] rounded-xl" />
+                {i < 2 && <div className="h-12 w-full bg-[#0e2530] rounded-xl" />}
               </div>
             </div>
           ))}
@@ -140,7 +140,7 @@ export default function SettingsPage() {
 
         {/* Barber selector — only for ADMIN */}
         {isAdmin && barbers.length >= 1 && (
-          <div className="bg-[#2d1515] rounded-xl p-5 border border-[#3d2020]">
+          <div className="bg-[#0a1520] rounded-xl p-5 border border-[#0e2530]">
             <div className="flex items-center gap-2 mb-3">
               <span className="text-xs font-semibold text-white/40 uppercase tracking-wider">Viendo config de</span>
             </div>
@@ -153,12 +153,12 @@ export default function SettingsPage() {
                     onClick={() => setSelectedBarberId(b.id)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition border-2 ${
                       isSelected
-                        ? "bg-[#d97706] border-[#d97706] text-white shadow-lg shadow-[#d97706]/20"
-                        : "bg-[#1a0a0a] border-[#3d2020] text-white/60 hover:border-[#d97706]/50 hover:text-white"
+                        ? "bg-[#00bcd4] border-[#00bcd4] text-white shadow-lg shadow-[#00bcd4]/20"
+                        : "bg-[#080f16] border-[#0e2530] text-white/60 hover:border-[#00bcd4]/50 hover:text-white"
                     }`}
                   >
                     <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
-                      isSelected ? "bg-white/20" : "bg-[#3d2020]"
+                      isSelected ? "bg-white/20" : "bg-[#0e2530]"
                     }`}>
                       {(b.name || "?")[0].toUpperCase()}
                     </div>
@@ -176,7 +176,7 @@ export default function SettingsPage() {
         )}
 
         {/* Shop Info */}
-        <div className="bg-[#2d1515] rounded-xl p-6 border border-[#3d2020]">
+        <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530]">
           <h3 className="font-semibold mb-4 text-white">Información de la barbería</h3>
           <div className="space-y-4">
             <div>
@@ -185,7 +185,7 @@ export default function SettingsPage() {
                 type="text"
                 value={settings.shopName}
                 onChange={(e) => setSettings({ ...settings, shopName: e.target.value })}
-                className="w-full mt-1 p-3 border border-[#3d2020] rounded-xl focus:border-[#d97706] focus:outline-none bg-[#1a0a0a] text-white placeholder-white/40"
+                className="w-full mt-1 p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40"
               />
             </div>
             <div>
@@ -195,7 +195,7 @@ export default function SettingsPage() {
                 value={settings.phone}
                 onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
                 placeholder="+57 3001234567"
-                className="w-full mt-1 p-3 border border-[#3d2020] rounded-xl focus:border-[#d97706] focus:outline-none bg-[#1a0a0a] text-white placeholder-white/40"
+                className="w-full mt-1 p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40"
               />
             </div>
             <div>
@@ -205,7 +205,7 @@ export default function SettingsPage() {
                 value={settings.address}
                 onChange={(e) => setSettings({ ...settings, address: e.target.value })}
                 placeholder="Calle 123 #45-67, Barrio, Ciudad"
-                className="w-full mt-1 p-3 border border-[#3d2020] rounded-xl focus:border-[#d97706] focus:outline-none bg-[#1a0a0a] text-white placeholder-white/40"
+                className="w-full mt-1 p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40"
               />
               <p className="text-xs text-white/30 mt-1">Esta dirección aparecerá en el mapa de &quot;Cómo llegar&quot; de la página pública.</p>
             </div>
@@ -213,7 +213,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Schedule */}
-        <div className="bg-[#2d1515] rounded-xl p-6 border border-[#3d2020]">
+        <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530]">
           <h3 className="font-semibold mb-4 text-white">Horario</h3>
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
@@ -222,7 +222,7 @@ export default function SettingsPage() {
                 type="time"
                 value={settings.openTime}
                 onChange={(e) => setSettings({ ...settings, openTime: e.target.value })}
-                className="w-full mt-1 p-3 border border-[#3d2020] rounded-xl focus:border-[#d97706] focus:outline-none bg-[#1a0a0a] text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
+                className="w-full mt-1 p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
               />
             </div>
             <div>
@@ -231,14 +231,14 @@ export default function SettingsPage() {
                 type="time"
                 value={settings.closeTime}
                 onChange={(e) => setSettings({ ...settings, closeTime: e.target.value })}
-                className="w-full mt-1 p-3 border border-[#3d2020] rounded-xl focus:border-[#d97706] focus:outline-none bg-[#1a0a0a] text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
+                className="w-full mt-1 p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
               />
             </div>
           </div>
         </div>
 
         {/* Days off */}
-        <div className="bg-[#2d1515] rounded-xl p-6 border border-[#3d2020]">
+        <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530]">
           <h3 className="font-semibold mb-4 text-white">Días de descanso</h3>
           <div className="flex flex-wrap gap-2">
             {DAYS.map((day) => (
@@ -248,7 +248,7 @@ export default function SettingsPage() {
                 className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
                   settings.daysOff.includes(day.value)
                     ? "bg-red-100 text-red-700 border-2 border-red-300"
-                    : "bg-[#3d2020] text-white/60 border-2 border-transparent hover:bg-[#4d2c2c]"
+                    : "bg-[#0e2530] text-white/60 border-2 border-transparent hover:bg-[#4d2c2c]"
                 }`}
               >
                 {day.label}
@@ -258,7 +258,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Per-day custom schedules */}
-        <div className="bg-[#2d1515] rounded-xl p-6 border border-[#3d2020]">
+        <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530]">
           <h3 className="font-semibold mb-1 text-white">Horarios especiales por día</h3>
           <p className="text-sm text-white/40 mb-4">
             Define un horario diferente al general para días específicos. Los días de descanso no aplican.
@@ -295,7 +295,7 @@ export default function SettingsPage() {
 
                 return (
                   <div key={day.value} className="flex items-center gap-3 flex-wrap">
-                    <span className={`w-24 text-sm font-medium ${hasCustom ? "text-[#d97706]" : "text-white/50"}`}>
+                    <span className={`w-24 text-sm font-medium ${hasCustom ? "text-[#00bcd4]" : "text-white/50"}`}>
                       {day.label}
                     </span>
                     <div className="flex items-center gap-2">
@@ -303,21 +303,21 @@ export default function SettingsPage() {
                         type="time"
                         value={openVal}
                         onChange={(e) => updateDay("open", e.target.value)}
-                        className="p-2 border border-[#3d2020] rounded-xl bg-[#1a0a0a] text-white text-sm focus:border-[#d97706] focus:outline-none [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
+                        className="p-2 border border-[#0e2530] rounded-xl bg-[#080f16] text-white text-sm focus:border-[#00bcd4] focus:outline-none [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
                       />
                       <span className="text-white/30 text-sm">—</span>
                       <input
                         type="time"
                         value={closeVal}
                         onChange={(e) => updateDay("close", e.target.value)}
-                        className="p-2 border border-[#3d2020] rounded-xl bg-[#1a0a0a] text-white text-sm focus:border-[#d97706] focus:outline-none [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
+                        className="p-2 border border-[#0e2530] rounded-xl bg-[#080f16] text-white text-sm focus:border-[#00bcd4] focus:outline-none [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
                       />
                     </div>
                     {hasCustom ? (
                       <button
                         onClick={resetDay}
                         title="Restablecer al horario general"
-                        className="text-xs text-white/30 hover:text-red-400 transition px-2 py-1 rounded-lg border border-[#3d2020] hover:border-red-400"
+                        className="text-xs text-white/30 hover:text-red-400 transition px-2 py-1 rounded-lg border border-[#0e2530] hover:border-red-400"
                       >
                         ↺ general
                       </button>
@@ -332,7 +332,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Booking Link + QR */}
-        <div className="bg-[#2d1515] rounded-xl p-6 border border-[#3d2020]">
+        <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530]">
           <h3 className="font-semibold mb-2 text-white">Link de reservas</h3>
           <p className="text-sm text-white/40 mb-3">
             Comparte este link o el QR con tus clientes para que agenden en linea
@@ -342,13 +342,13 @@ export default function SettingsPage() {
               type="text"
               readOnly
               value={typeof window !== "undefined" ? `${window.location.origin}/booking` : "/booking"}
-              className="flex-1 p-3 bg-[#1a0a0a] border border-[#3d2020] rounded-xl text-sm text-white/60"
+              className="flex-1 p-3 bg-[#080f16] border border-[#0e2530] rounded-xl text-sm text-white/60"
             />
             <button
               onClick={() => {
                 navigator.clipboard.writeText(`${window.location.origin}/booking`)
               }}
-              className="px-4 py-2 rounded-xl bg-[#d97706] text-white text-sm hover:bg-[#c0392b] transition"
+              className="px-4 py-2 rounded-xl bg-[#00bcd4] text-white text-sm hover:bg-[#c0392b] transition"
             >
               Copiar
             </button>
@@ -360,7 +360,7 @@ export default function SettingsPage() {
               value={typeof window !== "undefined" ? `${window.location.origin}/booking` : ""}
               size={200}
               bgColor="#ffffff"
-              fgColor="#1a0a0a"
+              fgColor="#080f16"
               level="H"
               imageSettings={{
                 src: "/logo.png",
@@ -386,7 +386,7 @@ export default function SettingsPage() {
                 ctx.fillStyle = "#ffffff"
                 ctx.fillRect(0, 0, 600, 700)
                 ctx.drawImage(img, 100, 50, 400, 400)
-                ctx.fillStyle = "#1a0a0a"
+                ctx.fillStyle = "#080f16"
                 ctx.font = "bold 28px sans-serif"
                 ctx.textAlign = "center"
                 ctx.fillText("Mi Barbería", 300, 510)
@@ -401,7 +401,7 @@ export default function SettingsPage() {
               }
               img.src = "data:image/svg+xml;base64," + btoa(decodeURIComponent(encodeURIComponent(svgData).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode(parseInt(p1, 16)))))
             }}
-            className="w-full mt-4 py-3 rounded-xl border border-[#3d2020] text-white text-sm hover:bg-[#1a0a0a] transition font-medium"
+            className="w-full mt-4 py-3 rounded-xl border border-[#0e2530] text-white text-sm hover:bg-[#080f16] transition font-medium"
           >
             Descargar QR como imagen
           </button>
@@ -411,7 +411,7 @@ export default function SettingsPage() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="w-full py-3 rounded-xl bg-[#d97706] text-white font-semibold hover:bg-[#c0392b] transition disabled:opacity-50"
+          className="w-full py-3 rounded-xl bg-[#00bcd4] text-white font-semibold hover:bg-[#c0392b] transition disabled:opacity-50"
         >
           {saving ? "Guardando..." : "Guardar configuración"}
         </button>

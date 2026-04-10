@@ -104,7 +104,7 @@ export default function GalleryPage() {
             setPreview(null)
             setForm({ title: "", description: "", category: "corte" })
           }}
-          className="bg-[#e84118] text-white px-4 py-2 rounded-xl font-medium hover:bg-[#c0392b] transition text-sm flex items-center gap-2"
+          className="bg-[#00bcd4] text-white px-4 py-2 rounded-xl font-medium hover:bg-[#c0392b] transition text-sm flex items-center gap-2"
         >
           {showForm ? <X size={16} /> : <Plus size={16} />}
           {showForm ? "Cancelar" : "Agregar"}
@@ -113,7 +113,7 @@ export default function GalleryPage() {
 
       {/* Upload Form */}
       {showForm && (
-        <div className="bg-[#2d1515] rounded-xl p-6 border border-[#3d2020] mb-6">
+        <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530] mb-6">
           <h3 className="font-semibold mb-4 text-white">Nueva imagen</h3>
 
           {/* File input + preview */}
@@ -129,7 +129,7 @@ export default function GalleryPage() {
                 </button>
               </div>
             ) : (
-              <label className="flex flex-col items-center justify-center w-full max-w-xs aspect-square border-2 border-dashed border-[#3d2020] rounded-xl cursor-pointer hover:border-[#e84118] transition">
+              <label className="flex flex-col items-center justify-center w-full max-w-xs aspect-square border-2 border-dashed border-[#0e2530] rounded-xl cursor-pointer hover:border-[#00bcd4] transition">
                 <Plus size={32} className="text-white/30 mb-2" />
                 <span className="text-sm text-white/40">Seleccionar imagen</span>
                 <input
@@ -148,12 +148,12 @@ export default function GalleryPage() {
               placeholder="Título (opcional)"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
-              className="p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white placeholder-white/40"
+              className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40"
             />
             <select
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value })}
-              className="p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white"
+              className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white"
             >
               {CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
@@ -168,13 +168,13 @@ export default function GalleryPage() {
             placeholder="Descripción (opcional)"
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
-            className="mt-4 w-full p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white placeholder-white/40"
+            className="mt-4 w-full p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40"
           />
 
           <button
             onClick={handleSubmit}
             disabled={uploading || !preview}
-            className="mt-4 px-6 py-2 rounded-xl bg-[#e84118] text-white text-sm hover:bg-[#c0392b] transition disabled:opacity-50"
+            className="mt-4 px-6 py-2 rounded-xl bg-[#00bcd4] text-white text-sm hover:bg-[#c0392b] transition disabled:opacity-50"
           >
             {uploading ? "Subiendo..." : "Subir imagen"}
           </button>
@@ -184,7 +184,7 @@ export default function GalleryPage() {
       {loading ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="aspect-square bg-[#2d1515] rounded-xl animate-pulse border border-[#3d2020]" />
+            <div key={i} className="aspect-square bg-[#0a1520] rounded-xl animate-pulse border border-[#0e2530]" />
           ))}
         </div>
       ) : items.length === 0 ? (
@@ -195,7 +195,7 @@ export default function GalleryPage() {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {items.map((item) => (
-            <div key={item.id} className="group relative aspect-square rounded-xl overflow-hidden border border-[#3d2020]">
+            <div key={item.id} className="group relative aspect-square rounded-xl overflow-hidden border border-[#0e2530]">
               <Image
                 src={item.imageUrl}
                 alt={item.title || "Trabajo"}

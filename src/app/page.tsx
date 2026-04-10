@@ -90,8 +90,8 @@ export default async function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/60 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#c9a227]/15 border border-[#c9a227]/30 flex items-center justify-center">
-              <Scissors size={15} className="text-[#c9a227]" />
+            <div className="w-8 h-8 rounded-lg bg-[#00bcd4]/15 border border-[#00bcd4]/30 flex items-center justify-center">
+              <Scissors size={15} className="text-[#00bcd4]" />
             </div>
             <span className="font-bold tracking-wide text-white">{shopName}</span>
           </div>
@@ -104,7 +104,7 @@ export default async function Home() {
             </a>
             <Link
               href="/booking"
-              className="bg-[#c9a227] text-black text-sm font-bold px-5 py-2.5 rounded-xl hover:bg-[#d4ae3f] transition-all hover:shadow-lg hover:shadow-[#c9a227]/25"
+              className="bg-[#00bcd4] text-black text-sm font-bold px-5 py-2.5 rounded-xl hover:bg-[#26c6da] transition-all hover:shadow-lg hover:shadow-[#00bcd4]/25"
             >
               Agendar
             </Link>
@@ -126,7 +126,7 @@ export default async function Home() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
             <div>
-              <p className="text-xs font-bold text-[#c9a227] tracking-[0.25em] uppercase mb-4">
+              <p className="text-xs font-bold text-[#00bcd4] tracking-[0.25em] uppercase mb-4">
                 Nuestros servicios
               </p>
               <h2 className="text-4xl md:text-5xl font-black leading-tight">
@@ -148,23 +148,23 @@ export default async function Home() {
                 key={service.id}
                 className={`relative group rounded-2xl p-7 border transition-all duration-300 hover:-translate-y-1 ${
                   i === 1
-                    ? "bg-gradient-to-b from-[#1a1400] to-[#0d0b00] border-[#c9a227]/40 shadow-xl shadow-[#c9a227]/10"
+                    ? "bg-gradient-to-b from-[#1a1400] to-[#0d0b00] border-[#00bcd4]/40 shadow-xl shadow-[#00bcd4]/10"
                     : "bg-[#111] border-white/8 hover:border-white/15 hover:bg-[#161616]"
                 }`}
               >
                 {i === 1 && (
                   <>
-                    <div className="absolute inset-0 rounded-2xl bg-[#c9a227]/5 pointer-events-none" />
-                    <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#c9a227] text-black text-[10px] font-black px-3 py-1 rounded-full tracking-widest uppercase">
+                    <div className="absolute inset-0 rounded-2xl bg-[#00bcd4]/5 pointer-events-none" />
+                    <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#00bcd4] text-black text-[10px] font-black px-3 py-1 rounded-full tracking-widest uppercase">
                       Popular
                     </span>
                   </>
                 )}
                 <div className="mb-5">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-5 ${
-                    i === 1 ? "bg-[#c9a227]/20" : "bg-white/5"
+                    i === 1 ? "bg-[#00bcd4]/20" : "bg-white/5"
                   }`}>
-                    <Scissors size={18} className={i === 1 ? "text-[#c9a227]" : "text-white/50"} />
+                    <Scissors size={18} className={i === 1 ? "text-[#00bcd4]" : "text-white/50"} />
                   </div>
                   <h3 className="text-xl font-bold text-white mb-2">{service.name}</h3>
                   {service.description && (
@@ -180,8 +180,8 @@ export default async function Home() {
                     href="/booking"
                     className={`flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl transition ${
                       i === 1
-                        ? "bg-[#c9a227] text-black hover:bg-[#d4ae3f]"
-                        : "bg-white/8 text-white/60 hover:bg-[#c9a227] hover:text-black"
+                        ? "bg-[#00bcd4] text-black hover:bg-[#26c6da]"
+                        : "bg-white/8 text-white/60 hover:bg-[#00bcd4] hover:text-black"
                     }`}
                   >
                     Reservar
@@ -198,7 +198,7 @@ export default async function Home() {
       <section className="py-28 bg-[#080808] border-t border-white/5">
         <div className="max-w-6xl mx-auto px-6">
           <div className="mb-16">
-            <p className="text-xs font-bold text-[#c9a227] tracking-[0.25em] uppercase mb-4">
+            <p className="text-xs font-bold text-[#00bcd4] tracking-[0.25em] uppercase mb-4">
               Proceso
             </p>
             <h2 className="text-4xl md:text-5xl font-black leading-tight">
@@ -228,9 +228,9 @@ export default async function Home() {
               },
             ].map((item, i) => (
               <div key={item.step} className="relative group">
-                <div className="bg-[#111] border border-white/8 rounded-2xl p-8 hover:border-[#c9a227]/30 hover:bg-[#0f1a2e] transition-all duration-300">
+                <div className="bg-[#111] border border-white/8 rounded-2xl p-8 hover:border-[#00bcd4]/30 hover:bg-[#0d1a22] transition-all duration-300">
                   <div className="flex items-start justify-between mb-6">
-                    <div className="w-12 h-12 rounded-2xl bg-[#c9a227]/10 flex items-center justify-center text-[#c9a227]">
+                    <div className="w-12 h-12 rounded-2xl bg-[#00bcd4]/10 flex items-center justify-center text-[#00bcd4]">
                       {item.icon}
                     </div>
                     <span className="text-5xl font-black text-white/5 leading-none select-none">
@@ -256,7 +256,7 @@ export default async function Home() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
-              <p className="text-xs font-bold text-[#c9a227] tracking-[0.25em] uppercase mb-4">
+              <p className="text-xs font-bold text-[#00bcd4] tracking-[0.25em] uppercase mb-4">
                 Por que elegirnos
               </p>
               <h2 className="text-4xl md:text-5xl font-black leading-tight mb-12">
@@ -286,7 +286,7 @@ export default async function Home() {
                   },
                 ].map((feature) => (
                   <div key={feature.title} className="flex gap-5 group">
-                    <div className="flex-shrink-0 w-11 h-11 rounded-2xl bg-[#c9a227]/10 border border-[#c9a227]/20 flex items-center justify-center text-[#c9a227] group-hover:bg-[#c9a227]/20 transition">
+                    <div className="flex-shrink-0 w-11 h-11 rounded-2xl bg-[#00bcd4]/10 border border-[#00bcd4]/20 flex items-center justify-center text-[#00bcd4] group-hover:bg-[#00bcd4]/20 transition">
                       {feature.icon}
                     </div>
                     <div>
@@ -301,13 +301,13 @@ export default async function Home() {
             {/* Info card */}
             <div className="hidden md:block">
               <div className="relative">
-                <div className="absolute -inset-4 bg-[#c9a227]/8 rounded-3xl blur-3xl pointer-events-none" />
-                <div className="relative bg-[#0f1a2e] border border-[#c9a227]/15 rounded-3xl overflow-hidden shadow-2xl">
+                <div className="absolute -inset-4 bg-[#00bcd4]/8 rounded-3xl blur-3xl pointer-events-none" />
+                <div className="relative bg-[#0d1a22] border border-[#00bcd4]/15 rounded-3xl overflow-hidden shadow-2xl">
                   <div className="p-7 border-b border-white/8 flex items-center gap-4">
                     <div className="relative">
-                      <div className="absolute inset-0 bg-[#c9a227]/30 rounded-full blur-md" />
-                      <div className="relative w-[52px] h-[52px] rounded-full bg-[#c9a227]/15 border border-[#c9a227]/30 flex items-center justify-center">
-                        <Scissors size={24} className="text-[#c9a227]" />
+                      <div className="absolute inset-0 bg-[#00bcd4]/30 rounded-full blur-md" />
+                      <div className="relative w-[52px] h-[52px] rounded-full bg-[#00bcd4]/15 border border-[#00bcd4]/30 flex items-center justify-center">
+                        <Scissors size={24} className="text-[#00bcd4]" />
                       </div>
                     </div>
                     <div>
@@ -319,7 +319,7 @@ export default async function Home() {
                   </div>
                   <div className="divide-y divide-white/5">
                     <div className="p-5 flex items-center gap-4">
-                      <Clock size={16} className="text-[#c9a227] flex-shrink-0" />
+                      <Clock size={16} className="text-[#00bcd4] flex-shrink-0" />
                       <div>
                         <p className="text-xs text-white/30 mb-0.5">Horario de atención</p>
                         <p className="text-sm font-bold text-white">
@@ -328,29 +328,29 @@ export default async function Home() {
                       </div>
                     </div>
                     <div className="p-5 flex items-center gap-4">
-                      <Scissors size={16} className="text-[#c9a227] flex-shrink-0" />
+                      <Scissors size={16} className="text-[#00bcd4] flex-shrink-0" />
                       <div>
                         <p className="text-xs text-white/30 mb-0.5">Servicios disponibles</p>
                         <p className="text-sm font-bold text-white">{services.length} servicios</p>
                       </div>
                     </div>
                     <div className="p-5 flex items-center gap-4">
-                      <Zap size={16} className="text-[#c9a227] flex-shrink-0" />
+                      <Zap size={16} className="text-[#00bcd4] flex-shrink-0" />
                       <div>
                         <p className="text-xs text-white/30 mb-0.5">Reservas</p>
-                        <p className="text-sm font-bold text-[#c9a227]">Online 24/7</p>
+                        <p className="text-sm font-bold text-[#00bcd4]">Online 24/7</p>
                       </div>
                     </div>
                     {settings?.phone && (
                       <div className="p-5 flex items-center gap-4">
-                        <Phone size={16} className="text-[#c9a227] flex-shrink-0" />
+                        <Phone size={16} className="text-[#00bcd4] flex-shrink-0" />
                         <div>
                           <p className="text-xs text-white/30 mb-0.5">WhatsApp</p>
                           <a
                             href={`https://wa.me/${settings.phone.replace(/\D/g, "")}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-sm font-bold text-white hover:text-[#c9a227] transition"
+                            className="text-sm font-bold text-white hover:text-[#00bcd4] transition"
                           >
                             {settings.phone}
                           </a>
@@ -361,7 +361,7 @@ export default async function Home() {
                   <div className="p-6">
                     <Link
                       href="/booking"
-                      className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#c9a227] to-[#a88520] text-black font-bold py-3.5 rounded-xl hover:shadow-lg hover:shadow-[#c9a227]/25 transition-all text-sm"
+                      className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#00bcd4] to-[#0097a7] text-black font-bold py-3.5 rounded-xl hover:shadow-lg hover:shadow-[#00bcd4]/25 transition-all text-sm"
                     >
                       Agendar mi cita
                       <ArrowUpRight size={15} />
@@ -379,7 +379,7 @@ export default async function Home() {
         <section className="py-28 bg-[#080808] border-t border-white/5">
           <div className="max-w-6xl mx-auto px-6">
             <div className="mb-16">
-              <p className="text-xs font-bold text-[#c9a227] tracking-[0.25em] uppercase mb-4">
+              <p className="text-xs font-bold text-[#00bcd4] tracking-[0.25em] uppercase mb-4">
                 Portafolio
               </p>
               <h2 className="text-4xl md:text-5xl font-black leading-tight">
@@ -415,7 +415,7 @@ export default async function Home() {
       <section className="py-28 border-t border-white/5">
         <div className="max-w-6xl mx-auto px-6">
           <div className="mb-16">
-            <p className="text-xs font-bold text-[#c9a227] tracking-[0.25em] uppercase mb-4">
+            <p className="text-xs font-bold text-[#00bcd4] tracking-[0.25em] uppercase mb-4">
               Testimonios
             </p>
             <h2 className="text-4xl md:text-5xl font-black leading-tight">
@@ -427,11 +427,11 @@ export default async function Home() {
             {testimonials.map((t: typeof testimonials[number]) => (
               <div
                 key={t.name}
-                className="bg-[#111] border border-white/8 rounded-2xl p-7 hover:border-[#c9a227]/20 transition-all duration-300"
+                className="bg-[#111] border border-white/8 rounded-2xl p-7 hover:border-[#00bcd4]/20 transition-all duration-300"
               >
                 <div className="flex items-center gap-1 mb-5">
                   {Array.from({ length: t.rating }).map((_, i) => (
-                    <svg key={i} className="w-4 h-4 text-[#c9a227]" fill="currentColor" viewBox="0 0 20 20">
+                    <svg key={i} className="w-4 h-4 text-[#00bcd4]" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   ))}
@@ -440,8 +440,8 @@ export default async function Home() {
                   &ldquo;{t.text}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#c9a227]/15 border border-[#c9a227]/30 flex items-center justify-center">
-                    <span className="text-xs font-black text-[#c9a227]">{t.initials}</span>
+                  <div className="w-10 h-10 rounded-full bg-[#00bcd4]/15 border border-[#00bcd4]/30 flex items-center justify-center">
+                    <span className="text-xs font-black text-[#00bcd4]">{t.initials}</span>
                   </div>
                   <div>
                     <p className="text-sm font-bold text-white">{t.name}</p>
@@ -456,15 +456,15 @@ export default async function Home() {
 
       {/* ── CTA ── */}
       <section className="relative py-32 overflow-hidden border-t border-white/5">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0f1e] via-[#060c17] to-[#060c17]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-[#c9a227]/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#080f16] via-[#050c10] to-[#050c10]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-[#00bcd4]/10 rounded-full blur-[100px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto text-center px-6">
-          <p className="text-xs font-bold text-[#c9a227] tracking-[0.25em] uppercase mb-6">
+          <p className="text-xs font-bold text-[#00bcd4] tracking-[0.25em] uppercase mb-6">
             Agenda ahora
           </p>
           <h2 className="text-5xl md:text-7xl font-black leading-tight mb-6">
             Listo para un<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c9a227] to-[#d4ae3f]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00bcd4] to-[#26c6da]">
               nuevo look?
             </span>
           </h2>
@@ -473,7 +473,7 @@ export default async function Home() {
           </p>
           <Link
             href="/booking"
-            className="inline-flex items-center gap-3 bg-gradient-to-r from-[#c9a227] to-[#a88520] text-black font-black px-10 py-5 rounded-2xl text-lg hover:shadow-2xl hover:shadow-[#c9a227]/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="inline-flex items-center gap-3 bg-gradient-to-r from-[#00bcd4] to-[#0097a7] text-black font-black px-10 py-5 rounded-2xl text-lg hover:shadow-2xl hover:shadow-[#00bcd4]/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
             Agendar mi cita
             <ArrowUpRight size={20} />
@@ -486,7 +486,7 @@ export default async function Home() {
         <section id="ubicacion" className="py-28 bg-[#080808] border-t border-white/5">
           <div className="max-w-6xl mx-auto px-6">
             <div className="mb-16">
-              <p className="text-xs font-bold text-[#c9a227] tracking-[0.25em] uppercase mb-4">
+              <p className="text-xs font-bold text-[#00bcd4] tracking-[0.25em] uppercase mb-4">
                 Ubicacion
               </p>
               <h2 className="text-4xl md:text-5xl font-black leading-tight">Como llegar</h2>
@@ -496,8 +496,8 @@ export default async function Home() {
               <div className="md:col-span-2 bg-[#111] border border-white/8 rounded-2xl overflow-hidden flex flex-col">
                 <div className="divide-y divide-white/8 flex-1">
                   <div className="p-6 flex gap-4 items-start">
-                    <div className="w-10 h-10 rounded-xl bg-[#c9a227]/10 flex items-center justify-center flex-shrink-0">
-                      <MapPin size={18} className="text-[#c9a227]" />
+                    <div className="w-10 h-10 rounded-xl bg-[#00bcd4]/10 flex items-center justify-center flex-shrink-0">
+                      <MapPin size={18} className="text-[#00bcd4]" />
                     </div>
                     <div>
                       <p className="text-xs font-bold text-white/30 uppercase tracking-wider mb-1.5">Direccion</p>
@@ -505,8 +505,8 @@ export default async function Home() {
                     </div>
                   </div>
                   <div className="p-6 flex gap-4 items-start">
-                    <div className="w-10 h-10 rounded-xl bg-[#c9a227]/10 flex items-center justify-center flex-shrink-0">
-                      <Clock size={18} className="text-[#c9a227]" />
+                    <div className="w-10 h-10 rounded-xl bg-[#00bcd4]/10 flex items-center justify-center flex-shrink-0">
+                      <Clock size={18} className="text-[#00bcd4]" />
                     </div>
                     <div>
                       <p className="text-xs font-bold text-white/30 uppercase tracking-wider mb-1.5">Horario</p>
@@ -517,8 +517,8 @@ export default async function Home() {
                   </div>
                   {settings.phone && (
                     <div className="p-6 flex gap-4 items-start">
-                      <div className="w-10 h-10 rounded-xl bg-[#c9a227]/10 flex items-center justify-center flex-shrink-0">
-                        <Phone size={18} className="text-[#c9a227]" />
+                      <div className="w-10 h-10 rounded-xl bg-[#00bcd4]/10 flex items-center justify-center flex-shrink-0">
+                        <Phone size={18} className="text-[#00bcd4]" />
                       </div>
                       <div>
                         <p className="text-xs font-bold text-white/30 uppercase tracking-wider mb-1.5">WhatsApp</p>
@@ -526,7 +526,7 @@ export default async function Home() {
                           href={`https://wa.me/${settings.phone.replace(/\D/g, "")}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sm font-semibold text-white hover:text-[#c9a227] transition"
+                          className="text-sm font-semibold text-white hover:text-[#00bcd4] transition"
                         >
                           {settings.phone}
                         </a>
@@ -539,7 +539,7 @@ export default async function Home() {
                     href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-2 bg-[#c9a227] text-black font-bold py-3.5 rounded-xl hover:bg-[#d4ae3f] transition-all text-sm"
+                    className="w-full flex items-center justify-center gap-2 bg-[#00bcd4] text-black font-bold py-3.5 rounded-xl hover:bg-[#26c6da] transition-all text-sm"
                   >
                     Abrir en Google Maps
                     <ArrowUpRight size={14} />
@@ -570,8 +570,8 @@ export default async function Home() {
           <div className="flex flex-col md:flex-row justify-between items-start gap-10 mb-10">
             <div>
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-9 h-9 rounded-lg bg-[#c9a227]/15 border border-[#c9a227]/30 flex items-center justify-center">
-                  <Scissors size={16} className="text-[#c9a227]" />
+                <div className="w-9 h-9 rounded-lg bg-[#00bcd4]/15 border border-[#00bcd4]/30 flex items-center justify-center">
+                  <Scissors size={16} className="text-[#00bcd4]" />
                 </div>
                 <span className="font-black text-lg text-white">{shopName}</span>
               </div>

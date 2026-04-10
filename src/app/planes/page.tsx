@@ -15,8 +15,8 @@ const businessTypes = [
     title: "Barberías",
     tagline: "Cortes que marcan estilo",
     gradient: "from-[#1a0f00] to-[#0f0800]",
-    border: "border-[#c9a227]/20",
-    accent: "text-[#c9a227]",
+    border: "border-[#00bcd4]/20",
+    accent: "text-[#00bcd4]",
   },
   {
     emoji: "🧖‍♀️",
@@ -83,10 +83,10 @@ export default function PlanesPage() {
   return (
     <div
       className="min-h-screen text-white overflow-x-hidden"
-      style={{ background: "linear-gradient(135deg, #060c17 0%, #0a0f1e 50%, #060c17 100%)" }}
+      style={{ background: "linear-gradient(135deg, #050c10 0%, #080f16 50%, #050c10 100%)" }}
     >
       {/* Ambient glows */}
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-[#c9a227]/5 rounded-full blur-[160px] pointer-events-none z-0" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-[#00bcd4]/5 rounded-full blur-[160px] pointer-events-none z-0" />
       <div className="fixed bottom-0 right-0 w-[500px] h-[400px] bg-purple-900/8 rounded-full blur-[120px] pointer-events-none z-0" />
 
       {/* Nav */}
@@ -99,7 +99,7 @@ export default function PlanesPage() {
             <span className="hidden xs:inline">Inicio</span>
           </Link>
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-br from-[#c9a227] to-[#a88520] flex items-center justify-center shadow-lg shadow-[#c9a227]/20">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-br from-[#00bcd4] to-[#0097a7] flex items-center justify-center shadow-lg shadow-[#00bcd4]/20">
               <Scissors size={13} className="text-black" />
             </div>
             <span className="font-black text-sm sm:text-base text-white tracking-tight">BarberOS</span>
@@ -108,7 +108,7 @@ export default function PlanesPage() {
             href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hola! Me interesa conocer más sobre BarberOS para mi negocio.")}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 bg-gradient-to-r from-[#c9a227] to-[#a88520] text-black font-black px-3 sm:px-4 py-2 rounded-xl hover:shadow-lg hover:shadow-[#c9a227]/25 transition-all flex-shrink-0"
+            className="flex items-center gap-1.5 bg-gradient-to-r from-[#00bcd4] to-[#0097a7] text-black font-black px-3 sm:px-4 py-2 rounded-xl hover:shadow-lg hover:shadow-[#00bcd4]/25 transition-all flex-shrink-0"
           >
             <MessageCircle size={13} />
             <span className="text-xs sm:text-sm"><span className="hidden sm:inline">Hablar con </span>ventas</span>
@@ -120,14 +120,14 @@ export default function PlanesPage() {
 
         {/* ── Hero ── */}
         <section className="text-center pt-14 sm:pt-20 pb-8 px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-[#c9a227]/10 border border-[#c9a227]/25 rounded-full px-4 sm:px-5 py-2 mb-8 sm:mb-10">
-            <Zap size={13} className="text-[#c9a227] flex-shrink-0" />
-            <span className="text-[11px] sm:text-xs font-bold text-[#c9a227] tracking-wide">WhatsApp automático incluido · Sin cobros ocultos</span>
+          <div className="inline-flex items-center gap-2 bg-[#00bcd4]/10 border border-[#00bcd4]/25 rounded-full px-4 sm:px-5 py-2 mb-8 sm:mb-10">
+            <Zap size={13} className="text-[#00bcd4] flex-shrink-0" />
+            <span className="text-[11px] sm:text-xs font-bold text-[#00bcd4] tracking-wide">WhatsApp automático incluido · Sin cobros ocultos</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl md:text-[5.5rem] font-black leading-[0.92] tracking-tight mb-6 sm:mb-7">
             La plataforma que<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c9a227] via-[#d4ae3f] to-[#c9a227]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00bcd4] via-[#26c6da] to-[#00bcd4]">
               tu negocio merece
             </span>
           </h1>
@@ -148,8 +148,8 @@ export default function PlanesPage() {
               { value: "10 min", label: "Configuración" },
               { value: "0%", label: "Comisión por cita" },
             ].map((s) => (
-              <div key={s.label} className="bg-[#0a0f1e] px-4 sm:px-8 py-4 sm:py-5 text-center">
-                <p className="text-lg sm:text-xl font-black text-[#c9a227]">{s.value}</p>
+              <div key={s.label} className="bg-[#080f16] px-4 sm:px-8 py-4 sm:py-5 text-center">
+                <p className="text-lg sm:text-xl font-black text-[#00bcd4]">{s.value}</p>
                 <p className="text-[11px] sm:text-xs text-white/30 mt-0.5">{s.label}</p>
               </div>
             ))}
@@ -184,7 +184,7 @@ export default function PlanesPage() {
         <section className="px-4 sm:px-6 pb-16 sm:pb-24 border-t border-white/5 pt-14 sm:pt-20">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-4">
-              <p className="text-xs font-bold text-[#c9a227] tracking-[0.25em] uppercase mb-4">Planes</p>
+              <p className="text-xs font-bold text-[#00bcd4] tracking-[0.25em] uppercase mb-4">Planes</p>
               <h2 className="text-4xl md:text-5xl font-black mb-3">Simple y transparente</h2>
               <p className="text-white/35 text-sm max-w-sm mx-auto">Sin letra pequeña. El precio que ves es el que pagas.</p>
             </div>
@@ -197,7 +197,7 @@ export default function PlanesPage() {
         <section className="border-t border-white/5 py-16 sm:py-24 px-4 sm:px-6">
           <div className="max-w-4xl mx-auto">
             <div className="mb-10 sm:mb-12 text-center">
-              <p className="text-xs font-bold text-[#c9a227] tracking-[0.25em] uppercase mb-4">Comparación</p>
+              <p className="text-xs font-bold text-[#00bcd4] tracking-[0.25em] uppercase mb-4">Comparación</p>
               <h2 className="text-3xl sm:text-4xl font-black mb-4">La diferencia es clara</h2>
               <p className="text-white/35 text-sm max-w-sm mx-auto">
                 Otras plataformas cobran el WhatsApp como add-on. En BarberOS va incluido desde el plan más básico.
@@ -211,9 +211,9 @@ export default function PlanesPage() {
                   <p className="text-xs font-bold text-white/25 uppercase tracking-wider">Función</p>
                 </div>
                 <div className="p-5 text-center border-l border-white/8">
-                  <div className="inline-flex items-center gap-1.5 bg-[#c9a227]/10 border border-[#c9a227]/30 rounded-lg px-3 py-1.5">
-                    <Scissors size={11} className="text-[#c9a227]" />
-                    <span className="text-xs font-black text-[#c9a227]">BarberOS</span>
+                  <div className="inline-flex items-center gap-1.5 bg-[#00bcd4]/10 border border-[#00bcd4]/30 rounded-lg px-3 py-1.5">
+                    <Scissors size={11} className="text-[#00bcd4]" />
+                    <span className="text-xs font-black text-[#00bcd4]">BarberOS</span>
                   </div>
                 </div>
                 <div className="p-5 text-center border-l border-white/8">
@@ -242,11 +242,11 @@ export default function PlanesPage() {
                   </div>
                   <div className="p-4 border-l border-white/5 flex items-center justify-center">
                     {row.us === true ? (
-                      <div className="w-6 h-6 rounded-full bg-[#c9a227]/15 border border-[#c9a227]/30 flex items-center justify-center">
-                        <Check size={12} className="text-[#c9a227]" strokeWidth={3} />
+                      <div className="w-6 h-6 rounded-full bg-[#00bcd4]/15 border border-[#00bcd4]/30 flex items-center justify-center">
+                        <Check size={12} className="text-[#00bcd4]" strokeWidth={3} />
                       </div>
                     ) : (
-                      <span className="text-xs font-bold text-[#c9a227] text-center">{row.us}</span>
+                      <span className="text-xs font-bold text-[#00bcd4] text-center">{row.us}</span>
                     )}
                   </div>
                   <div className="p-4 border-l border-white/5 flex items-center justify-center">
@@ -272,7 +272,7 @@ export default function PlanesPage() {
                 href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hola! Quiero empezar mi prueba gratis de BarberOS.")}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#c9a227] to-[#a88520] text-black font-black px-8 py-4 rounded-2xl text-sm hover:shadow-xl hover:shadow-[#c9a227]/25 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#00bcd4] to-[#0097a7] text-black font-black px-8 py-4 rounded-2xl text-sm hover:shadow-xl hover:shadow-[#00bcd4]/25 transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 <MessageCircle size={16} />
                 Empezar gratis — 14 días sin tarjeta
@@ -285,7 +285,7 @@ export default function PlanesPage() {
         <section className="border-t border-white/5 py-16 sm:py-24 px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
             <div className="mb-14 text-center">
-              <p className="text-xs font-bold text-[#c9a227] tracking-[0.25em] uppercase mb-4">La plataforma completa</p>
+              <p className="text-xs font-bold text-[#00bcd4] tracking-[0.25em] uppercase mb-4">La plataforma completa</p>
               <h2 className="text-4xl md:text-5xl font-black">Todo lo que necesita tu negocio</h2>
             </div>
             <div className="grid md:grid-cols-3 gap-5">
@@ -300,7 +300,7 @@ export default function PlanesPage() {
                 { icon: "👥", title: "Múltiples profesionales",       desc: "Cada profesional tiene su propio calendario y página de perfil." },
                 { icon: "🚀", title: "Lista de espera automática",    desc: "Cupo lleno = lista de espera automática. Te llena los huecos solos." },
               ].map((item) => (
-                <div key={item.title} className="bg-[#0b0f1a] border border-white/6 rounded-2xl p-6 hover:border-[#c9a227]/15 transition-all duration-300 group">
+                <div key={item.title} className="bg-[#0b0f1a] border border-white/6 rounded-2xl p-6 hover:border-[#00bcd4]/15 transition-all duration-300 group">
                   <div className="text-3xl mb-4 group-hover:scale-110 transition-transform duration-300 inline-block">{item.icon}</div>
                   <h3 className="font-bold text-white mb-2 text-sm">{item.title}</h3>
                   <p className="text-xs text-white/35 leading-relaxed">{item.desc}</p>
@@ -314,12 +314,12 @@ export default function PlanesPage() {
         <section className="border-t border-white/5 py-16 sm:py-24 px-4 sm:px-6">
           <div className="max-w-3xl mx-auto">
             <div className="mb-14 text-center">
-              <p className="text-xs font-bold text-[#c9a227] tracking-[0.25em] uppercase mb-4">FAQ</p>
+              <p className="text-xs font-bold text-[#00bcd4] tracking-[0.25em] uppercase mb-4">FAQ</p>
               <h2 className="text-4xl font-black">Preguntas frecuentes</h2>
             </div>
             <div className="space-y-3">
               {faqs.map((faq) => (
-                <div key={faq.q} className="bg-[#0b0f1a] border border-white/6 rounded-2xl p-6 hover:border-[#c9a227]/15 transition-all">
+                <div key={faq.q} className="bg-[#0b0f1a] border border-white/6 rounded-2xl p-6 hover:border-[#00bcd4]/15 transition-all">
                   <p className="font-bold text-white mb-3 text-sm">{faq.q}</p>
                   <p className="text-sm text-white/40 leading-relaxed">{faq.a}</p>
                 </div>
@@ -330,15 +330,15 @@ export default function PlanesPage() {
 
         {/* ── Final CTA ── */}
         <section className="relative py-32 px-6 overflow-hidden border-t border-white/5">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#0a0f1e] via-[#060c17] to-[#060c17]" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-[#c9a227]/8 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#080f16] via-[#050c10] to-[#050c10]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-[#00bcd4]/8 rounded-full blur-[120px] pointer-events-none" />
           <div className="relative z-10 text-center max-w-2xl mx-auto">
-            <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-[#c9a227] to-[#a88520] flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-[#c9a227]/25 rotate-3">
+            <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-[#00bcd4] to-[#0097a7] flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-[#00bcd4]/25 rotate-3">
               <Scissors size={32} className="text-black -rotate-3" />
             </div>
             <h2 className="text-5xl md:text-6xl font-black mb-6 leading-tight tracking-tight">
               Empieza hoy,<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c9a227] to-[#d4ae3f]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00bcd4] to-[#26c6da]">
                 sin compromisos
               </span>
             </h2>
@@ -350,7 +350,7 @@ export default function PlanesPage() {
                 href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hola! Quiero empezar mi prueba gratis de BarberOS. ¿Cómo empezamos?")}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-[#c9a227] to-[#a88520] text-black font-black px-10 py-5 rounded-2xl text-base hover:shadow-2xl hover:shadow-[#c9a227]/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-[#00bcd4] to-[#0097a7] text-black font-black px-10 py-5 rounded-2xl text-base hover:shadow-2xl hover:shadow-[#00bcd4]/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 <MessageCircle size={20} />
                 Empezar gratis — WhatsApp
@@ -370,7 +370,7 @@ export default function PlanesPage() {
         <footer className="border-t border-white/8 py-8 px-6 bg-[#080808]">
           <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-[#c9a227] to-[#a88520] flex items-center justify-center">
+              <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-[#00bcd4] to-[#0097a7] flex items-center justify-center">
                 <Scissors size={13} className="text-black" />
               </div>
               <span className="font-black text-sm text-white">BarberOS</span>

@@ -62,7 +62,7 @@ type Stats = {
   topClients: { name: string; count: number; revenue: number }[]
 }
 
-const PIE_COLORS = ["#e84118", "#f0932b", "#e55039", "#c0392b", "#a93226"]
+const PIE_COLORS = ["#00bcd4", "#f0932b", "#e55039", "#c0392b", "#a93226"]
 
 const fmt = (v: number) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0 }).format(v)
@@ -108,13 +108,13 @@ function KpiCard({
   return (
     <div className={`relative rounded-2xl p-5 border overflow-hidden ${
       accent
-        ? "bg-gradient-to-br from-[#e84118]/20 to-[#1a0808] border-[#e84118]/40"
+        ? "bg-gradient-to-br from-[#00bcd4]/20 to-[#1a0808] border-[#00bcd4]/40"
         : "bg-[#111] border-white/8"
     }`}>
-      {accent && <div className="absolute inset-0 bg-[#e84118]/5 pointer-events-none" />}
+      {accent && <div className="absolute inset-0 bg-[#00bcd4]/5 pointer-events-none" />}
       <div className="relative">
-        <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-3 ${accent ? "bg-[#e84118]/20" : "bg-white/5"}`}>
-          <Icon size={16} className={accent ? "text-[#e84118]" : "text-white/50"} />
+        <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-3 ${accent ? "bg-[#00bcd4]/20" : "bg-white/5"}`}>
+          <Icon size={16} className={accent ? "text-[#00bcd4]" : "text-white/50"} />
         </div>
         <p className="text-xs text-white/40 mb-1">{label}</p>
         <p className="text-2xl font-black text-white leading-none mb-2">{value}</p>
@@ -210,11 +210,11 @@ export default function DashboardPage() {
           </p>
         </div>
         {stats.monthProjection > 0 && (
-          <div className="hidden sm:flex items-center gap-2 bg-[#e84118]/10 border border-[#e84118]/25 rounded-xl px-4 py-2.5">
-            <Target size={14} className="text-[#e84118]" />
+          <div className="hidden sm:flex items-center gap-2 bg-[#00bcd4]/10 border border-[#00bcd4]/25 rounded-xl px-4 py-2.5">
+            <Target size={14} className="text-[#00bcd4]" />
             <div>
               <p className="text-[10px] text-white/40 leading-none mb-0.5">Proyección del mes</p>
-              <p className="text-sm font-bold text-[#e84118] leading-none">{fmtShort(stats.monthProjection)}</p>
+              <p className="text-sm font-bold text-[#00bcd4] leading-none">{fmtShort(stats.monthProjection)}</p>
             </div>
           </div>
         )}
@@ -277,8 +277,8 @@ export default function DashboardPage() {
             <AreaChart data={stats.monthlyRevenue}>
               <defs>
                 <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#e84118" stopOpacity={0.35} />
-                  <stop offset="100%" stopColor="#e84118" stopOpacity={0} />
+                  <stop offset="0%" stopColor="#00bcd4" stopOpacity={0.35} />
+                  <stop offset="100%" stopColor="#00bcd4" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#ffffff08" />
@@ -288,11 +288,11 @@ export default function DashboardPage() {
               <Area
                 type="monotone"
                 dataKey="revenue"
-                stroke="#e84118"
+                stroke="#00bcd4"
                 strokeWidth={2.5}
                 fill="url(#revenueGrad)"
-                dot={{ fill: "#e84118", r: 4 }}
-                activeDot={{ r: 6, fill: "#e84118" }}
+                dot={{ fill: "#00bcd4", r: 4 }}
+                activeDot={{ r: 6, fill: "#00bcd4" }}
               />
             </AreaChart>
           </ResponsiveContainer>
@@ -367,10 +367,10 @@ export default function DashboardPage() {
                       style={{
                         width: `${Math.max((h.count / maxHourCount) * 100, h.count > 0 ? 4 : 0)}%`,
                         background: h.count / maxHourCount > 0.7
-                          ? "#e84118"
+                          ? "#00bcd4"
                           : h.count / maxHourCount > 0.4
                           ? "#f0932b"
-                          : "#e8411855",
+                          : "#00bcd455",
                       }}
                     />
                   </div>
@@ -394,7 +394,7 @@ export default function DashboardPage() {
               <Bar dataKey="count" radius={[6, 6, 0, 0]}>
                 {stats.byWeekday.map((entry, i) => {
                   const max = Math.max(...stats.byWeekday.map((d) => d.count))
-                  return <Cell key={i} fill={entry.count === max ? "#e84118" : "#e8411840"} />
+                  return <Cell key={i} fill={entry.count === max ? "#00bcd4" : "#00bcd440"} />
                 })}
               </Bar>
             </BarChart>
@@ -415,7 +415,7 @@ export default function DashboardPage() {
               {stats.topClients.map((client, i) => (
                 <div key={client.name + i} className="flex items-center gap-3">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 ${
-                    i === 0 ? "bg-[#e84118] text-white" : "bg-white/8 text-white/60"
+                    i === 0 ? "bg-[#00bcd4] text-white" : "bg-white/8 text-white/60"
                   }`}>
                     {i === 0 ? "👑" : (client.name[0] || "?").toUpperCase()}
                   </div>
@@ -423,7 +423,7 @@ export default function DashboardPage() {
                     <p className="text-sm font-semibold text-white truncate">{client.name}</p>
                     <p className="text-xs text-white/30">{client.count} citas</p>
                   </div>
-                  <span className="text-sm font-bold text-[#e84118] shrink-0">{fmtShort(client.revenue)}</span>
+                  <span className="text-sm font-bold text-[#00bcd4] shrink-0">{fmtShort(client.revenue)}</span>
                 </div>
               ))}
             </div>
@@ -440,7 +440,7 @@ export default function DashboardPage() {
             {stats.todayAppointments.length > 0 && (
               <div className="text-right">
                 <p className="text-xs text-white/30">Total estimado</p>
-                <p className="text-sm font-bold text-[#e84118]">
+                <p className="text-sm font-bold text-[#00bcd4]">
                   {fmt(stats.todayAppointments.filter(a => a.status !== "CANCELLED").reduce((s: number, a: any) => s + (a.service?.price || 0), 0))}
                 </p>
               </div>
@@ -455,7 +455,7 @@ export default function DashboardPage() {
             <div className="space-y-2.5 max-h-[280px] overflow-y-auto pr-1">
               {stats.todayAppointments.map((apt: any) => (
                 <div key={apt.id} className="flex items-center gap-3 p-3 bg-white/3 rounded-xl border border-white/5">
-                  <div className="w-9 h-9 bg-[#e84118]/15 rounded-full flex items-center justify-center text-sm font-bold text-[#e84118] shrink-0">
+                  <div className="w-9 h-9 bg-[#00bcd4]/15 rounded-full flex items-center justify-center text-sm font-bold text-[#00bcd4] shrink-0">
                     {(apt.user?.name || "?")[0].toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -491,7 +491,7 @@ export default function DashboardPage() {
             </div>
             <div className="text-right">
               <p className="text-xs text-white/30">Total del equipo</p>
-              <p className="text-sm font-bold text-[#c9a227]">
+              <p className="text-sm font-bold text-[#00bcd4]">
                 {fmtShort(barberStats.reduce((s, b) => s + b.thisMonth.revenue, 0))}
               </p>
             </div>
@@ -499,13 +499,13 @@ export default function DashboardPage() {
 
           {/* Top barber highlight */}
           {barberStats[0] && barberStats[0].thisMonth.completedCount > 0 && (
-            <div className="flex items-center gap-4 p-4 bg-[#c9a227]/8 border border-[#c9a227]/20 rounded-2xl mb-5">
-              <div className="w-12 h-12 rounded-full bg-[#c9a227]/20 border-2 border-[#c9a227]/40 flex items-center justify-center flex-shrink-0 overflow-hidden">
+            <div className="flex items-center gap-4 p-4 bg-[#00bcd4]/8 border border-[#00bcd4]/20 rounded-2xl mb-5">
+              <div className="w-12 h-12 rounded-full bg-[#00bcd4]/20 border-2 border-[#00bcd4]/40 flex items-center justify-center flex-shrink-0 overflow-hidden">
                 {barberStats[0].image ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={barberStats[0].image} alt="" className="w-full h-full object-cover" />
                 ) : (
-                  <span className="text-lg font-black text-[#c9a227]">
+                  <span className="text-lg font-black text-[#00bcd4]">
                     {(barberStats[0].name || "?")[0].toUpperCase()}
                   </span>
                 )}
@@ -514,14 +514,14 @@ export default function DashboardPage() {
                 <div className="flex items-center gap-2 mb-0.5">
                   <span className="text-base">👑</span>
                   <p className="font-bold text-white truncate">{barberStats[0].name || "Barbero"}</p>
-                  <span className="text-[10px] bg-[#c9a227]/20 text-[#c9a227] font-bold px-2 py-0.5 rounded-full">Top</span>
+                  <span className="text-[10px] bg-[#00bcd4]/20 text-[#00bcd4] font-bold px-2 py-0.5 rounded-full">Top</span>
                 </div>
                 <p className="text-xs text-white/40">
                   {barberStats[0].specialty || "Barbero profesional"} · {barberStats[0].thisMonth.uniqueClients} clientes únicos
                 </p>
               </div>
               <div className="text-right flex-shrink-0">
-                <p className="text-xl font-black text-[#c9a227]">{fmtShort(barberStats[0].thisMonth.revenue)}</p>
+                <p className="text-xl font-black text-[#00bcd4]">{fmtShort(barberStats[0].thisMonth.revenue)}</p>
                 <p className="text-xs text-white/30">{barberStats[0].thisMonth.completedCount} citas</p>
               </div>
             </div>
@@ -558,14 +558,14 @@ export default function DashboardPage() {
                             {barber.revenueTrend > 0 ? "+" : ""}{barber.revenueTrend}%
                           </span>
                         )}
-                        <span className="text-sm font-bold text-[#c9a227] w-14 text-right tabular-nums">
+                        <span className="text-sm font-bold text-[#00bcd4] w-14 text-right tabular-nums">
                           {fmtShort(barber.thisMonth.revenue)}
                         </span>
                       </div>
                     </div>
                     <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-[#c9a227] to-[#a88520] transition-all duration-700"
+                        className="h-full rounded-full bg-gradient-to-r from-[#00bcd4] to-[#0097a7] transition-all duration-700"
                         style={{ width: `${(barber.thisMonth.revenue / maxRevenue) * 100}%` }}
                       />
                     </div>

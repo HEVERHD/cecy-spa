@@ -66,10 +66,10 @@ export default async function BarberProfilePage({
   return (
     <div
       className="min-h-screen text-white"
-      style={{ background: "linear-gradient(135deg, #060c17 0%, #0a0f1e 50%, #060c17 100%)" }}
+      style={{ background: "linear-gradient(135deg, #050c10 0%, #080f16 50%, #050c10 100%)" }}
     >
       {/* Ambient glow */}
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[#c9a227]/8 rounded-full blur-[120px] pointer-events-none z-0" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[#00bcd4]/8 rounded-full blur-[120px] pointer-events-none z-0" />
 
       {/* Nav */}
       <nav className="relative z-10 border-b border-white/5 bg-black/40 backdrop-blur-xl">
@@ -82,7 +82,7 @@ export default async function BarberProfilePage({
           </Link>
           <Link
             href={`/booking?barberId=${barber.id}`}
-            className="flex items-center gap-2 bg-[#c9a227] text-black text-sm font-bold px-4 py-2 rounded-xl hover:bg-[#d4ae3f] transition"
+            className="flex items-center gap-2 bg-[#00bcd4] text-black text-sm font-bold px-4 py-2 rounded-xl hover:bg-[#26c6da] transition"
           >
             Agendar
             <ArrowUpRight size={13} />
@@ -96,8 +96,8 @@ export default async function BarberProfilePage({
         <div className="flex flex-col sm:flex-row items-center sm:items-end gap-8 mb-14">
           {/* Avatar */}
           <div className="relative flex-shrink-0">
-            <div className="absolute -inset-1 bg-gradient-to-br from-[#c9a227] to-[#a88520] rounded-full blur-md opacity-40" />
-            <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-[#c9a227]/40 bg-[#0f1a2e]">
+            <div className="absolute -inset-1 bg-gradient-to-br from-[#00bcd4] to-[#0097a7] rounded-full blur-md opacity-40" />
+            <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-[#00bcd4]/40 bg-[#0d1a22]">
               {barber.avatarUrl || barber.image ? (
                 <Image
                   src={barber.avatarUrl || barber.image || ""}
@@ -107,7 +107,7 @@ export default async function BarberProfilePage({
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
-                  <span className="text-4xl font-black text-[#c9a227]">{initials}</span>
+                  <span className="text-4xl font-black text-[#00bcd4]">{initials}</span>
                 </div>
               )}
             </div>
@@ -115,7 +115,7 @@ export default async function BarberProfilePage({
 
           {/* Info */}
           <div className="text-center sm:text-left">
-            <p className="text-xs font-bold text-[#c9a227] tracking-[0.25em] uppercase mb-2">Barbero profesional</p>
+            <p className="text-xs font-bold text-[#00bcd4] tracking-[0.25em] uppercase mb-2">Barbero profesional</p>
             <h1 className="text-4xl md:text-5xl font-black text-white mb-2">{barber.name}</h1>
             {barber.specialty && (
               <p className="text-white/50 text-base">{barber.specialty}</p>
@@ -132,23 +132,23 @@ export default async function BarberProfilePage({
           ].map((stat) => (
             <div
               key={stat.label}
-              className="bg-[#111] border border-white/8 rounded-2xl p-6 text-center hover:border-[#c9a227]/20 transition"
+              className="bg-[#111] border border-white/8 rounded-2xl p-6 text-center hover:border-[#00bcd4]/20 transition"
             >
-              <p className="text-3xl font-black text-[#c9a227] mb-1">{stat.value}</p>
+              <p className="text-3xl font-black text-[#00bcd4] mb-1">{stat.value}</p>
               <p className="text-xs text-white/35 font-medium">{stat.label}</p>
             </div>
           ))}
         </div>
 
         {/* CTA */}
-        <div className="bg-gradient-to-r from-[#1a1400] to-[#0d0b00] border border-[#c9a227]/30 rounded-2xl p-7 mb-14 flex flex-col sm:flex-row items-center justify-between gap-5">
+        <div className="bg-gradient-to-r from-[#1a1400] to-[#0d0b00] border border-[#00bcd4]/30 rounded-2xl p-7 mb-14 flex flex-col sm:flex-row items-center justify-between gap-5">
           <div>
             <p className="font-bold text-white text-lg mb-1">Agenda con {barber.name?.split(" ")[0]}</p>
             <p className="text-sm text-white/40">Elige fecha y hora en segundos, sin llamadas.</p>
           </div>
           <Link
             href={`/booking?barberId=${barber.id}`}
-            className="flex-shrink-0 flex items-center gap-2 bg-gradient-to-r from-[#c9a227] to-[#a88520] text-black font-bold px-7 py-3.5 rounded-xl hover:shadow-lg hover:shadow-[#c9a227]/25 transition-all text-sm"
+            className="flex-shrink-0 flex items-center gap-2 bg-gradient-to-r from-[#00bcd4] to-[#0097a7] text-black font-bold px-7 py-3.5 rounded-xl hover:shadow-lg hover:shadow-[#00bcd4]/25 transition-all text-sm"
           >
             <Calendar size={15} />
             Reservar cita
@@ -158,7 +158,7 @@ export default async function BarberProfilePage({
         {/* Gallery */}
         {gallery.length > 0 && (
           <div className="mb-14">
-            <p className="text-xs font-bold text-[#c9a227] tracking-[0.25em] uppercase mb-4">Portafolio</p>
+            <p className="text-xs font-bold text-[#00bcd4] tracking-[0.25em] uppercase mb-4">Portafolio</p>
             <h2 className="text-2xl font-black mb-8">Trabajos recientes</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {gallery.map((item) => (
@@ -187,23 +187,23 @@ export default async function BarberProfilePage({
         {/* Reviews */}
         {reviews.length > 0 && (
           <div>
-            <p className="text-xs font-bold text-[#c9a227] tracking-[0.25em] uppercase mb-4">Reseñas</p>
+            <p className="text-xs font-bold text-[#00bcd4] tracking-[0.25em] uppercase mb-4">Reseñas</p>
             <h2 className="text-2xl font-black mb-8">Lo que dicen los clientes</h2>
             <div className="space-y-4">
               {reviews.map((review) => (
                 <div
                   key={review.id}
-                  className="bg-[#111] border border-white/8 rounded-2xl p-6 hover:border-[#c9a227]/15 transition"
+                  className="bg-[#111] border border-white/8 rounded-2xl p-6 hover:border-[#00bcd4]/15 transition"
                 >
                   <div className="flex items-center gap-1 mb-3">
                     {Array.from({ length: review.rating }).map((_, i) => (
-                      <Star key={i} size={14} className="text-[#c9a227]" fill="#c9a227" />
+                      <Star key={i} size={14} className="text-[#00bcd4]" fill="#00bcd4" />
                     ))}
                   </div>
                   <p className="text-white/60 text-sm leading-relaxed mb-4">&ldquo;{review.comment}&rdquo;</p>
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#c9a227]/15 border border-[#c9a227]/25 flex items-center justify-center">
-                      <span className="text-[10px] font-black text-[#c9a227]">
+                    <div className="w-8 h-8 rounded-full bg-[#00bcd4]/15 border border-[#00bcd4]/25 flex items-center justify-center">
+                      <span className="text-[10px] font-black text-[#00bcd4]">
                         {review.clientName.slice(0, 2).toUpperCase()}
                       </span>
                     </div>
@@ -217,9 +217,9 @@ export default async function BarberProfilePage({
 
         {/* Bottom CTA */}
         <div className="mt-14 text-center">
-          <div className="inline-flex items-center gap-2 bg-[#c9a227]/10 border border-[#c9a227]/20 rounded-full px-5 py-2.5 mb-6">
-            <Scissors size={14} className="text-[#c9a227]" />
-            <span className="text-xs font-bold text-[#c9a227] tracking-wide">Tu estilo, tu tiempo</span>
+          <div className="inline-flex items-center gap-2 bg-[#00bcd4]/10 border border-[#00bcd4]/20 rounded-full px-5 py-2.5 mb-6">
+            <Scissors size={14} className="text-[#00bcd4]" />
+            <span className="text-xs font-bold text-[#00bcd4] tracking-wide">Tu estilo, tu tiempo</span>
           </div>
           <p className="text-white/30 text-sm">
             <Link href="/" className="hover:text-white transition">Volver al inicio</Link>

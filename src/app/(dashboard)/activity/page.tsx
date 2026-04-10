@@ -96,7 +96,7 @@ export default function ActivityPage() {
             onClick={() => setFilter(filter === key ? "all" : key)}
             className={`rounded-xl px-3 py-2.5 flex items-center gap-2.5 transition border ${
               filter === key
-                ? "border-[#e84118]/50 bg-[#e84118]/10"
+                ? "border-[#00bcd4]/50 bg-[#00bcd4]/10"
                 : "border-white/8 bg-[#1a1a1a] hover:border-white/20"
             }`}
           >
@@ -112,7 +112,7 @@ export default function ActivityPage() {
       {/* Feed */}
       {loading ? (
         <div className="flex flex-col items-center py-20 gap-3">
-          <div className="w-7 h-7 rounded-full border-2 border-[#e84118]/20 border-t-[#e84118] animate-spin" />
+          <div className="w-7 h-7 rounded-full border-2 border-[#00bcd4]/20 border-t-[#00bcd4] animate-spin" />
           <p className="text-sm text-white/30">Cargando...</p>
         </div>
       ) : filtered.length === 0 ? (

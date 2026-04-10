@@ -157,10 +157,10 @@ export default function ClientsPage() {
         </button>
 
         {/* Client header */}
-        <div className={`rounded-xl p-6 border mb-6 ${selectedClient.blocked ? "bg-[#2d1010] border-red-900/50" : "bg-[#2d1515] border-[#3d2020]"}`}>
+        <div className={`rounded-xl p-6 border mb-6 ${selectedClient.blocked ? "bg-[#2d1010] border-red-900/50" : "bg-[#0a1520] border-[#0e2530]"}`}>
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-[#e84118]/20 rounded-full flex items-center justify-center text-2xl font-bold text-[#e84118] flex-shrink-0">
+              <div className="w-16 h-16 bg-[#00bcd4]/20 rounded-full flex items-center justify-center text-2xl font-bold text-[#00bcd4] flex-shrink-0">
                 {(selectedClient.name || "?")[0].toUpperCase()}
               </div>
               <div>
@@ -206,7 +206,7 @@ export default function ClientsPage() {
           ].map((kpi) => (
             <div
               key={kpi.label}
-              className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020]"
+              className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]"
             >
               <div className="text-xl mb-1">{kpi.icon}</div>
               <p className="text-xs text-white/40">{kpi.label}</p>
@@ -216,7 +216,7 @@ export default function ClientsPage() {
         </div>
 
         {/* Appointment history */}
-        <div className="bg-[#2d1515] rounded-xl p-6 border border-[#3d2020]">
+        <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530]">
           <h3 className="font-semibold text-white mb-4">Historial de citas</h3>
           {selectedClient.appointments.length === 0 ? (
             <p className="text-white/30 text-sm">Sin citas registradas</p>
@@ -225,7 +225,7 @@ export default function ClientsPage() {
               {selectedClient.appointments.map((apt) => (
                 <div
                   key={apt.id}
-                  className="flex items-center justify-between p-3 bg-[#1a0a0a] rounded-lg border border-[#3d2020]"
+                  className="flex items-center justify-between p-3 bg-[#080f16] rounded-lg border border-[#0e2530]"
                 >
                   <div className="flex items-center gap-3">
                     <div className="text-center min-w-[50px]">
@@ -263,7 +263,7 @@ export default function ClientsPage() {
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-[#e84118] text-white px-3 sm:px-4 py-2 rounded-xl font-medium hover:bg-[#c0392b] transition text-sm"
+          className="bg-[#00bcd4] text-white px-3 sm:px-4 py-2 rounded-xl font-medium hover:bg-[#c0392b] transition text-sm"
         >
           + Nuevo
         </button>
@@ -271,7 +271,7 @@ export default function ClientsPage() {
 
       {/* New client form */}
       {showForm && (
-        <div className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020] mb-4">
+        <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530] mb-4">
           <h3 className="font-semibold mb-3 text-white text-sm">Registrar cliente</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <input
@@ -279,21 +279,21 @@ export default function ClientsPage() {
               placeholder="Nombre *"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white placeholder-white/40 text-sm"
+              className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40 text-sm"
             />
             <input
               type="tel"
               placeholder="WhatsApp (+57...) *"
               value={form.phone}
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              className="p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white placeholder-white/40 text-sm"
+              className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40 text-sm"
             />
             <input
               type="email"
               placeholder="Email (opcional)"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white placeholder-white/40 text-sm"
+              className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40 text-sm"
             />
           </div>
           {formError && (
@@ -304,14 +304,14 @@ export default function ClientsPage() {
           <div className="flex gap-2 mt-3">
             <button
               onClick={() => { setShowForm(false); setFormError("") }}
-              className="px-4 py-2 rounded-xl border border-[#3d2020] text-sm hover:bg-[#1a0a0a] transition text-white"
+              className="px-4 py-2 rounded-xl border border-[#0e2530] text-sm hover:bg-[#080f16] transition text-white"
             >
               Cancelar
             </button>
             <button
               onClick={createClient}
               disabled={saving || !form.name || !form.phone}
-              className="px-4 py-2 rounded-xl bg-[#e84118] text-white text-sm hover:bg-[#c0392b] transition disabled:opacity-50"
+              className="px-4 py-2 rounded-xl bg-[#00bcd4] text-white text-sm hover:bg-[#c0392b] transition disabled:opacity-50"
             >
               {saving ? "Guardando..." : "Registrar"}
             </button>
@@ -326,30 +326,30 @@ export default function ClientsPage() {
           placeholder="Buscar por nombre, telefono o email..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white placeholder-white/40 text-sm"
+          className="w-full p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40 text-sm"
         />
       </div>
 
       {loading ? (
         <div className="space-y-3">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020] animate-pulse">
+            <div key={i} className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530] animate-pulse">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#3d2020] rounded-full" />
+                <div className="w-10 h-10 bg-[#0e2530] rounded-full" />
                 <div className="flex-1">
-                  <div className="h-4 w-32 bg-[#3d2020] rounded mb-2" />
-                  <div className="h-3 w-24 bg-[#3d2020] rounded" />
+                  <div className="h-4 w-32 bg-[#0e2530] rounded mb-2" />
+                  <div className="h-3 w-24 bg-[#0e2530] rounded" />
                 </div>
                 <div className="hidden sm:block text-right">
-                  <div className="h-4 w-16 bg-[#3d2020] rounded mb-1" />
-                  <div className="h-3 w-20 bg-[#3d2020] rounded" />
+                  <div className="h-4 w-16 bg-[#0e2530] rounded mb-1" />
+                  <div className="h-3 w-20 bg-[#0e2530] rounded" />
                 </div>
               </div>
             </div>
           ))}
         </div>
       ) : filteredClients.length === 0 ? (
-        <div className="text-center py-12 bg-[#2d1515] rounded-xl border border-[#3d2020]">
+        <div className="text-center py-12 bg-[#0a1520] rounded-xl border border-[#0e2530]">
           <p className="text-4xl mb-3">👥</p>
           <p className="text-white/30">
             {search ? "No se encontraron clientes" : "No hay clientes registrados"}
@@ -361,11 +361,11 @@ export default function ClientsPage() {
             <div
               key={client.id}
               onClick={() => viewClient(client.id)}
-              className={`rounded-xl p-4 border cursor-pointer transition ${client.blocked ? "bg-[#2d1010] border-red-900/40 hover:border-red-900/60" : "bg-[#2d1515] border-[#3d2020] hover:border-[#e84118]/30"}`}
+              className={`rounded-xl p-4 border cursor-pointer transition ${client.blocked ? "bg-[#2d1010] border-red-900/40 hover:border-red-900/60" : "bg-[#0a1520] border-[#0e2530] hover:border-[#00bcd4]/30"}`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#e84118]/20 rounded-full flex items-center justify-center text-sm font-bold text-[#e84118]">
+                  <div className="w-10 h-10 bg-[#00bcd4]/20 rounded-full flex items-center justify-center text-sm font-bold text-[#00bcd4]">
                     {(client.name || "?")[0].toUpperCase()}
                   </div>
                   <div>

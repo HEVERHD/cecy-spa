@@ -99,7 +99,7 @@ export default function PricingCards() {
         <div className="relative flex items-center bg-white/5 border border-white/10 rounded-full p-1">
           {/* Sliding pill */}
           <div
-            className="absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-full bg-gradient-to-r from-[#c9a227] to-[#a88520] transition-all duration-300 ease-in-out"
+            className="absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-full bg-gradient-to-r from-[#00bcd4] to-[#0097a7] transition-all duration-300 ease-in-out"
             style={{ left: currency === "COP" ? "4px" : "calc(50%)" }}
           />
           <button
@@ -128,19 +128,19 @@ export default function PricingCards() {
             key={plan.id}
             className={`relative rounded-3xl overflow-hidden transition-all duration-300 ${
               plan.highlight
-                ? "border border-[#c9a227]/50 bg-gradient-to-b from-[#0f1a2e] to-[#0a1220] shadow-2xl shadow-[#c9a227]/15 scale-[1.02]"
+                ? "border border-[#00bcd4]/50 bg-gradient-to-b from-[#0d1a22] to-[#0a1220] shadow-2xl shadow-[#00bcd4]/15 scale-[1.02]"
                 : "border border-white/8 bg-[#0b0f1a] hover:border-white/15"
             }`}
           >
             {/* Gold bar top */}
             {plan.highlight && (
-              <div className="h-[3px] bg-gradient-to-r from-[#c9a227] to-[#a88520]" />
+              <div className="h-[3px] bg-gradient-to-r from-[#00bcd4] to-[#0097a7]" />
             )}
 
             {/* Recommended badge */}
             {plan.badge && (
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-px">
-                <span className="block bg-gradient-to-r from-[#c9a227] to-[#a88520] text-black text-[11px] font-black px-5 py-1.5 rounded-b-xl tracking-wide">
+                <span className="block bg-gradient-to-r from-[#00bcd4] to-[#0097a7] text-black text-[11px] font-black px-5 py-1.5 rounded-b-xl tracking-wide">
                   {plan.badge}
                 </span>
               </div>
@@ -148,7 +148,7 @@ export default function PricingCards() {
 
             <div className={`p-7 ${plan.highlight ? "pt-10" : ""}`}>
               {/* Plan name */}
-              <p className={`text-xs font-black tracking-[0.25em] uppercase mb-1 ${plan.highlight ? "text-[#c9a227]" : "text-white/40"}`}>
+              <p className={`text-xs font-black tracking-[0.25em] uppercase mb-1 ${plan.highlight ? "text-[#00bcd4]" : "text-white/40"}`}>
                 {plan.name}
               </p>
               <p className="text-white/35 text-sm mb-7 leading-snug">{plan.tagline}</p>
@@ -159,7 +159,7 @@ export default function PricingCards() {
                   <div>
                     <div className="flex items-end gap-1 mb-1">
                       <span className="text-white/30 text-lg font-bold self-start mt-2">$</span>
-                      <span className={`text-5xl font-black tabular-nums leading-none ${plan.highlight ? "text-[#c9a227]" : "text-white"}`}>
+                      <span className={`text-5xl font-black tabular-nums leading-none ${plan.highlight ? "text-[#00bcd4]" : "text-white"}`}>
                         {plan.priceCOP.toLocaleString("es-CO")}
                       </span>
                     </div>
@@ -169,7 +169,7 @@ export default function PricingCards() {
                   <div>
                     <div className="flex items-end gap-1 mb-1">
                       <span className="text-white/30 text-lg font-bold self-start mt-2">$</span>
-                      <span className={`text-5xl font-black tabular-nums leading-none ${plan.highlight ? "text-[#c9a227]" : "text-white"}`}>
+                      <span className={`text-5xl font-black tabular-nums leading-none ${plan.highlight ? "text-[#00bcd4]" : "text-white"}`}>
                         {plan.priceUSD}
                       </span>
                     </div>
@@ -185,7 +185,7 @@ export default function PricingCards() {
                 rel="noopener noreferrer"
                 className={`flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl font-black text-sm transition-all mb-8 ${
                   plan.highlight
-                    ? "bg-gradient-to-r from-[#c9a227] to-[#a88520] text-black hover:shadow-lg hover:shadow-[#c9a227]/30 hover:scale-[1.02] active:scale-[0.98]"
+                    ? "bg-gradient-to-r from-[#00bcd4] to-[#0097a7] text-black hover:shadow-lg hover:shadow-[#00bcd4]/30 hover:scale-[1.02] active:scale-[0.98]"
                     : "bg-white/6 border border-white/10 text-white hover:bg-white/10 active:scale-[0.98]"
                 }`}
               >
@@ -201,12 +201,12 @@ export default function PricingCards() {
                   <div key={f.text} className="flex items-start gap-3">
                     <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
                       f.highlight
-                        ? "bg-[#c9a227]/20 border border-[#c9a227]/50"
-                        : "bg-[#c9a227]/10 border border-[#c9a227]/25"
+                        ? "bg-[#00bcd4]/20 border border-[#00bcd4]/50"
+                        : "bg-[#00bcd4]/10 border border-[#00bcd4]/25"
                     }`}>
-                      <Check size={11} className="text-[#c9a227]" strokeWidth={3} />
+                      <Check size={11} className="text-[#00bcd4]" strokeWidth={3} />
                     </div>
-                    <span className={`text-sm leading-snug ${f.highlight ? "text-[#c9a227] font-semibold" : "text-white/65"}`}>
+                    <span className={`text-sm leading-snug ${f.highlight ? "text-[#00bcd4] font-semibold" : "text-white/65"}`}>
                       {f.text}
                     </span>
                   </div>

@@ -118,20 +118,20 @@ export default function UsersPage() {
       {loading ? (
         <div className="space-y-3">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020] animate-pulse">
+            <div key={i} className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530] animate-pulse">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-[#3d2020] rounded-full" />
+                <div className="w-12 h-12 bg-[#0e2530] rounded-full" />
                 <div className="flex-1">
-                  <div className="h-4 w-36 bg-[#3d2020] rounded mb-2" />
-                  <div className="h-3 w-48 bg-[#3d2020] rounded" />
+                  <div className="h-4 w-36 bg-[#0e2530] rounded mb-2" />
+                  <div className="h-3 w-48 bg-[#0e2530] rounded" />
                 </div>
-                <div className="h-8 w-24 bg-[#3d2020] rounded-lg" />
+                <div className="h-8 w-24 bg-[#0e2530] rounded-lg" />
               </div>
             </div>
           ))}
         </div>
       ) : users.length === 0 ? (
-        <div className="text-center py-12 bg-[#2d1515] rounded-xl border border-[#3d2020]">
+        <div className="text-center py-12 bg-[#0a1520] rounded-xl border border-[#0e2530]">
           <p className="text-4xl mb-3">👥</p>
           <p className="text-white/30">No hay usuarios registrados</p>
         </div>
@@ -140,7 +140,7 @@ export default function UsersPage() {
           {users.map((user) => (
             <div
               key={user.id}
-              className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020]"
+              className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]"
             >
               <div className="flex items-center gap-3">
                 {/* Avatar */}
@@ -151,7 +151,7 @@ export default function UsersPage() {
                     className="w-12 h-12 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-12 h-12 bg-[#e84118]/20 rounded-full flex items-center justify-center text-lg font-bold text-[#e84118]">
+                  <div className="w-12 h-12 bg-[#00bcd4]/20 rounded-full flex items-center justify-center text-lg font-bold text-[#00bcd4]">
                     {(user.name || user.email || "?")[0].toUpperCase()}
                   </div>
                 )}
@@ -167,7 +167,7 @@ export default function UsersPage() {
                         user.role === "ADMIN"
                           ? "bg-purple-900/30 text-purple-400"
                           : user.role === "BARBER"
-                          ? "bg-[#e84118]/20 text-[#e84118]"
+                          ? "bg-[#00bcd4]/20 text-[#00bcd4]"
                           : "bg-blue-900/30 text-blue-400"
                       }`}
                     >
@@ -195,7 +195,7 @@ export default function UsersPage() {
                   {user.role === "CLIENT" && (
                     <button
                       onClick={() => changeRole(user.id, "BARBER")}
-                      className="px-3 py-2 text-xs font-medium rounded-lg bg-[#e84118] text-white hover:bg-[#c0392b] transition"
+                      className="px-3 py-2 text-xs font-medium rounded-lg bg-[#00bcd4] text-white hover:bg-[#c0392b] transition"
                     >
                       Hacer Barbero
                     </button>
@@ -203,7 +203,7 @@ export default function UsersPage() {
                   {user.role === "BARBER" && (
                     <button
                       onClick={() => changeRole(user.id, "CLIENT")}
-                      className="px-3 py-2 text-xs font-medium rounded-lg bg-[#3d2020] text-white/50 hover:bg-[#4d2c2c] transition"
+                      className="px-3 py-2 text-xs font-medium rounded-lg bg-[#0e2530] text-white/50 hover:bg-[#4d2c2c] transition"
                     >
                       Quitar
                     </button>

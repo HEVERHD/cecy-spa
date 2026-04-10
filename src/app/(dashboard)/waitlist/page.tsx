@@ -137,7 +137,7 @@ export default function WaitlistPage() {
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-2 bg-[#e84118] text-white px-4 py-2 rounded-xl font-medium hover:bg-[#c0392b] transition text-sm"
+          className="flex items-center gap-2 bg-[#00bcd4] text-white px-4 py-2 rounded-xl font-medium hover:bg-[#c0392b] transition text-sm"
         >
           <Plus size={16} />
           Nueva entrada
@@ -146,7 +146,7 @@ export default function WaitlistPage() {
 
       {/* Add entry form */}
       {showForm && (
-        <div className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020] mb-5">
+        <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530] mb-5">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-semibold text-white text-sm">Agregar a lista de espera</h3>
             <button onClick={() => { setShowForm(false); setFormError("") }} className="text-white/40 hover:text-white">
@@ -160,7 +160,7 @@ export default function WaitlistPage() {
                 type="date"
                 value={form.date}
                 onChange={e => setForm({ ...form, date: e.target.value })}
-                className="w-full p-3 border border-[#3d2020] rounded-xl bg-[#1a0a0a] text-white text-sm focus:border-[#e84118] focus:outline-none"
+                className="w-full p-3 border border-[#0e2530] rounded-xl bg-[#080f16] text-white text-sm focus:border-[#00bcd4] focus:outline-none"
               />
             </div>
             <div>
@@ -168,7 +168,7 @@ export default function WaitlistPage() {
               <select
                 value={form.serviceId}
                 onChange={e => setForm({ ...form, serviceId: e.target.value })}
-                className="w-full p-3 border border-[#3d2020] rounded-xl bg-[#1a0a0a] text-white text-sm focus:border-[#e84118] focus:outline-none"
+                className="w-full p-3 border border-[#0e2530] rounded-xl bg-[#080f16] text-white text-sm focus:border-[#00bcd4] focus:outline-none"
               >
                 <option value="">Seleccionar...</option>
                 {services.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
@@ -181,7 +181,7 @@ export default function WaitlistPage() {
                 placeholder="Nombre del cliente"
                 value={form.name}
                 onChange={e => setForm({ ...form, name: e.target.value })}
-                className="w-full p-3 border border-[#3d2020] rounded-xl bg-[#1a0a0a] text-white placeholder-white/30 text-sm focus:border-[#e84118] focus:outline-none"
+                className="w-full p-3 border border-[#0e2530] rounded-xl bg-[#080f16] text-white placeholder-white/30 text-sm focus:border-[#00bcd4] focus:outline-none"
               />
             </div>
             <div>
@@ -191,7 +191,7 @@ export default function WaitlistPage() {
                 placeholder="3001234567"
                 value={form.phone}
                 onChange={e => setForm({ ...form, phone: e.target.value })}
-                className="w-full p-3 border border-[#3d2020] rounded-xl bg-[#1a0a0a] text-white placeholder-white/30 text-sm focus:border-[#e84118] focus:outline-none"
+                className="w-full p-3 border border-[#0e2530] rounded-xl bg-[#080f16] text-white placeholder-white/30 text-sm focus:border-[#00bcd4] focus:outline-none"
               />
             </div>
           </div>
@@ -201,14 +201,14 @@ export default function WaitlistPage() {
           <div className="flex gap-2 mt-3">
             <button
               onClick={() => { setShowForm(false); setFormError("") }}
-              className="px-4 py-2 rounded-xl border border-[#3d2020] text-white/60 text-sm hover:bg-[#1a0a0a] transition"
+              className="px-4 py-2 rounded-xl border border-[#0e2530] text-white/60 text-sm hover:bg-[#080f16] transition"
             >
               Cancelar
             </button>
             <button
               onClick={handleAddEntry}
               disabled={formSubmitting}
-              className="px-4 py-2 rounded-xl bg-[#e84118] text-white text-sm font-medium hover:bg-[#c0392b] transition disabled:opacity-50"
+              className="px-4 py-2 rounded-xl bg-[#00bcd4] text-white text-sm font-medium hover:bg-[#c0392b] transition disabled:opacity-50"
             >
               {formSubmitting ? "Agregando..." : "Agregar"}
             </button>
@@ -230,8 +230,8 @@ export default function WaitlistPage() {
             onClick={() => setFilterStatus(f.value)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
               filterStatus === f.value
-                ? "bg-[#e84118] text-white"
-                : "bg-[#1a0a0a] border border-[#3d2020] text-white/50 hover:text-white"
+                ? "bg-[#00bcd4] text-white"
+                : "bg-[#080f16] border border-[#0e2530] text-white/50 hover:text-white"
             }`}
           >
             {f.label}
@@ -248,7 +248,7 @@ export default function WaitlistPage() {
       {loading ? (
         <div className="space-y-3">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="bg-[#2d1515] rounded-xl p-5 border border-[#3d2020] animate-pulse h-24" />
+            <div key={i} className="bg-[#0a1520] rounded-xl p-5 border border-[#0e2530] animate-pulse h-24" />
           ))}
         </div>
       ) : filtered.length === 0 ? (
@@ -263,7 +263,7 @@ export default function WaitlistPage() {
             const cfg = STATUS_CONFIG[entry.status]
             const isLoading = (s: string) => actionLoading === entry.id + s
             return (
-              <div key={entry.id} className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020]">
+              <div key={entry.id} className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -279,7 +279,7 @@ export default function WaitlistPage() {
                       href={`https://wa.me/${entry.phone.replace(/\D/g, "")}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs text-[#e84118] hover:underline mt-1"
+                      className="inline-flex items-center gap-1 text-xs text-[#00bcd4] hover:underline mt-1"
                     >
                       <Phone size={11} />
                       {entry.phone}
@@ -300,7 +300,7 @@ export default function WaitlistPage() {
 
                 {/* Action buttons */}
                 {entry.status === "WAITING" && (
-                  <div className="flex gap-2 mt-3 pt-3 border-t border-[#3d2020]">
+                  <div className="flex gap-2 mt-3 pt-3 border-t border-[#0e2530]">
                     <button
                       onClick={() => updateStatus(entry.id, "NOTIFIED")}
                       disabled={isLoading("NOTIFIED")}
@@ -321,7 +321,7 @@ export default function WaitlistPage() {
                 )}
 
                 {entry.status === "NOTIFIED" && (
-                  <div className="flex gap-2 mt-3 pt-3 border-t border-[#3d2020]">
+                  <div className="flex gap-2 mt-3 pt-3 border-t border-[#0e2530]">
                     <button
                       onClick={() => updateStatus(entry.id, "BOOKED")}
                       disabled={isLoading("BOOKED")}

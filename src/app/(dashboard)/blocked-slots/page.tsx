@@ -139,23 +139,23 @@ export default function BlockedSlotsPage() {
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-[#e84118] text-white px-4 py-2 rounded-xl font-medium hover:bg-[#c0392b] transition text-sm"
+          className="bg-[#00bcd4] text-white px-4 py-2 rounded-xl font-medium hover:bg-[#c0392b] transition text-sm"
         >
           + Nuevo Bloqueo
         </button>
       </div>
 
       {/* ── Bloqueos fijos (recurrentes) ── */}
-      <div className="bg-[#2d1515] rounded-xl border border-[#3d2020] mb-6 overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[#3d2020]">
+      <div className="bg-[#0a1520] rounded-xl border border-[#0e2530] mb-6 overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[#0e2530]">
           <div className="flex items-center gap-2">
-            <RepeatIcon size={16} className="text-[#e84118]" />
+            <RepeatIcon size={16} className="text-[#00bcd4]" />
             <p className="text-sm font-bold text-white">Bloqueos fijos</p>
             <span className="text-xs text-white/30 ml-1">· aplican todos los días</span>
           </div>
           <button
             onClick={() => setShowRecurringForm(!showRecurringForm)}
-            className="text-xs px-3 py-1.5 rounded-lg bg-[#e84118]/15 text-[#e84118] hover:bg-[#e84118]/25 transition font-medium"
+            className="text-xs px-3 py-1.5 rounded-lg bg-[#00bcd4]/15 text-[#00bcd4] hover:bg-[#00bcd4]/25 transition font-medium"
           >
             + Agregar
           </button>
@@ -163,12 +163,12 @@ export default function BlockedSlotsPage() {
 
         {/* Recurring quick add */}
         {showRecurringForm && (
-          <div className="px-5 py-4 border-b border-[#3d2020] bg-[#1a0a0a]">
+          <div className="px-5 py-4 border-b border-[#0e2530] bg-[#080f16]">
             <p className="text-xs text-white/40 mb-3">Agrega un bloqueo que se repita cada día automáticamente</p>
             {/* Almuerzo shortcut */}
             <button
               onClick={() => createRecurring({ startTime: "11:58", endTime: "13:00", reason: "Almuerzo" })}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#2d1515] border border-[#e84118]/30 hover:bg-[#e84118]/10 transition text-sm text-white mb-3 w-full"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0a1520] border border-[#00bcd4]/30 hover:bg-[#00bcd4]/10 transition text-sm text-white mb-3 w-full"
             >
               <span>🍽</span>
               <span className="font-medium">Almuerzo fijo</span>
@@ -182,7 +182,7 @@ export default function BlockedSlotsPage() {
                   type="time"
                   value={recurringForm.startTime}
                   onChange={(e) => setRecurringForm({ ...recurringForm, startTime: e.target.value })}
-                  className="p-2.5 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#2d1515] text-white text-sm [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
+                  className="p-2.5 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#0a1520] text-white text-sm [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
                 />
               </div>
               <div>
@@ -191,7 +191,7 @@ export default function BlockedSlotsPage() {
                   type="time"
                   value={recurringForm.endTime}
                   onChange={(e) => setRecurringForm({ ...recurringForm, endTime: e.target.value })}
-                  className="p-2.5 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#2d1515] text-white text-sm [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
+                  className="p-2.5 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#0a1520] text-white text-sm [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
                 />
               </div>
               <div className="flex-1 min-w-[160px]">
@@ -201,12 +201,12 @@ export default function BlockedSlotsPage() {
                   placeholder="Ej: Almuerzo"
                   value={recurringForm.reason}
                   onChange={(e) => setRecurringForm({ ...recurringForm, reason: e.target.value })}
-                  className="w-full p-2.5 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#2d1515] text-white text-sm placeholder-white/30"
+                  className="w-full p-2.5 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#0a1520] text-white text-sm placeholder-white/30"
                 />
               </div>
               <button
                 onClick={() => createRecurring()}
-                className="px-4 py-2.5 rounded-xl bg-[#e84118] text-white text-sm hover:bg-[#c0392b] transition"
+                className="px-4 py-2.5 rounded-xl bg-[#00bcd4] text-white text-sm hover:bg-[#c0392b] transition"
               >
                 Guardar
               </button>
@@ -222,19 +222,19 @@ export default function BlockedSlotsPage() {
             <p className="text-sm text-white/25">Sin bloqueos fijos. Agrega el horario de almuerzo para que nunca esté disponible.</p>
           </div>
         ) : (
-          <div className="divide-y divide-[#3d2020]">
+          <div className="divide-y divide-[#0e2530]">
             {recurringBlocks.map((r) => (
               <div key={r.id} className="flex items-center justify-between px-5 py-3.5">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-[#e84118]/10 rounded-lg flex items-center justify-center">
-                    <RepeatIcon size={14} className="text-[#e84118]" />
+                  <div className="w-8 h-8 bg-[#00bcd4]/10 rounded-lg flex items-center justify-center">
+                    <RepeatIcon size={14} className="text-[#00bcd4]" />
                   </div>
                   <div>
                     <p className="text-sm font-medium text-white">
                       {r.allDay ? "Todo el día" : `${to12Hour(r.startTime)} – ${to12Hour(r.endTime)}`}
                       {r.reason && <span className="text-white/40 font-normal"> · {r.reason}</span>}
                     </p>
-                    <p className="text-xs text-[#e84118]/70">Todos los días</p>
+                    <p className="text-xs text-[#00bcd4]/70">Todos los días</p>
                   </div>
                 </div>
                 <button
@@ -250,7 +250,7 @@ export default function BlockedSlotsPage() {
       </div>
 
       {/* ── Quick presets (one-time) ── */}
-      <div className="bg-[#2d1515] rounded-xl p-5 border border-[#3d2020] mb-6">
+      <div className="bg-[#0a1520] rounded-xl p-5 border border-[#0e2530] mb-6">
         <p className="text-xs font-bold text-white/30 uppercase tracking-widest mb-4">Bloqueo rápido para una fecha</p>
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <div className="flex-1 w-full sm:w-auto">
@@ -259,7 +259,7 @@ export default function BlockedSlotsPage() {
               type="date"
               value={quickDate}
               onChange={(e) => setQuickDate(e.target.value)}
-              className="w-full p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
+              className="w-full p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
             />
           </div>
           <div className="flex flex-wrap gap-3 pt-5">
@@ -268,7 +268,7 @@ export default function BlockedSlotsPage() {
                 key={preset.label}
                 onClick={() => quickBlock(preset)}
                 disabled={quickLoading === preset.label}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1a0a0a] border border-[#3d2020] hover:border-[#e84118]/60 hover:bg-[#e84118]/10 transition text-sm text-white/70 hover:text-white disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#080f16] border border-[#0e2530] hover:border-[#00bcd4]/60 hover:bg-[#00bcd4]/10 transition text-sm text-white/70 hover:text-white disabled:opacity-50"
               >
                 <span>{preset.emoji}</span>
                 <span>{quickLoading === preset.label ? "Bloqueando..." : preset.label}</span>
@@ -283,7 +283,7 @@ export default function BlockedSlotsPage() {
 
       {/* ── Form ── */}
       {showForm && (
-        <div className="bg-[#2d1515] rounded-xl p-6 border border-[#3d2020] mb-6">
+        <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530] mb-6">
           <h3 className="font-semibold mb-4 text-white">Bloqueo personalizado</h3>
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
@@ -292,7 +292,7 @@ export default function BlockedSlotsPage() {
                 type="date"
                 value={form.date}
                 onChange={(e) => setForm({ ...form, date: e.target.value })}
-                className="w-full p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
+                className="w-full p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
               />
             </div>
             <div className="flex items-center gap-3">
@@ -301,7 +301,7 @@ export default function BlockedSlotsPage() {
                   type="checkbox"
                   checked={form.allDay}
                   onChange={(e) => setForm({ ...form, allDay: e.target.checked })}
-                  className="w-4 h-4 accent-[#e84118]"
+                  className="w-4 h-4 accent-[#00bcd4]"
                 />
                 <span className="text-sm text-white">Todo el día</span>
               </label>
@@ -314,7 +314,7 @@ export default function BlockedSlotsPage() {
                     type="time"
                     value={form.startTime}
                     onChange={(e) => setForm({ ...form, startTime: e.target.value })}
-                    className="w-full p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
+                    className="w-full p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
                   />
                 </div>
                 <div>
@@ -323,7 +323,7 @@ export default function BlockedSlotsPage() {
                     type="time"
                     value={form.endTime}
                     onChange={(e) => setForm({ ...form, endTime: e.target.value })}
-                    className="w-full p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
+                    className="w-full p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
                   />
                 </div>
               </>
@@ -335,20 +335,20 @@ export default function BlockedSlotsPage() {
                 placeholder="Ej: Día libre, almuerzo, cita personal..."
                 value={form.reason}
                 onChange={(e) => setForm({ ...form, reason: e.target.value })}
-                className="w-full p-3 border border-[#3d2020] rounded-xl focus:border-[#e84118] focus:outline-none bg-[#1a0a0a] text-white placeholder-white/40"
+                className="w-full p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40"
               />
             </div>
           </div>
           <div className="flex gap-3 mt-4">
             <button
               onClick={() => setShowForm(false)}
-              className="px-4 py-2 rounded-xl border border-[#3d2020] text-sm hover:bg-[#1a0a0a] transition text-white"
+              className="px-4 py-2 rounded-xl border border-[#0e2530] text-sm hover:bg-[#080f16] transition text-white"
             >
               Cancelar
             </button>
             <button
               onClick={createBlock}
-              className="px-4 py-2 rounded-xl bg-[#e84118] text-white text-sm hover:bg-[#c0392b] transition"
+              className="px-4 py-2 rounded-xl bg-[#00bcd4] text-white text-sm hover:bg-[#c0392b] transition"
             >
               Bloquear
             </button>
@@ -365,7 +365,7 @@ export default function BlockedSlotsPage() {
         {loading ? (
           <Loader />
         ) : blockedSlots.length === 0 ? (
-          <div className="text-center py-10 bg-[#2d1515] rounded-xl border border-[#3d2020]">
+          <div className="text-center py-10 bg-[#0a1520] rounded-xl border border-[#0e2530]">
             <p className="text-white/25 text-sm">Sin bloqueos por fecha</p>
           </div>
         ) : (
@@ -373,7 +373,7 @@ export default function BlockedSlotsPage() {
             {blockedSlots.map((slot) => (
               <div
                 key={slot.id}
-                className="bg-[#2d1515] rounded-xl p-4 border border-[#3d2020] flex items-center justify-between"
+                className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530] flex items-center justify-between"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-red-900/30 rounded-full flex items-center justify-center text-lg">
