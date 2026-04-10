@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react"
 import { useSearchParams, useRouter } from "next/navigation"
 import Image from "next/image"
 import { Suspense, useState } from "react"
+import cecyLogo from "@/assets/cecylogo.png"
 
 function LoginContent() {
   const searchParams = useSearchParams()
@@ -37,12 +38,12 @@ function LoginContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0a0a0a] to-[#1a1a1a]">
-      <div className="bg-[#111] border border-white/10 rounded-2xl shadow-2xl p-8 w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#050c10] to-[#0d1a22]">
+      <div className="bg-[#0d1a22] border border-white/10 rounded-2xl shadow-2xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
-          <Image src="/logo.png" alt="Barbería" width={72} height={72} className="mx-auto mb-4 rounded-xl" />
+          <Image src={cecyLogo} alt="Cecy D'Estética & Spa" width={80} height={80} className="mx-auto mb-4 rounded-xl object-contain" />
           <h1 className="text-2xl font-bold text-white">Panel de Administración</h1>
-          <p className="text-white/40 text-sm mt-1">Acceso para barberos</p>
+          <p className="text-white/40 text-sm mt-1">Cecy D&apos;Estética &amp; Spa</p>
         </div>
 
         {wasRedirected && (
@@ -53,7 +54,6 @@ function LoginContent() {
           </div>
         )}
 
-        {/* Credentials form */}
         <form onSubmit={handleCredentialsLogin} className="space-y-4 mb-6">
           <div>
             <label className="block text-xs text-white/50 mb-1.5">Email</label>
@@ -63,8 +63,8 @@ function LoginContent() {
               onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
-              placeholder="barbero@email.com"
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#d97706] transition"
+              placeholder="estilista@email.com"
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00bcd4] transition"
             />
           </div>
           <div>
@@ -76,7 +76,7 @@ function LoginContent() {
               required
               autoComplete="current-password"
               placeholder="••••••••"
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#d97706] transition"
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#00bcd4] transition"
             />
           </div>
 
@@ -87,20 +87,18 @@ function LoginContent() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-lg bg-[#d97706] text-white font-semibold text-sm hover:bg-[#b45309] transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 rounded-lg bg-[#00bcd4] text-white font-semibold text-sm hover:bg-[#0097a7] transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Ingresando..." : "Iniciar sesión"}
           </button>
         </form>
 
-        {/* Divider */}
         <div className="flex items-center gap-3 mb-5">
           <div className="flex-1 h-px bg-white/10" />
           <span className="text-xs text-white/30">o</span>
           <div className="flex-1 h-px bg-white/10" />
         </div>
 
-        {/* Google */}
         <button
           onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
           className="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 rounded-lg px-6 py-3 text-white/70 text-sm font-medium hover:bg-white/10 transition"
