@@ -4,7 +4,6 @@ import { signIn } from "next-auth/react"
 import { useSearchParams, useRouter } from "next/navigation"
 import Image from "next/image"
 import { Suspense, useState } from "react"
-import cecyLogo from "@/assets/cecylogo.png"
 
 function LoginContent() {
   const searchParams = useSearchParams()
@@ -41,7 +40,7 @@ function LoginContent() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#050c10] to-[#0d1a22]">
       <div className="bg-[#0d1a22] border border-white/10 rounded-2xl shadow-2xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
-          <Image src={cecyLogo} alt="Cecy D'Estética & Spa" width={80} height={80} className="mx-auto mb-4 rounded-xl object-contain" />
+          <Image src="/logo.png" alt="Cecy D'Estética & Spa" width={80} height={80} className="mx-auto mb-4 rounded-xl object-contain" />
           <h1 className="text-2xl font-bold text-white">Panel de Administración</h1>
           <p className="text-white/40 text-sm mt-1">Cecy D&apos;Estética &amp; Spa</p>
         </div>
