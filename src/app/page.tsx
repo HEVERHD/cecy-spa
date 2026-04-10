@@ -90,9 +90,7 @@ export default async function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/60 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#00bcd4]/15 border border-[#00bcd4]/30 flex items-center justify-center">
-              <Scissors size={15} className="text-[#00bcd4]" />
-            </div>
+            <img src="/logo.png" alt={shopName} width={32} height={32} className="rounded-lg object-contain" />
             <span className="font-bold tracking-wide text-white">{shopName}</span>
           </div>
           <div className="flex items-center gap-8">
