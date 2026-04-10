@@ -92,9 +92,14 @@ export function Sidebar() {
   const [pushState, setPushState] = useState<PushState>("unsubscribed")
   const [pushLoading, setPushLoading] = useState(false)
   const [showPwaHint, setShowPwaHint] = useState(false)
+  const [shopName, setShopName] = useState("Mi Negocio")
   const pathname = usePathname()
   const { data: session } = useSession()
   const role = (session?.user as any)?.role || "BARBER"
+
+  useEffect(() => {
+    fetch("/api/settings").then(r => r.json()).then(d => { if (d?.shopName) setShopName(d.shopName) }).catch(() => {})
+  }, [])
 
   useEffect(() => {
     setReady(true)
@@ -152,9 +157,9 @@ export function Sidebar() {
       <div className="md:hidden fixed top-0 left-0 right-0 bg-[#080f16] border-b border-[#0e2530] z-50">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
-            <img src="/logo.png" alt="Mi Barbería" width={28} height={28} className="rounded-lg" />
+            <img src="/logo.png" alt={shopName} width={28} height={28} className="rounded-lg" />
             <h1 className="text-sm font-bold text-white">
-              Mi Barbería
+              {shopName}
             </h1>
           </div>
           <div className="flex items-center gap-1 relative">
@@ -224,10 +229,10 @@ export function Sidebar() {
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex flex-col w-64 bg-[#080f16] text-white min-h-screen p-6 border-r border-[#0e2530]">
         <div className="mb-10 flex items-center gap-3">
-          <img src="/logo.png" alt="Mi Barbería" width={36} height={36} className="rounded-lg" />
+          <img src="/logo.png" alt={shopName} width={36} height={36} className="rounded-lg" />
           <div>
             <h1 className="text-lg font-bold">
-              Mi Barbería
+              {shopName}
             </h1>
             <p className="text-xs text-white/30">
               {role === "ADMIN" ? "Administrador" : "Barbero"}
