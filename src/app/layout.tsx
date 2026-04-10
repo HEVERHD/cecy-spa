@@ -11,13 +11,13 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#c9a227",
+  themeColor: "#00bcd4",
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://barberia-demo-eta.vercel.app"
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://cecy-spa.vercel.app"
 
 export const metadata: Metadata = {
-  title: "StyleCut Studio — Agenda tu cita online",
+  title: "Cecy D'Estética & Spa — Agenda tu cita online",
   description: "Agenda tu cita en segundos, confirmación instantánea por WhatsApp. Sin llamadas, sin esperas.",
   manifest: "/manifest.json",
   icons: {
@@ -28,13 +28,13 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "StyleCut Studio",
+    title: "Cecy D'Estética & Spa",
   },
   openGraph: {
-    title: "StyleCut Studio — Tu look habla antes que tú.",
+    title: "Cecy D'Estética & Spa — Tu belleza, nuestra pasión.",
     description: "Agenda tu cita en segundos, sin llamadas, sin esperas.",
     url: BASE_URL,
-    siteName: "StyleCut Studio",
+    siteName: "Cecy D'Estética & Spa",
     locale: "es_CO",
     type: "website",
     images: [
@@ -42,13 +42,13 @@ export const metadata: Metadata = {
         url: `${BASE_URL}/logo2.png`,
         width: 512,
         height: 512,
-        alt: "StyleCut Studio — Agenda tu cita online",
+        alt: "Cecy D'Estética & Spa — Agenda tu cita online",
       },
     ],
   },
   twitter: {
     card: "summary",
-    title: "StyleCut Studio — Tu look habla antes que tú.",
+    title: "Cecy D'Estética & Spa — Tu belleza, nuestra pasión.",
     description: "Agenda tu cita en segundos, sin llamadas, sin esperas.",
     images: [`${BASE_URL}/logo2.png`],
   },
