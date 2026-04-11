@@ -19,7 +19,7 @@ export function FullPageLoader() {
           <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-[#00bcd4] animate-spin" />
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="text-[#00bcd4] font-bold text-sm">Mi Barbería</span>
+          <span className="text-[#00bcd4] font-bold text-sm">Mi Spa</span>
           <span className="text-white/60 font-medium text-sm">Studio</span>
         </div>
       </div>

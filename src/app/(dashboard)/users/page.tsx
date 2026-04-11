@@ -46,7 +46,7 @@ export default function UsersPage() {
     if (res.ok) {
       const labels: Record<string, string> = {
         ADMIN: "Usuario promovido a Administrador",
-        BARBER: "Usuario promovido a Barbero",
+        BARBER: "Usuario promovido a Profesional",
         CLIENT: "Rol cambiado a Cliente",
       }
       toast(labels[newRole] || "Rol actualizado")
@@ -171,7 +171,7 @@ export default function UsersPage() {
                           : "bg-blue-900/30 text-blue-400"
                       }`}
                     >
-                      {user.role === "ADMIN" ? "Admin" : user.role === "BARBER" ? "Barbero" : "Cliente"}
+                      {user.role === "ADMIN" ? "Admin" : user.role === "BARBER" ? "Profesional" : "Cliente"}
                     </span>
                   </div>
                   <p className="text-xs text-white/40 truncate">
@@ -197,7 +197,7 @@ export default function UsersPage() {
                       onClick={() => changeRole(user.id, "BARBER")}
                       className="px-3 py-2 text-xs font-medium rounded-lg bg-[#00bcd4] text-white hover:bg-[#c0392b] transition"
                     >
-                      Hacer Barbero
+                      Hacer Profesional
                     </button>
                   )}
                   {user.role === "BARBER" && (

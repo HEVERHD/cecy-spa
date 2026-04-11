@@ -94,7 +94,7 @@ export default function CitaPage() {
             <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-[#00bcd4] animate-spin" />
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="text-white/40 text-sm">Mi Barbería</span>
+            <span className="text-white/40 text-sm">Mi Spa</span>
           </div>
         </div>
       </div>
@@ -134,7 +134,7 @@ export default function CitaPage() {
       <div className="max-w-md w-full">
         {/* Header */}
         <div className="text-center mb-6">
-          <img src="/logo.png" alt="Barbería" width={64} height={64} className="mx-auto mb-3 rounded-xl" />
+          <img src="/logo.png" alt="Spa" width={64} height={64} className="mx-auto mb-3 rounded-xl" />
           <h1 className="text-lg font-bold text-white">{appointment.shopName}</h1>
           <p className="text-white/40 text-sm mt-1">Detalles de tu cita</p>
         </div>

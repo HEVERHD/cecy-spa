@@ -235,7 +235,7 @@ export function Sidebar() {
               {shopName}
             </h1>
             <p className="text-xs text-white/30">
-              {role === "ADMIN" ? "Administrador" : "Barbero"}
+              {role === "ADMIN" ? "Administrador" : "Profesional"}
             </p>
           </div>
         </div>

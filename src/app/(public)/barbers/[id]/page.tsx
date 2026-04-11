@@ -101,7 +101,7 @@ export default async function BarberProfilePage({
               {barber.avatarUrl || barber.image ? (
                 <Image
                   src={barber.avatarUrl || barber.image || ""}
-                  alt={barber.name || "Barbero"}
+                  alt={barber.name || "Profesional"}
                   fill
                   className="object-cover"
                 />
@@ -115,7 +115,7 @@ export default async function BarberProfilePage({
 
           {/* Info */}
           <div className="text-center sm:text-left">
-            <p className="text-xs font-bold text-[#00bcd4] tracking-[0.25em] uppercase mb-2">Barbero profesional</p>
+            <p className="text-xs font-bold text-[#00bcd4] tracking-[0.25em] uppercase mb-2">Profesional del spa</p>
             <h1 className="text-4xl md:text-5xl font-black text-white mb-2">{barber.name}</h1>
             {barber.specialty && (
               <p className="text-white/50 text-base">{barber.specialty}</p>

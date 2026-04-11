@@ -162,7 +162,7 @@ export default function SettingsPage() {
                     }`}>
                       {(b.name || "?")[0].toUpperCase()}
                     </div>
-                    {b.name || "Barbero"}
+                    {b.name || "Profesional"}
                     {isSelected && (
                       <svg className="w-3.5 h-3.5 ml-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -177,10 +177,10 @@ export default function SettingsPage() {
 
         {/* Shop Info */}
         <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530]">
-          <h3 className="font-semibold mb-4 text-white">Información de la barbería</h3>
+          <h3 className="font-semibold mb-4 text-white">Información del spa</h3>
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-white/60">Nombre de la barbería</label>
+              <label className="text-sm font-medium text-white/60">Nombre del spa</label>
               <input
                 type="text"
                 value={settings.shopName}
@@ -189,7 +189,7 @@ export default function SettingsPage() {
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-white/60">WhatsApp del barbero</label>
+              <label className="text-sm font-medium text-white/60">WhatsApp del profesional</label>
               <input
                 type="tel"
                 value={settings.phone}
@@ -389,7 +389,7 @@ export default function SettingsPage() {
                 ctx.fillStyle = "#080f16"
                 ctx.font = "bold 28px sans-serif"
                 ctx.textAlign = "center"
-                ctx.fillText("Mi Barbería", 300, 510)
+                ctx.fillText("Mi Spa", 300, 510)
                 ctx.font = "18px sans-serif"
                 ctx.fillStyle = "#666666"
                 ctx.fillText("Escanea para agendar tu cita", 300, 550)

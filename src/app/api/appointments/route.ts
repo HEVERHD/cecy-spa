@@ -272,7 +272,7 @@ export async function POST(req: NextRequest) {
   // Build appointment link for client
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "http://localhost:3000"
   const appointmentLink = `${baseUrl}/cita/${appointment.token}`
-  const queueLink = `${baseUrl}/cola`
+  const queueLink = `${baseUrl}/cola?barberId=${appointment.barber.id}`
 
   // Send WhatsApp confirmation to client
   const shopName = settings?.shopName || "Mi Barbería"
@@ -378,12 +378,14 @@ export async function PATCH(req: NextRequest) {
   })
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "http://localhost:3000"
-  const queueLink = `${baseUrl}/cola`
+  const queueLink = `${baseUrl}/cola?barberId=${appointment.barberId}`
 
   // When confirming, notify the client
   if (body.status === "CONFIRMED" && appointment.user.phone) {
     try {
-      const settings = await prisma.barberSettings.findFirst()
+      const settings = await prisma.barberSettings.findUnique({
+        where: { userId: appointment.barberId },
+      })
       const shopName = settings?.shopName || "Mi Barbería"
       const msg = buildStatusConfirmedMessage(
         appointment.user.name?.split(" ")[0] || "Cliente",
@@ -408,13 +410,14 @@ export async function PATCH(req: NextRequest) {
             lt: parseColombia(dateStr + "T23:59:59"),
           },
           status: { in: ["CONFIRMED", "PENDING"] },
+          barberId: appointment.barberId,
         },
         include: { user: true, service: true },
         orderBy: { date: "asc" },
       })
       if (nextApt?.user.phone) {
         const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "http://localhost:3000"
-        const msg = `¡Hola ${nextApt.user.name?.split(" ")[0] || ""}! 💈 Es casi tu turno. Tu cita de *${nextApt.service.name}* está próxima. Ve preparándote. 🙌\n\n📍 ${baseUrl}/cola`
+        const msg = `¡Hola ${nextApt.user.name?.split(" ")[0] || ""}! 💈 Es casi tu turno. Tu cita de *${nextApt.service.name}* está próxima. Ve preparándote. 🙌\n\n📍 ${baseUrl}/cola?barberId=${appointment.barberId}`
         sendWhatsAppMessage(nextApt.user.phone, msg).catch(() => {})
       }
     } catch {}

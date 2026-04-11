@@ -146,7 +146,7 @@ export function buildStatusConfirmedMessage(
   shopName: string,
   queueLink?: string
 ): string {
-  let msg = `✅ *Cita Confirmada por el barbero*\n\nHola ${clientName}, tu cita ha sido confirmada:\n\n📋 Servicio: ${serviceName}\n📅 Fecha: ${date}\n🕐 Hora: ${time}\n💈 ${shopName}`
+  let msg = `✅ *Cita Confirmada por el profesional*\n\nHola ${clientName}, tu cita ha sido confirmada:\n\n📋 Servicio: ${serviceName}\n📅 Fecha: ${date}\n🕐 Hora: ${time}\n💈 ${shopName}`
   if (queueLink) {
     msg += `\n\n📍 Ver cola en vivo el día de tu cita:\n${queueLink}`
   }

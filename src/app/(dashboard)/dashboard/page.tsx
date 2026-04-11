@@ -486,7 +486,7 @@ export default function DashboardPage() {
         <div className="mt-6 bg-[#111] rounded-2xl p-6 border border-white/8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <p className="font-bold text-white">Rendimiento por barbero</p>
+              <p className="font-bold text-white">Rendimiento del equipo</p>
               <p className="text-xs text-white/30 mt-0.5">Mes actual · citas completadas</p>
             </div>
             <div className="text-right">
@@ -513,11 +513,11 @@ export default function DashboardPage() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
                   <span className="text-base">👑</span>
-                  <p className="font-bold text-white truncate">{barberStats[0].name || "Barbero"}</p>
+                  <p className="font-bold text-white truncate">{barberStats[0].name || "Profesional"}</p>
                   <span className="text-[10px] bg-[#00bcd4]/20 text-[#00bcd4] font-bold px-2 py-0.5 rounded-full">Top</span>
                 </div>
                 <p className="text-xs text-white/40">
-                  {barberStats[0].specialty || "Barbero profesional"} · {barberStats[0].thisMonth.uniqueClients} clientes únicos
+                  {barberStats[0].specialty || "Profesional del spa"} · {barberStats[0].thisMonth.uniqueClients} clientes únicos
                 </p>
               </div>
               <div className="text-right flex-shrink-0">
@@ -544,7 +544,7 @@ export default function DashboardPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1.5">
-                      <p className="text-sm font-semibold text-white truncate">{barber.name || "Barbero"}</p>
+                      <p className="text-sm font-semibold text-white truncate">{barber.name || "Profesional"}</p>
                       <div className="flex items-center gap-2 flex-shrink-0 ml-2">
                         <span className="text-xs text-white/35">{barber.thisMonth.completedCount} citas</span>
                         <span className="text-white/20 text-xs">·</span>

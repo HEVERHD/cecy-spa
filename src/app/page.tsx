@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { to12Hour } from "@/lib/utils"
 import HeroSection from "@/components/HeroSection"
 import ParallaxBg from "@/components/ParallaxBg"
+import spaLogo from "@/assets/spaCECYlogo.png"
 import {
   Clock,
   Calendar,
@@ -61,13 +62,13 @@ export default async function Home() {
     getReviews(),
   ])
 
-  const shopName = settings?.shopName || "Mi Barbería"
+  const shopName = settings?.shopName || "Mi Spa"
 
   const staticTestimonials = [
-    { name: "Carlos M.", city: "Bogotá", rating: 5, text: "La mejor barbería que he visitado. El sistema de citas online es súper fácil y nunca tengo que esperar. Mi corte queda perfecto cada vez.", initials: "CM" },
-    { name: "Andrés P.", city: "Medellín", rating: 5, text: "Me encanta que me recuerdan la cita por WhatsApp. El barbero sabe exactamente lo que quiero sin que tenga que explicarlo de nuevo.", initials: "AP" },
+    { name: "Carlos M.", city: "Bogotá", rating: 5, text: "El mejor spa que he visitado. El sistema de citas online es súper fácil y nunca tengo que esperar. La atención siempre queda impecable.", initials: "CM" },
+    { name: "Andrés P.", city: "Medellín", rating: 5, text: "Me encanta que me recuerdan la cita por WhatsApp. La profesional sabe exactamente lo que quiero sin que tenga que explicarlo de nuevo.", initials: "AP" },
     { name: "Luis F.", city: "Cali", rating: 5, text: "Agendé desde mi celular en menos de 2 minutos. La confirmación llegó al instante. El servicio es impecable, 100% recomendado.", initials: "LF" },
-    { name: "Diego R.", city: "Barranquilla", rating: 5, text: "Por fin una barbería que respeta mi tiempo. Llego a mi hora exacta y salgo listo. La app es intuitiva y el resultado siempre supera mis expectativas.", initials: "DR" },
+    { name: "Diego R.", city: "Barranquilla", rating: 5, text: "Por fin un spa que respeta mi tiempo. Llego a mi hora exacta y salgo listo. La app es intuitiva y el resultado siempre supera mis expectativas.", initials: "DR" },
   ]
 
   const testimonials = reviews.length >= 1
@@ -90,8 +91,22 @@ export default async function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/60 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/logo.png" alt={shopName} width={32} height={32} className="rounded-lg object-contain" />
-            <span className="font-bold tracking-wide text-white">{shopName}</span>
+            <div className="relative h-10 w-14 sm:h-12 sm:w-20">
+              <Image
+                src={spaLogo}
+                alt={`${shopName} logo`}
+                fill
+                priority
+                className="object-contain object-left"
+                sizes="80px"
+              />
+            </div>
+            <div className="leading-tight">
+              <p className="font-black tracking-wide text-white">{shopName}</p>
+              <p className="hidden sm:block text-[10px] uppercase tracking-[0.28em] text-[#ff5fc3]/80">
+                Estetica y spa
+              </p>
+            </div>
           </div>
           <div className="flex items-center gap-8">
             <a href="#servicios" className="hidden sm:block text-sm text-white/50 hover:text-white transition font-medium">
@@ -547,7 +562,7 @@ export default async function Home() {
 
               <div className="md:col-span-3 rounded-2xl overflow-hidden border border-white/8 min-h-[340px] shadow-2xl">
                 <iframe
-                  title="Ubicación Barbería"
+                  title="Ubicación Spa"
                   width="100%"
                   height="100%"
                   style={{ minHeight: 340, border: 0, display: "block" }}
@@ -580,7 +595,7 @@ export default async function Home() {
 
             <div className="flex gap-10">
               <div>
-                <p className="text-[10px] font-bold text-white/25 uppercase tracking-widest mb-3">Barbería</p>
+                <p className="text-[10px] font-bold text-white/25 uppercase tracking-widest mb-3">Spa</p>
                 <div className="flex flex-col gap-2.5">
                   <Link href="/booking" className="text-sm text-white/55 hover:text-white transition">Agendar cita</Link>
                   <a href="#servicios" className="text-sm text-white/55 hover:text-white transition">Servicios</a>

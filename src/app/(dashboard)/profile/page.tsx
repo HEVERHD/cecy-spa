@@ -42,8 +42,8 @@ export default function ProfilePage() {
   const shareLink = async () => {
     if (navigator.share) {
       await navigator.share({
-        title: "Mi Barbería - Agenda tu cita",
-        text: "Agenda tu cita en Mi Barbería",
+        title: "Cecy Spa - Agenda tu cita",
+        text: "Agenda tu cita en Cecy Spa",
         url: bookingUrl,
       })
     } else {
@@ -85,7 +85,7 @@ export default function ProfilePage() {
           <h2 className="text-xl font-bold text-white">{session?.user?.name || "Admin"}</h2>
           <p className="text-sm text-white/40 mt-0.5">{session?.user?.email}</p>
           <span className="inline-block mt-2 text-[10px] px-3 py-1 rounded-full bg-[#00bcd4]/20 text-[#00bcd4] font-medium">
-            Barbero Admin
+            Profesional Admin
           </span>
         </div>
       </div>
@@ -137,7 +137,7 @@ export default function ProfilePage() {
       <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530] mb-6">
         <h3 className="font-semibold text-white mb-2">Link de reservas</h3>
         <p className="text-sm text-white/40 mb-4">
-          Comparte este link con tus clientes para que agenden citas
+          Comparte este link con tus clientes para que reserven citas
         </p>
         <div className="flex gap-2">
           <div className="flex-1 bg-[#080f16] border border-[#0e2530] rounded-xl px-4 py-3 text-sm text-white/60 truncate">

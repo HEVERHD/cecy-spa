@@ -5,15 +5,17 @@ import { prisma } from "@/lib/prisma"
 
 export const dynamic = "force-dynamic"
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions)
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const userId = (session.user as any).id
   const role = (session.user as any).role
+  const { searchParams } = new URL(req.url)
+  const barberId = searchParams.get("barberId")
 
   const blocks = await prisma.recurringBlock.findMany({
-    where: role === "ADMIN" ? {} : { barberId: userId },
+    where: role === "ADMIN" ? (barberId ? { barberId } : {}) : { barberId: userId },
     orderBy: { startTime: "asc" },
   })
 
@@ -25,7 +27,9 @@ export async function POST(req: NextRequest) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const userId = (session.user as any).id
+  const role = (session.user as any).role
   const body = await req.json()
+  const targetBarberId = role === "ADMIN" && body.barberId ? body.barberId : userId
 
   const block = await prisma.recurringBlock.create({
     data: {
@@ -33,7 +37,7 @@ export async function POST(req: NextRequest) {
       endTime: body.endTime,
       reason: body.reason || null,
       allDay: body.allDay ?? false,
-      barberId: userId,
+      barberId: targetBarberId,
     },
   })
 

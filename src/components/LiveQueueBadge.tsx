@@ -9,6 +9,7 @@ type Apt = {
   id: string
   clientName: string
   serviceName: string
+  professionalName?: string
   duration: number
   date: string
   status: string
@@ -38,6 +39,7 @@ function formatTime(dateStr: string) {
 export default function LiveQueueBadge() {
   const [now, setNow] = useState(new Date())
   const [appointments, setAppointments] = useState<Apt[]>([])
+  const [multipleProfessionals, setMultipleProfessionals] = useState(false)
   const [loaded, setLoaded] = useState(false)
 
   const fetchQueue = useCallback(async () => {
@@ -46,6 +48,7 @@ export default function LiveQueueBadge() {
       if (!res.ok) return
       const json = await res.json()
       setAppointments(json.appointments ?? [])
+      setMultipleProfessionals((json.professionals?.length ?? 0) > 1)
       setLoaded(true)
     } catch {}
   }, [])
@@ -73,7 +76,7 @@ export default function LiveQueueBadge() {
 
   if (!active && waiting.length === 0) return null
 
-  // Minutos hasta el próximo turno (solo cuando el barbero está libre)
+  // Minutos hasta el próximo turno (solo cuando el profesional está libre)
   const nextApt = waiting[0]
   const minsToNext = nextApt
     ? Math.ceil((new Date(nextApt.date).getTime() - now.getTime()) / 60000)
@@ -108,9 +111,12 @@ export default function LiveQueueBadge() {
             </span>
             <div className="flex-1 min-w-0">
               <p className="text-white text-sm font-semibold truncate leading-tight">
-                Peluqueando a {active.clientName}
+                Atendiendo a {active.clientName}
               </p>
               <p className="text-white/40 text-xs truncate">{active.serviceName}</p>
+              {multipleProfessionals && active.professionalName && (
+                <p className="text-white/25 text-[11px] truncate">{active.professionalName}</p>
+              )}
             </div>
             <span className="text-[#00bcd4] text-xs font-bold flex-shrink-0 tabular-nums">
               {remaining} min
@@ -153,7 +159,7 @@ export default function LiveQueueBadge() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
           </span>
-          <p className="text-white text-sm font-semibold">💈 Barbero disponible ahora</p>
+          <p className="text-white text-sm font-semibold">💈 Profesional disponible ahora</p>
         </div>
       )}
 

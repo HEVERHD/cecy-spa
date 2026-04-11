@@ -82,7 +82,7 @@ export default function BookingPage() {
   const [waitlistSubmitting, setWaitlistSubmitting] = useState(false)
   const [waitlistDone, setWaitlistDone] = useState(false)
   const [weekStart, setWeekStart] = useState(() => getWeekStart(new Date()))
-  const [shopName, setShopName] = useState("Mi Barbería")
+  const [shopName, setShopName] = useState("Mi Spa")
 
   // ── Data fetching ──────────────────────────────────────────
   useEffect(() => {
@@ -270,7 +270,7 @@ export default function BookingPage() {
             <span>Inicio</span>
           </Link>
           <div className="flex items-center gap-2.5">
-            <Image src="/logo2.png" alt="Barbería" width={28} height={28} />
+            <Image src="/logo2.png" alt="Spa" width={28} height={28} />
             <span className="font-black text-base tracking-wide">
               {shopName}
             </span>
@@ -296,7 +296,7 @@ export default function BookingPage() {
           <div>
             <div className="mb-8">
               <p className="text-xs font-bold text-[#00bcd4] tracking-[0.2em] uppercase mb-2">Paso 1</p>
-              <h2 className="text-2xl font-black">Elige tu barbero</h2>
+              <h2 className="text-2xl font-black">Elige tu profesional</h2>
             </div>
             <div className="space-y-3">
               {barbers.map((barber) => (
@@ -316,7 +316,7 @@ export default function BookingPage() {
                       )}
                     </div>
                     <div>
-                      <p className="font-bold text-white text-lg">{barber.name || "Barbero"}</p>
+                      <p className="font-bold text-white text-lg">{barber.name || "Profesional"}</p>
                       {barber.specialty && <p className="text-sm text-white/40 mt-0.5">{barber.specialty}</p>}
                     </div>
                     <div className="ml-auto w-8 h-8 rounded-full bg-white/5 group-hover:bg-[#00bcd4] flex items-center justify-center transition-all">
@@ -592,7 +592,7 @@ export default function BookingPage() {
               <div className="divide-y divide-white/5">
                 {selectedBarber && barbers.length > 1 && (
                   <div className="flex justify-between items-center px-5 py-3.5">
-                    <span className="text-sm text-white/40">Barbero</span>
+                    <span className="text-sm text-white/40">Profesional</span>
                     <span className="text-sm font-semibold text-white">{selectedBarber.name}</span>
                   </div>
                 )}

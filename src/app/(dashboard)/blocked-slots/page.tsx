@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useSession } from "next-auth/react"
 import { to12Hour } from "@/lib/utils"
 import { Loader } from "@/components/ui/loader"
 import { RepeatIcon, CalendarX, Trash2 } from "lucide-react"
@@ -23,14 +24,23 @@ type RecurringBlock = {
   allDay: boolean
 }
 
+type Professional = {
+  id: string
+  name: string | null
+}
+
 const QUICK_PRESETS = [
   { label: "Almuerzo", emoji: "🍽", startTime: "11:58", endTime: "13:00", reason: "Almuerzo" },
   { label: "Día libre", emoji: "🏖", startTime: "00:00", endTime: "23:59", reason: "Día libre", allDay: true },
 ]
 
 export default function BlockedSlotsPage() {
+  const { data: session } = useSession()
+  const isAdmin = (session?.user as any)?.role === "ADMIN"
   const [blockedSlots, setBlockedSlots] = useState<BlockedSlot[]>([])
   const [recurringBlocks, setRecurringBlocks] = useState<RecurringBlock[]>([])
+  const [professionals, setProfessionals] = useState<Professional[]>([])
+  const [selectedProfessionalId, setSelectedProfessionalId] = useState("")
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [showRecurringForm, setShowRecurringForm] = useState(false)
@@ -46,14 +56,28 @@ export default function BlockedSlotsPage() {
   })
 
   useEffect(() => {
+    if (isAdmin && !selectedProfessionalId) return
     fetchAll()
-  }, [])
+  }, [selectedProfessionalId, isAdmin])
+
+  useEffect(() => {
+    if (!isAdmin) return
+    fetch("/api/barbers")
+      .then((r) => r.json())
+      .then((data: Professional[]) => {
+        setProfessionals(data)
+        if (data.length > 0 && !selectedProfessionalId) {
+          setSelectedProfessionalId(data[0].id)
+        }
+      })
+  }, [isAdmin, selectedProfessionalId])
 
   const fetchAll = async () => {
     setLoading(true)
+    const query = isAdmin && selectedProfessionalId ? `?barberId=${selectedProfessionalId}` : ""
     const [slotsRes, recurringRes] = await Promise.all([
-      fetch("/api/blocked-slots"),
-      fetch("/api/recurring-blocks"),
+      fetch(`/api/blocked-slots${query}`),
+      fetch(`/api/recurring-blocks${query}`),
     ])
     const [slots, recurring] = await Promise.all([slotsRes.json(), recurringRes.json()])
     setBlockedSlots(slots)
@@ -71,7 +95,10 @@ export default function BlockedSlotsPage() {
     await fetch("/api/blocked-slots", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify({
+        ...form,
+        ...(isAdmin && selectedProfessionalId ? { barberId: selectedProfessionalId } : {}),
+      }),
     })
     setForm({ date: new Date().toISOString().split("T")[0], startTime: "09:00", endTime: "10:00", reason: "", allDay: false })
     setShowForm(false)
@@ -95,6 +122,7 @@ export default function BlockedSlotsPage() {
         endTime: preset.endTime,
         reason: preset.reason,
         allDay: preset.allDay ?? false,
+        ...(isAdmin && selectedProfessionalId ? { barberId: selectedProfessionalId } : {}),
       }),
     })
     setQuickLoading(null)
@@ -102,7 +130,10 @@ export default function BlockedSlotsPage() {
   }
 
   const createRecurring = async (preset?: { startTime: string; endTime: string; reason: string }) => {
-    const data = preset ?? { ...recurringForm, allDay: false }
+    const data = {
+      ...(preset ?? { ...recurringForm, allDay: false }),
+      ...(isAdmin && selectedProfessionalId ? { barberId: selectedProfessionalId } : {}),
+    }
     await fetch("/api/recurring-blocks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -144,6 +175,37 @@ export default function BlockedSlotsPage() {
           + Nuevo Bloqueo
         </button>
       </div>
+
+      {isAdmin && professionals.length > 0 && (
+        <div className="bg-[#0a1520] rounded-xl p-5 border border-[#0e2530] mb-6">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-xs font-semibold text-white/40 uppercase tracking-wider">Gestionando bloqueos de</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {professionals.map((professional) => {
+              const isSelected = selectedProfessionalId === professional.id
+              return (
+                <button
+                  key={professional.id}
+                  onClick={() => setSelectedProfessionalId(professional.id)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition border-2 ${
+                    isSelected
+                      ? "bg-[#00bcd4] border-[#00bcd4] text-white shadow-lg shadow-[#00bcd4]/20"
+                      : "bg-[#080f16] border-[#0e2530] text-white/60 hover:border-[#00bcd4]/50 hover:text-white"
+                  }`}
+                >
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
+                    isSelected ? "bg-white/20" : "bg-[#0e2530]"
+                  }`}>
+                    {(professional.name || "?")[0].toUpperCase()}
+                  </div>
+                  {professional.name || "Profesional"}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {/* ── Bloqueos fijos (recurrentes) ── */}
       <div className="bg-[#0a1520] rounded-xl border border-[#0e2530] mb-6 overflow-hidden">

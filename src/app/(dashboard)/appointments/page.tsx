@@ -529,7 +529,7 @@ export default function AppointmentsPage() {
               >
                 {barbers.map((b: any) => (
                   <option key={b.id} value={b.id}>
-                    {b.name || "Barbero"}
+                    {b.name || "Profesional"}
                   </option>
                 ))}
               </select>

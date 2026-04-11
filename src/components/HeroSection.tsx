@@ -3,9 +3,10 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowUpRight, ChevronDown, Scissors } from "lucide-react"
+import { ArrowUpRight, ChevronDown } from "lucide-react"
 import LiveQueueBadge from "@/components/LiveQueueBadge"
 import AnimatedCounter from "@/components/AnimatedCounter"
+import spaLogo from "@/assets/spaCECYlogo.png"
 
 const PHRASES = [
   "sin esperas.",
@@ -19,7 +20,7 @@ interface HeroSectionProps {
   shopName?: string
 }
 
-export default function HeroSection({ galleryImages = [], shopName = "Mi Barbería" }: HeroSectionProps) {
+export default function HeroSection({ galleryImages = [], shopName = "Mi Spa" }: HeroSectionProps) {
   const [phraseIndex, setPhraseIndex] = useState(0)
   const [displayed, setDisplayed] = useState("")
   const [isDeleting, setIsDeleting] = useState(false)
@@ -322,23 +323,19 @@ export default function HeroSection({ galleryImages = [], shopName = "Mi Barber�
                 />
 
                 {/* Center icon — shown when no gallery photos */}
-                {galleryImages.length === 0 && (
-                  <div className="fs-float relative z-10 flex items-center justify-center" style={{ width: "42%", height: "42%" }}>
-                    <div className="relative w-full h-full flex items-center justify-center">
-                      <div className="absolute inset-0 rounded-full border border-[#ff5fc3]/25 bg-[#ff1aa8]/8" />
-                      <Scissors
-                        size={48}
-                        className="text-[#ff5fc3]/80 lg:hidden"
-                        style={{ filter: "drop-shadow(0 0 10px rgba(255, 26, 168, 0.35))" }}
-                      />
-                      <Scissors
-                        size={72}
-                        className="text-[#ff5fc3]/80 hidden lg:block"
-                        style={{ filter: "drop-shadow(0 0 14px rgba(255, 26, 168, 0.35))" }}
-                      />
-                    </div>
+                <div className="fs-float relative z-10 flex items-center justify-center" style={{ width: "74%", height: "74%" }}>
+                  <div className="relative w-full h-full">
+                    <div className="absolute inset-[8%] rounded-full bg-gradient-to-br from-[#ff1aa8]/16 via-[#b5179e]/10 to-[#11d68f]/12 blur-3xl" />
+                    <Image
+                      src={spaLogo}
+                      alt={`${shopName} logo`}
+                      fill
+                      priority
+                      className="object-contain drop-shadow-[0_0_26px_rgba(255,26,168,0.30)]"
+                      sizes="(max-width: 1024px) 280px, 420px"
+                    />
                   </div>
-                )}
+                </div>
 
                 {/* Brand line inside HUD */}
                 <div className="absolute bottom-9 left-1/2 -translate-x-1/2 text-center whitespace-nowrap">
