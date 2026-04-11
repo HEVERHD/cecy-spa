@@ -8,7 +8,8 @@
     "lint": "next lint",
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
-    "db:seed": "npx tsx prisma/seed.ts"
+    "db:seed": "npx tsx prisma/seed.ts",
+    "db:create-team": "npx tsx scripts/create-team-users.ts"
   },
   "dependencies": {
     "@aws-sdk/client-sns": "^3.1022.0",

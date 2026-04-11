@@ -154,7 +154,7 @@ export function Sidebar() {
   return (
     <>
       {/* Mobile Top Navbar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 bg-[#080f16] border-b border-[#0e2530] z-50">
+      <div className="md:hidden fixed top-0 left-0 right-0 bg-[#160312] border-b border-[#4a1840] z-50">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
             <img src="/logo.png" alt={shopName} width={28} height={28} className="rounded-lg" />
@@ -165,8 +165,8 @@ export function Sidebar() {
           <div className="flex items-center gap-1 relative">
             {/* PWA install hint tooltip */}
             {showPwaHint && (
-              <div className="absolute right-0 top-10 z-50 bg-[#0a1520] border border-[#00bcd4]/40 rounded-xl p-3 w-56 text-xs text-white/80 shadow-xl">
-                <p className="font-semibold text-[#00bcd4] mb-1">Instala la app primero</p>
+              <div className="absolute right-0 top-10 z-50 bg-[#23071d] border border-[#ff5fc3]/40 rounded-xl p-3 w-56 text-xs text-white/80 shadow-xl">
+                <p className="font-semibold text-[#ff5fc3] mb-1">Instala la app primero</p>
                 <p>En Safari → <span className="font-medium">Compartir</span> → <span className="font-medium">Añadir a pantalla de inicio</span> → luego activa las notificaciones.</p>
               </div>
             )}
@@ -182,7 +182,7 @@ export function Sidebar() {
               }
               className={`p-2.5 rounded-xl transition ${
                 pushState === "subscribed"
-                  ? "text-[#00bcd4] bg-[#00bcd4]/15"
+                  ? "text-[#ff5fc3] bg-[#ff1aa8]/15"
                   : pushState === "denied"
                   ? "text-white/20 cursor-not-allowed"
                   : "text-white/40 hover:text-white hover:bg-white/5"
@@ -195,7 +195,7 @@ export function Sidebar() {
                 href="/users"
                 className={`p-2.5 rounded-xl transition ${
                   pathname === "/users"
-                    ? "text-[#00bcd4] bg-[#00bcd4]/15"
+                    ? "text-[#ff5fc3] bg-[#ff1aa8]/15"
                     : "text-white/40 hover:text-white hover:bg-white/5"
                 }`}
               >
@@ -206,7 +206,7 @@ export function Sidebar() {
               href="/settings"
               className={`p-2.5 rounded-xl transition ${
                 pathname === "/settings"
-                  ? "text-[#00bcd4] bg-[#00bcd4]/15"
+                  ? "text-[#ff5fc3] bg-[#ff1aa8]/15"
                   : "text-white/40 hover:text-white hover:bg-white/5"
               }`}
             >
@@ -216,7 +216,7 @@ export function Sidebar() {
               href="/profile"
               className={`p-1.5 rounded-xl transition ${
                 pathname === "/profile"
-                  ? "bg-[#00bcd4]/15 ring-2 ring-[#00bcd4]/50"
+                  ? "bg-[#ff1aa8]/15 ring-2 ring-[#ff5fc3]/50"
                   : "hover:bg-white/5"
               }`}
             >
@@ -227,7 +227,7 @@ export function Sidebar() {
       </div>
 
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex flex-col w-64 bg-[#080f16] text-white min-h-screen p-6 border-r border-[#0e2530]">
+      <aside className="hidden md:flex flex-col w-64 bg-[#160312] text-white min-h-screen p-6 border-r border-[#4a1840]">
         <div className="mb-10 flex items-center gap-3">
           <img src="/logo.png" alt={shopName} width={36} height={36} className="rounded-lg" />
           <div>
@@ -247,7 +247,7 @@ export function Sidebar() {
               href={item.href}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition ${
                 pathname === item.href
-                  ? "bg-[#00bcd4]/20 text-[#00bcd4]"
+                  ? "bg-[#ff1aa8]/18 text-[#ff5fc3]"
                   : "text-white/60 hover:text-white hover:bg-white/5"
               }`}
             >
@@ -257,14 +257,14 @@ export function Sidebar() {
           ))}
         </nav>
 
-        <div className="pt-4 border-t border-[#0e2530]">
+        <div className="pt-4 border-t border-[#4a1840]">
           {/* Push notification toggle — always visible */}
           <button
             onClick={handlePushToggle}
             disabled={pushLoading || pushState === "denied"}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition ${
               pushState === "subscribed"
-                ? "text-[#00bcd4] hover:bg-[#00bcd4]/10"
+                ? "text-[#ff5fc3] hover:bg-[#ff1aa8]/10"
                 : pushState === "denied"
                 ? "text-white/20 cursor-not-allowed"
                 : "text-white/60 hover:text-white hover:bg-white/5"
@@ -298,14 +298,14 @@ export function Sidebar() {
       </aside>
 
       {/* Mobile Bottom Nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[#080f16] border-t border-[#0e2530] z-50">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[#160312] border-t border-[#4a1840] z-50">
         <div className="flex justify-around py-2">
           {mobileNavItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={`flex flex-col items-center gap-1 px-2 py-2 text-xs transition ${
-                pathname === item.href ? "text-[#00bcd4]" : "text-white/50"
+                pathname === item.href ? "text-[#ff5fc3]" : "text-white/50"
               }`}
             >
               <item.Icon size={20} />

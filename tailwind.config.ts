@@ -9,13 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        accent: "#00bcd4",
-        "accent-hover": "#0097a7",
-        "accent-warm": "#26c6da",
-        dark: "#080f16",
-        "dark-card": "#0d1a22",
-        "dark-border": "#0e2530",
-        "dark-deep": "#050c10",
+        accent: "#ff1aa8",
+        "accent-hover": "#d41488",
+        "accent-soft": "#ff5fc3",
+        plum: "#7a1cac",
+        orchid: "#b5179e",
+        mint: "#11d68f",
+        dark: "#160312",
+        "dark-card": "#23071d",
+        "dark-border": "#4a1840",
+        "dark-deep": "#0d020b",
       },
     },
   },

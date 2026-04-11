@@ -11,7 +11,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#00bcd4",
+  themeColor: "#ff1aa8",
 }
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://cecy-spa.vercel.app"

@@ -2,9 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --brand-bg: #0d020b;
+  --brand-surface: #23071d;
+  --brand-surface-2: #31102a;
+  --brand-border: #4a1840;
+  --brand-accent: #ff1aa8;
+  --brand-accent-strong: #d41488;
+  --brand-accent-soft: #ff5fc3;
+  --brand-plum: #7a1cac;
+  --brand-orchid: #b5179e;
+  --brand-mint: #11d68f;
+}
+
+html {
+  background:
+    radial-gradient(circle at top left, rgba(255, 95, 195, 0.12), transparent 30%),
+    radial-gradient(circle at top right, rgba(122, 28, 172, 0.12), transparent 32%),
+    linear-gradient(180deg, #14030f 0%, #0d020b 100%);
+}
+
 body {
-  color: #0a0a0a;
-  background: #ffffff;
+  color: #fff7fb;
+  background: transparent;
 }
 
 /* ── Landing animations ───────────────────────────── */
