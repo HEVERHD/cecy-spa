@@ -116,3 +116,10 @@ export function generateTimeSlots(
 
   return slots
 }
+
+export function buildWhatsAppLink(to: string, message: string) {
+  let phone = to.replace(/\D/g, "")
+  if (!phone.startsWith("57")) phone = `57${phone}`
+
+  return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
+}

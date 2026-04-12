@@ -1,4 +1,5 @@
 import { Resend } from "resend"
+import { buildWhatsAppLink } from "./utils"
 
 const FROM = process.env.RESEND_FROM || "onboarding@resend.dev"
 
@@ -12,6 +13,7 @@ function buildConfirmationHtml({
   price,
   shopName,
   appointmentLink,
+  whatsappLink, // 👈 FALTABA ESTO
 }: {
   clientName: string
   serviceName: string
@@ -21,6 +23,7 @@ function buildConfirmationHtml({
   price: string
   shopName: string
   appointmentLink: string
+  whatsappLink: string
 }) {
   return `<!DOCTYPE html>
 <html lang="es">
@@ -130,7 +133,14 @@ function buildConfirmationHtml({
                     </a>
                   </td>
                 </tr>
-
+<tr>
+  <td align="center" style="padding:0 0 32px;">
+    <a href="${whatsappLink}" 
+       style="display:inline-block;background:#25D366;color:#fff;font-size:14px;font-weight:900;padding:12px 28px;border-radius:12px;text-decoration:none;">
+       💬 Confirmar por WhatsApp
+    </a>
+  </td>
+</tr>
               </table>
             </td>
           </tr>
@@ -178,6 +188,9 @@ export async function sendConfirmationEmail({
 
   const resend = new Resend(process.env.RESEND_API_KEY)
 
+  const whatsappMessage = `Hola ${clientName}, confirmo mi cita el ${date} a las ${time} en ${shopName}`
+const whatsappLink = buildWhatsAppLink(to, whatsappMessage)
+
   await resend.emails.send({
     from: FROM,
     to,
@@ -191,6 +204,7 @@ export async function sendConfirmationEmail({
       price,
       shopName,
       appointmentLink,
+      whatsappLink
     }),
   })
 }
