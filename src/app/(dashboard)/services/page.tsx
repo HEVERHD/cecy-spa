@@ -3,12 +3,26 @@
 import { useEffect, useState } from "react"
 import { useToast } from "@/components/ui/toast"
 
+const CATEGORIES = [
+  "Cejas y Pestañas",
+  "Peluquería",
+  "Maquillaje",
+  "Estética y Spa",
+  "Depilación Damas",
+  "Depilación Caballero",
+  "Rehabilitación",
+  "Manos y Pies",
+  "Peinados",
+  "General",
+]
+
 type Service = {
   id: string
   name: string
   description: string | null
   price: number
   duration: number
+  category: string
   active: boolean
 }
 
@@ -17,7 +31,7 @@ export default function ServicesPage() {
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<Service | null>(null)
-  const [form, setForm] = useState({ name: "", description: "", price: "", duration: "" })
+  const [form, setForm] = useState({ name: "", description: "", price: "", duration: "", category: "General" })
   const { toast } = useToast()
 
   useEffect(() => {
@@ -33,7 +47,7 @@ export default function ServicesPage() {
 
   const openNew = () => {
     setEditing(null)
-    setForm({ name: "", description: "", price: "", duration: "" })
+    setForm({ name: "", description: "", price: "", duration: "", category: "General" })
     setShowForm(true)
   }
 
@@ -44,6 +58,7 @@ export default function ServicesPage() {
       description: service.description || "",
       price: service.price.toString(),
       duration: service.duration.toString(),
+      category: service.category || "General",
     })
     setShowForm(true)
   }
@@ -109,6 +124,15 @@ export default function ServicesPage() {
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40"
             />
+            <select
+              value={form.category}
+              onChange={(e) => setForm({ ...form, category: e.target.value })}
+              className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white"
+            >
+              {CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
             <input
               type="text"
               placeholder="Descripción (opcional)"
@@ -118,7 +142,7 @@ export default function ServicesPage() {
             />
             <input
               type="number"
-              placeholder="Precio (USD)"
+              placeholder="Precio (COP)"
               value={form.price}
               onChange={(e) => setForm({ ...form, price: e.target.value })}
               className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40"
@@ -178,12 +202,15 @@ export default function ServicesPage() {
                 !service.active ? "opacity-50" : ""
               }`}
             >
-              <div className="flex justify-between items-start mb-3">
+              <div className="flex justify-between items-start mb-2">
                 <h3 className="font-semibold text-white">{service.name}</h3>
                 <span className="text-lg font-bold text-[#00bcd4]">
                   {formatPrice(service.price)}
                 </span>
               </div>
+              <span className="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#00bcd4]/10 text-[#00bcd4] mb-2">
+                {service.category}
+              </span>
               {service.description && (
                 <p className="text-sm text-white/40 mb-2">{service.description}</p>
               )}

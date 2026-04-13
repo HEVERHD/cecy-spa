@@ -90,6 +90,7 @@ model Service {
   description  String?
   price        Float
   duration     Int              // minutes
+  category     String           @default("General")
   active       Boolean          @default(true)
   appointments Appointment[]
   waitlist     WaitlistEntry[]

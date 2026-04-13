@@ -20,6 +20,7 @@ type Service = {
   description: string | null
   price: number
   duration: number
+  category: string
 }
 
 type Step = "barber" | "service" | "datetime" | "info" | "confirm"
@@ -76,6 +77,7 @@ export default function BookingPage() {
   const [error, setError] = useState("")
   const [nameSuggestions, setNameSuggestions] = useState<{ name: string; phone: string }[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
+  const [activeCategory, setActiveCategory] = useState("Todos")
   const [showWaitlist, setShowWaitlist] = useState(false)
   const [waitlistName, setWaitlistName] = useState("")
   const [waitlistPhone, setWaitlistPhone] = useState("")
@@ -246,6 +248,12 @@ export default function BookingPage() {
       ? ["service", "datetime", "info", "confirm"]
       : ["barber", "service", "datetime", "info", "confirm"]
 
+  // ── Category filter ────────────────────────────────────────
+  const categories = ["Todos", ...Array.from(new Set(services.map((s: Service) => s.category).filter(Boolean)))]
+  const filteredServices = activeCategory === "Todos"
+    ? services
+    : services.filter((s: Service) => s.category === activeCategory)
+
   // ── Input styles ───────────────────────────────────────────
   const inputCls = "w-full p-3.5 bg-[#151515] border border-white/12 rounded-xl text-white placeholder-white/25 focus:border-[#00bcd4] focus:outline-none transition text-sm"
 
@@ -332,14 +340,34 @@ export default function BookingPage() {
         {/* ── Step: Service ── */}
         {step === "service" && (
           <div>
-            <div className="mb-8">
+            <div className="mb-6">
               <p className="text-xs font-bold text-[#00bcd4] tracking-[0.2em] uppercase mb-2">
                 {barbers.length > 1 ? "Paso 2" : "Paso 1"}
               </p>
               <h2 className="text-2xl font-black">Elige tu servicio</h2>
             </div>
+
+            {/* Category chips */}
+            {categories.length > 2 && (
+              <div className="flex gap-2 overflow-x-auto pb-3 mb-5 scrollbar-hide -mx-1 px-1">
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition whitespace-nowrap ${
+                      activeCategory === cat
+                        ? "bg-[#00bcd4] text-white shadow-md shadow-[#00bcd4]/30"
+                        : "bg-white/8 text-white/50 hover:bg-white/12 hover:text-white"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            )}
+
             <div className="space-y-3">
-              {services.map((service) => (
+              {filteredServices.map((service: Service) => (
                 <button
                   key={service.id}
                   onClick={() => { setSelectedService(service); setStep("datetime") }}

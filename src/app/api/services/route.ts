@@ -27,6 +27,7 @@ export async function POST(req: NextRequest) {
       description: body.description || null,
       price: parseFloat(body.price),
       duration: parseInt(body.duration),
+      category: body.category || "General",
     },
   })
   return NextResponse.json(service, { status: 201 })
@@ -47,6 +48,7 @@ export async function PUT(req: NextRequest) {
       description: body.description,
       price: parseFloat(body.price),
       duration: parseInt(body.duration),
+      category: body.category || "General",
       active: body.active,
     },
   })
