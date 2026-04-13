@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import { sendSMS, sendWhatsAppTemplateWithSMSFallback, buildConfirmationMessage, buildBarberNotification, buildStatusConfirmedMessage, buildLoyaltyMessage } from "@/lib/twilio"
+import { sendSMS, sendWhatsAppTemplateWithSMSFallback, buildConfirmationMessage, buildStatusConfirmedMessage, buildLoyaltyMessage } from "@/lib/twilio"
 import { formatDate, formatTime, formatCurrency, parseColombia, getColombiaTime, getColombiaDateStr, getColombiaDayOfWeek, to12Hour } from "@/lib/utils"
 import { sendPushToBarber } from "@/lib/push"
 import { autoScheduleFromWaitlist } from "@/lib/waitlist"
@@ -276,7 +276,6 @@ export async function POST(req: NextRequest) {
   // Send WhatsApp confirmation to client
   const shopName = settings?.shopName || "Mi Barbería"
   const confirmationTemplateSid = process.env.TWILIO_TEMPLATE_CONFIRMATION
-  const barberTemplateSid = process.env.TWILIO_TEMPLATE_BARBER
 
   if (user.phone) {
     try {
@@ -301,37 +300,6 @@ export async function POST(req: NextRequest) {
       }
     } catch (error) {
       console.error("Error sending WhatsApp to client:", error)
-    }
-  }
-
-  // Notify only the assigned barber (not all barbers)
-  const barberPhone = appointment.barber.barberSettings?.phone || appointment.barber.phone
-  if (barberPhone) {
-    try {
-      if (barberTemplateSid) {
-        sendWhatsAppTemplateWithSMSFallback(barberPhone, barberTemplateSid, {
-          "1": user.name || "Cliente",
-          "2": appointment.service.name,
-          "3": formatDate(appointment.date),
-          "4": formatTime(appointment.date),
-          "5": formatCurrency(appointment.service.price),
-          "6": appointmentLink,
-        }, `Nueva cita.\n\nCliente: ${user.name || "Cliente"}\nServicio: ${appointment.service.name}\nFecha: ${formatDate(appointment.date)}\nHora: ${formatTime(appointment.date)}\nPrecio: ${formatCurrency(appointment.service.price)}`).catch((err) => console.error("Error notifying barber:", err))
-      } else {
-        const barberMsg = buildBarberNotification(
-          user.name || "Cliente",
-          appointment.service.name,
-          formatDate(appointment.date),
-          formatTime(appointment.date),
-          formatCurrency(appointment.service.price),
-          body.bookedBy || "CLIENT"
-        )
-        sendSMS(barberPhone, barberMsg).catch((err) =>
-          console.error("Error notifying barber:", err)
-        )
-      }
-    } catch (error) {
-      console.error("Error notifying barber:", error)
     }
   }
 
