@@ -13,6 +13,14 @@ type ProfileStats = {
   avgPerDay: number
   topService: string
   completionRate: string
+  quincena: {
+    label: string
+    earnings: number
+    count: number
+    prevEarnings: number
+    prevCount: number
+    prevLabel: string
+  }
 }
 
 export default function ProfilePage() {
@@ -106,36 +114,58 @@ export default function ProfilePage() {
           ))}
         </div>
       ) : stats && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-          <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
-            <p className="text-xs text-white/40">Citas totales</p>
-            <p className="text-2xl font-bold text-white mt-1">{stats.totalAppointments}</p>
+        <>
+          {/* Quincena highlight card */}
+          {stats.quincena && (
+            <div className="bg-gradient-to-br from-[#00bcd4]/15 to-[#080f16] border border-[#00bcd4]/30 rounded-2xl p-5 mb-4">
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <p className="text-xs text-white/50 mb-0.5">Quincena {stats.quincena.label}</p>
+                  <p className="text-3xl font-bold text-[#00bcd4]">{formatCurrency(stats.quincena.earnings)}</p>
+                  <p className="text-xs text-white/40 mt-1">{stats.quincena.count} citas completadas</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] text-white/30 mb-0.5">{stats.quincena.prevLabel}</p>
+                  <p className="text-lg font-semibold text-white/50">{formatCurrency(stats.quincena.prevEarnings)}</p>
+                  <p className="text-[10px] text-white/30">{stats.quincena.prevCount} citas</p>
+                </div>
+              </div>
+              <div className="h-px bg-[#00bcd4]/20 my-3" />
+              <p className="text-[10px] text-white/30">Tu ganancia = precio × % asignado por servicio</p>
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+            <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
+              <p className="text-xs text-white/40">Citas totales</p>
+              <p className="text-2xl font-bold text-white mt-1">{stats.totalAppointments}</p>
+            </div>
+            <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
+              <p className="text-xs text-white/40">Ganancias del mes</p>
+              <p className="text-2xl font-bold text-[#00bcd4] mt-1">{formatCurrency(stats.monthRevenue)}</p>
+            </div>
+            <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
+              <p className="text-xs text-white/40">Total clientes</p>
+              <p className="text-2xl font-bold text-white mt-1">{stats.totalClients}</p>
+            </div>
+            <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
+              <p className="text-xs text-white/40">Tasa completadas</p>
+              <p className="text-2xl font-bold text-green-400 mt-1">{stats.completionRate}%</p>
+            </div>
+            <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
+              <p className="text-xs text-white/40">Completadas hoy</p>
+              <p className="text-2xl font-bold text-white mt-1">{stats.completedToday}</p>
+            </div>
+            <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
+              <p className="text-xs text-white/40">Promedio diario</p>
+              <p className="text-2xl font-bold text-white mt-1">{stats.avgPerDay}</p>
+            </div>
+            <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530] col-span-2">
+              <p className="text-xs text-white/40">Servicio mas popular</p>
+              <p className="text-2xl font-bold text-[#f0932b] mt-1">{stats.topService}</p>
+            </div>
           </div>
-          <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
-            <p className="text-xs text-white/40">Ingresos del mes</p>
-            <p className="text-2xl font-bold text-[#00bcd4] mt-1">{formatCurrency(stats.monthRevenue)}</p>
-          </div>
-          <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
-            <p className="text-xs text-white/40">Total clientes</p>
-            <p className="text-2xl font-bold text-white mt-1">{stats.totalClients}</p>
-          </div>
-          <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
-            <p className="text-xs text-white/40">Tasa completadas</p>
-            <p className="text-2xl font-bold text-green-400 mt-1">{stats.completionRate}%</p>
-          </div>
-          <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
-            <p className="text-xs text-white/40">Completadas hoy</p>
-            <p className="text-2xl font-bold text-white mt-1">{stats.completedToday}</p>
-          </div>
-          <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]">
-            <p className="text-xs text-white/40">Promedio diario</p>
-            <p className="text-2xl font-bold text-white mt-1">{stats.avgPerDay}</p>
-          </div>
-          <div className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530] col-span-2">
-            <p className="text-xs text-white/40">Servicio mas popular</p>
-            <p className="text-2xl font-bold text-[#f0932b] mt-1">{stats.topService}</p>
-          </div>
-        </div>
+        </>
       )}
 
       {/* Invitation link */}

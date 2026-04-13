@@ -85,16 +85,17 @@ enum Role {
 }
 
 model Service {
-  id           String           @id @default(cuid())
-  name         String
-  description  String?
-  price        Float
-  duration     Int              // minutes
-  category     String           @default("General")
-  active       Boolean          @default(true)
-  appointments Appointment[]
-  waitlist     WaitlistEntry[]
-  createdAt    DateTime         @default(now())
+  id             String           @id @default(cuid())
+  name           String
+  description    String?
+  price          Float
+  duration       Int              // minutes
+  category       String           @default("General")
+  active         Boolean          @default(true)
+  commissionRate Float            @default(0.5) // 0.5 = 50%, 0.6 = 60%
+  appointments   Appointment[]
+  waitlist       WaitlistEntry[]
+  createdAt      DateTime         @default(now())
 }
 
 model Appointment {

@@ -42,7 +42,7 @@ export async function GET() {
       select: {
         barberId: true,
         userId: true,
-        service: { select: { price: true } },
+        service: { select: { price: true, commissionRate: true } },
       },
     }),
     prisma.appointment.findMany({
@@ -52,7 +52,7 @@ export async function GET() {
       },
       select: {
         barberId: true,
-        service: { select: { price: true } },
+        service: { select: { price: true, commissionRate: true } },
       },
     }),
   ])
@@ -61,8 +61,10 @@ export async function GET() {
     const thisMonth = thisMonthApts.filter((a) => a.barberId === barber.id)
     const prevMonth = prevMonthApts.filter((a) => a.barberId === barber.id)
 
-    const revenue = thisMonth.reduce((sum, a) => sum + (a.service?.price ?? 0), 0)
-    const prevRevenue = prevMonth.reduce((sum, a) => sum + (a.service?.price ?? 0), 0)
+    // Use commission rate (earnings = what the specialist actually earns)
+    const revenue = thisMonth.reduce((sum, a) => sum + (a.service?.price ?? 0) * (a.service?.commissionRate ?? 0.5), 0)
+    const grossRevenue = thisMonth.reduce((sum, a) => sum + (a.service?.price ?? 0), 0)
+    const prevRevenue = prevMonth.reduce((sum, a) => sum + (a.service?.price ?? 0) * (a.service?.commissionRate ?? 0.5), 0)
     const uniqueClients = new Set(thisMonth.map((a) => a.userId)).size
 
     const revenueTrend =
@@ -78,6 +80,7 @@ export async function GET() {
       thisMonth: {
         completedCount: thisMonth.length,
         revenue,
+        grossRevenue,
         uniqueClients,
       },
       prevMonth: {

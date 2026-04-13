@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
       price: parseFloat(body.price),
       duration: parseInt(body.duration),
       category: body.category || "General",
+      commissionRate: body.commissionRate != null ? parseFloat(body.commissionRate) : 0.5,
     },
   })
   return NextResponse.json(service, { status: 201 })
@@ -50,6 +51,7 @@ export async function PUT(req: NextRequest) {
       duration: parseInt(body.duration),
       category: body.category || "General",
       active: body.active,
+      commissionRate: body.commissionRate != null ? parseFloat(body.commissionRate) : undefined,
     },
   })
   return NextResponse.json(service)

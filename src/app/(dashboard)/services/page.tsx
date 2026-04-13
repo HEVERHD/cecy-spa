@@ -24,6 +24,7 @@ type Service = {
   duration: number
   category: string
   active: boolean
+  commissionRate: number
 }
 
 export default function ServicesPage() {
@@ -31,7 +32,7 @@ export default function ServicesPage() {
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<Service | null>(null)
-  const [form, setForm] = useState({ name: "", description: "", price: "", duration: "", category: "General" })
+  const [form, setForm] = useState({ name: "", description: "", price: "", duration: "", category: "General", commissionRate: "0.5" })
   const { toast } = useToast()
 
   useEffect(() => {
@@ -47,7 +48,7 @@ export default function ServicesPage() {
 
   const openNew = () => {
     setEditing(null)
-    setForm({ name: "", description: "", price: "", duration: "", category: "General" })
+    setForm({ name: "", description: "", price: "", duration: "", category: "General", commissionRate: "0.5" })
     setShowForm(true)
   }
 
@@ -59,6 +60,7 @@ export default function ServicesPage() {
       price: service.price.toString(),
       duration: service.duration.toString(),
       category: service.category || "General",
+      commissionRate: (service.commissionRate ?? 0.5).toString(),
     })
     setShowForm(true)
   }
@@ -142,7 +144,7 @@ export default function ServicesPage() {
             />
             <input
               type="number"
-              placeholder="Precio (COP)"
+              placeholder="Precio"
               value={form.price}
               onChange={(e) => setForm({ ...form, price: e.target.value })}
               className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40"
@@ -154,6 +156,34 @@ export default function ServicesPage() {
               onChange={(e) => setForm({ ...form, duration: e.target.value })}
               className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40"
             />
+            {/* Commission rate selector */}
+            <div>
+              <label className="text-xs text-white/40 mb-1.5 block">Porcentaje del especialista</label>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setForm({ ...form, commissionRate: "0.5" })}
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition border ${
+                    form.commissionRate === "0.5"
+                      ? "bg-[#00bcd4] border-[#00bcd4] text-white"
+                      : "bg-[#080f16] border-[#0e2530] text-white/50 hover:text-white"
+                  }`}
+                >
+                  50% — Estándar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setForm({ ...form, commissionRate: "0.6" })}
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition border ${
+                    form.commissionRate === "0.6"
+                      ? "bg-[#f0932b] border-[#f0932b] text-white"
+                      : "bg-[#080f16] border-[#0e2530] text-white/50 hover:text-white"
+                  }`}
+                >
+                  60% — Con materiales
+                </button>
+              </div>
+            </div>
           </div>
           <div className="flex gap-3 mt-4">
             <button
@@ -195,46 +225,59 @@ export default function ServicesPage() {
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {services.map((service) => (
-            <div
-              key={service.id}
-              className={`bg-[#0a1520] rounded-xl p-5 border border-[#0e2530] transition ${
-                !service.active ? "opacity-50" : ""
-              }`}
-            >
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="font-semibold text-white">{service.name}</h3>
-                <span className="text-lg font-bold text-[#00bcd4]">
-                  {formatPrice(service.price)}
-                </span>
+          {services.map((service) => {
+            const rate = service.commissionRate ?? 0.5
+            const commission = service.price * rate
+            return (
+              <div
+                key={service.id}
+                className={`bg-[#0a1520] rounded-xl p-5 border border-[#0e2530] transition ${
+                  !service.active ? "opacity-50" : ""
+                }`}
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-semibold text-white">{service.name}</h3>
+                  <span className="text-lg font-bold text-[#00bcd4]">
+                    {formatPrice(service.price)}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#00bcd4]/10 text-[#00bcd4]">
+                    {service.category}
+                  </span>
+                  <span className={`inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                    rate >= 0.6
+                      ? "bg-[#f0932b]/15 text-[#f0932b]"
+                      : "bg-white/5 text-white/40"
+                  }`}>
+                    {Math.round(rate * 100)}% · {formatPrice(commission)}
+                  </span>
+                </div>
+                {service.description && (
+                  <p className="text-sm text-white/40 mb-2">{service.description}</p>
+                )}
+                <p className="text-xs text-white/30 mb-4">{service.duration} minutos</p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => openEdit(service)}
+                    className="text-xs px-3 py-1.5 rounded-lg bg-[#0e2530] text-white/50 hover:bg-[#4d2c2c] transition"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => toggleActive(service)}
+                    className={`text-xs px-3 py-1.5 rounded-lg transition ${
+                      service.active
+                        ? "bg-red-50 text-red-600 hover:bg-red-100"
+                        : "bg-green-50 text-green-600 hover:bg-green-100"
+                    }`}
+                  >
+                    {service.active ? "Desactivar" : "Activar"}
+                  </button>
+                </div>
               </div>
-              <span className="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#00bcd4]/10 text-[#00bcd4] mb-2">
-                {service.category}
-              </span>
-              {service.description && (
-                <p className="text-sm text-white/40 mb-2">{service.description}</p>
-              )}
-              <p className="text-xs text-white/30 mb-4">{service.duration} minutos</p>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => openEdit(service)}
-                  className="text-xs px-3 py-1.5 rounded-lg bg-[#0e2530] text-white/50 hover:bg-[#4d2c2c] transition"
-                >
-                  Editar
-                </button>
-                <button
-                  onClick={() => toggleActive(service)}
-                  className={`text-xs px-3 py-1.5 rounded-lg transition ${
-                    service.active
-                      ? "bg-red-50 text-red-600 hover:bg-red-100"
-                      : "bg-green-50 text-green-600 hover:bg-green-100"
-                  }`}
-                >
-                  {service.active ? "Desactivar" : "Activar"}
-                </button>
-              </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
     </div>
