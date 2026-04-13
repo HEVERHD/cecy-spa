@@ -112,16 +112,12 @@ export function buildConfirmationMessage(
   time: string,
   shopName: string,
   appointmentLink?: string,
-  queueLink?: string
 ): string {
-  let msg = `✅ *Cita Confirmada*\n\nHola ${clientName}, tu cita ha sido agendada:\n\n📋 Servicio: ${serviceName}\n📅 Fecha: ${date}\n🕐 Hora: ${time}\n💈 ${shopName}`
+  const nombre = clientName.split(" ")[0]
+  let msg = `Cita confirmada - ${shopName}\n\nHola ${nombre}!\nServicio: ${serviceName}\nFecha: ${date}\nHora: ${time}`
   if (appointmentLink) {
-    msg += `\n\n🔗 Ver o cancelar tu cita:\n${appointmentLink}`
+    msg += `\n\nVer/cancelar: ${appointmentLink}`
   }
-  if (queueLink) {
-    msg += `\n\n📍 Ver cola en vivo el día de tu cita:\n${queueLink}`
-  }
-  msg += `\n\n¡Te esperamos!`
   return msg
 }
 

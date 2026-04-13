@@ -272,7 +272,6 @@ export async function POST(req: NextRequest) {
   // Build appointment link for client
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "http://localhost:3000"
   const appointmentLink = `${baseUrl}/cita/${appointment.token}`
-  const queueLink = `${baseUrl}/cola?barberId=${appointment.barber.id}`
 
   // Send WhatsApp confirmation to client
   const shopName = settings?.shopName || "Mi Barbería"
@@ -297,7 +296,6 @@ export async function POST(req: NextRequest) {
           formatTime(appointment.date),
           shopName,
           appointmentLink,
-          queueLink
         )
         await sendSMS(user.phone, message)
       }

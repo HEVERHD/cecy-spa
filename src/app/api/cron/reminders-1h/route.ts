@@ -27,10 +27,13 @@ export async function GET() {
 
   console.log("⏰ 1H Reminders:", appointments.length)
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || ""
+
   for (const apt of appointments) {
     if (!apt.user.phone) continue
 
-    const msg = `⏰ Recordatorio de cita
+    const appointmentLink = baseUrl ? `${baseUrl}/cita/${apt.token}` : ""
+    let msg = `⏰ Recordatorio de cita
 
 Hola ${apt.user.name || "Cliente"},
 tu cita es en 1 hora.
@@ -39,6 +42,10 @@ tu cita es en 1 hora.
 🕐 Hora: ${formatTime(apt.date)}
 
 ¡Te esperamos! 💈`
+
+    if (appointmentLink) {
+      msg += `\n\n🔗 Ver o cancelar tu cita:\n${appointmentLink}`
+    }
 
     try {
       await sendSMS(apt.user.phone, msg)
