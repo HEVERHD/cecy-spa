@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { sendSMS } from "@/lib/twilio"
 import { sendReminderEmail } from "@/lib/resend"
 import { formatTime } from "@/lib/utils"
 
@@ -40,23 +39,7 @@ export async function GET(req: NextRequest) {
     const appointmentLink = baseUrl ? `${baseUrl}/cita/${apt.token}` : ""
     const clientName = apt.user.name || "Cliente"
     const timeStr = formatTime(apt.date)
-    let success = false
 
-    // ── SMS ───────────────────────────────────────────────────
-    if (apt.user.phone) {
-      let msg = `Recordatorio de cita - ${shopName}\n\nHola ${clientName.split(" ")[0]}, tu cita es en 1 hora.\n\nServicio: ${apt.service.name}\nHora: ${timeStr}`
-      if (appointmentLink) msg += `\n\nVer/cancelar: ${appointmentLink}`
-
-      try {
-        await sendSMS(apt.user.phone, msg)
-        console.log("✅ SMS enviado:", apt.user.phone)
-        success = true
-      } catch (err: any) {
-        console.error("❌ Error SMS:", err.message)
-      }
-    }
-
-    // ── Email (siempre si hay correo, independiente del SMS) ──
     if (apt.user.email) {
       try {
         await sendReminderEmail({
@@ -67,27 +50,22 @@ export async function GET(req: NextRequest) {
           shopName,
           appointmentLink,
         })
-        console.log("📩 Email recordatorio:", apt.user.email)
-        success = true
+        console.log("📩 Email recordatorio 1h:", apt.user.email)
+        await prisma.appointment.update({
+          where: { id: apt.id },
+          data: { notified: true },
+        })
+        sent++
       } catch (err: any) {
         console.error("❌ Error email:", err.message)
       }
-    }
-
-    // ── Marcar como notificado si al menos un canal funcionó ──
-    if (success) {
+    } else {
+      // Sin email — marcar para no reintentar
       await prisma.appointment.update({
         where: { id: apt.id },
         data: { notified: true },
       })
-      sent++
-    } else if (!apt.user.phone && !apt.user.email) {
-      // Sin datos de contacto — marcar para no reintentar
-      await prisma.appointment.update({
-        where: { id: apt.id },
-        data: { notified: true },
-      })
-      console.warn("⚠️ Sin contacto:", apt.id)
+      console.warn("⚠️ Sin email:", apt.id)
     }
   }
 

@@ -1,19 +1,17 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { sendSMS, sendWhatsAppTemplateWithSMSFallback, buildReminder24hMessage } from "@/lib/twilio"
+import { sendReminder24hEmail } from "@/lib/resend"
 import { formatDate, formatTime } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
 
 export async function GET(req: NextRequest) {
-  // Verify cron secret
   const authHeader = req.headers.get("authorization")
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
   const now = new Date()
-  // Window: appointments between 23h and 25h from now
   const from24h = new Date(now.getTime() + 23 * 60 * 60 * 1000)
   const to24h = new Date(now.getTime() + 25 * 60 * 60 * 1000)
 
@@ -26,60 +24,53 @@ export async function GET(req: NextRequest) {
     include: {
       user: true,
       service: true,
-      barber: {
-        include: { barberSettings: true },
-      },
+      barber: { include: { barberSettings: true } },
     },
   })
 
+  console.log("📅 24H Reminders:", appointments.length)
+
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || ""
-  const templateSid = process.env.TWILIO_TEMPLATE_REMINDER_24H
   let sent = 0
 
-  for (const appointment of appointments) {
-    if (appointment.user.phone) {
+  for (const apt of appointments) {
+    const shopName = (apt.barber as any).barberSettings?.shopName || "Mi Spa"
+    const appointmentLink = baseUrl ? `${baseUrl}/cita/${apt.token}` : ""
+    const clientName = apt.user.name || "Cliente"
+
+    if (apt.user.email) {
       try {
-        const shopName = (appointment.barber as any).barberSettings?.shopName || "Mi Barbería"
-        const link = baseUrl ? `${baseUrl}/cita/${appointment.token}` : undefined
-        if (templateSid) {
-          await sendWhatsAppTemplateWithSMSFallback(appointment.user.phone, templateSid, {
-            "1": appointment.user.name || "Cliente",
-            "2": appointment.service.name,
-            "3": formatDate(appointment.date),
-            "4": formatTime(appointment.date),
-            "5": shopName,
-            ...(link ? { "6": link } : {}),
-          }, `Recordatorio: mañana tienes cita.\n\nServicio: ${appointment.service.name}\nFecha: ${formatDate(appointment.date)}\nHora: ${formatTime(appointment.date)}\nLugar: ${shopName}${link ? `\n\nVer tu cita: ${link}` : ""}`)
-        } else {
-          const message = buildReminder24hMessage(
-            appointment.user.name || "Cliente",
-            appointment.service.name,
-            formatDate(appointment.date),
-            formatTime(appointment.date),
-            shopName,
-            link
-          )
-          await sendSMS(appointment.user.phone, message)
-        }
-        sent++
+        await sendReminder24hEmail({
+          to: apt.user.email,
+          clientName,
+          serviceName: apt.service.name,
+          date: formatDate(apt.date),
+          time: formatTime(apt.date),
+          shopName,
+          appointmentLink,
+        })
+        console.log("📩 Email recordatorio 24h:", apt.user.email)
         await prisma.appointment.update({
-          where: { id: appointment.id },
+          where: { id: apt.id },
           data: { reminded24h: true },
         })
-      } catch (error) {
-        console.error(`Error sending 24h reminder for appointment ${appointment.id}:`, error)
+        sent++
+      } catch (err: any) {
+        console.error("❌ Error email 24h:", err.message)
       }
     } else {
-      // No phone number — mark as reminded to avoid reprocessing
+      // Sin email — marcar para no reintentar
       await prisma.appointment.update({
-        where: { id: appointment.id },
+        where: { id: apt.id },
         data: { reminded24h: true },
       })
+      console.warn("⚠️ Sin email 24h:", apt.id)
     }
   }
 
   return NextResponse.json({
-    checked: appointments.length,
+    success: true,
+    processed: appointments.length,
     sent,
     timestamp: now.toISOString(),
   })

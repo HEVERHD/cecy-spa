@@ -162,19 +162,25 @@ function buildConfirmationHtml({
 </html>`
 }
 
-// ── Reminder email HTML ───────────────────────────────────────────────────
+// ── Reminder email HTML (shared for 1h and 24h) ───────────────────────────
 function buildReminderHtml({
   clientName,
   serviceName,
+  date,
   time,
   shopName,
   appointmentLink,
+  title,
+  subtitle,
 }: {
   clientName: string
   serviceName: string
+  date?: string
   time: string
   shopName: string
   appointmentLink: string
+  title: string
+  subtitle: string
 }) {
   return `<!DOCTYPE html>
 <html lang="es">
@@ -211,8 +217,8 @@ function buildReminderHtml({
                 <tr>
                   <td align="center" style="padding-bottom:24px;">
                     <div style="font-size:48px;margin-bottom:12px;">⏰</div>
-                    <h1 style="margin:0 0 6px;color:#ffffff;font-size:24px;font-weight:900;">Tu cita es en 1 hora</h1>
-                    <p style="margin:0;color:rgba(255,255,255,0.45);font-size:14px;">Hola ${clientName}, prepárate para tu visita.</p>
+                    <h1 style="margin:0 0 6px;color:#ffffff;font-size:24px;font-weight:900;">${title}</h1>
+                    <p style="margin:0;color:rgba(255,255,255,0.45);font-size:14px;">Hola ${clientName}, ${subtitle}</p>
                   </td>
                 </tr>
 
@@ -227,6 +233,7 @@ function buildReminderHtml({
                           <p style="margin:0;font-size:16px;font-weight:700;color:#fff;">${serviceName}</p>
                         </td>
                         <td align="right">
+                          ${date ? `<p style="margin:0 0 4px;font-size:11px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;">Fecha</p><p style="margin:0 0 8px;font-size:14px;font-weight:600;color:#fff;">${date}</p>` : ""}
                           <p style="margin:0 0 4px;font-size:11px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;">Hora</p>
                           <p style="margin:0;font-size:16px;font-weight:700;color:#00bcd4;">${time}</p>
                         </td>
@@ -285,7 +292,37 @@ export async function sendReminderEmail({
     from: FROM,
     to,
     subject: `⏰ Recordatorio — Tu cita de ${serviceName} es en 1 hora`,
-    html: buildReminderHtml({ clientName, serviceName, time, shopName, appointmentLink }),
+    html: buildReminderHtml({ clientName, serviceName, time, shopName, appointmentLink, title: "Tu cita es en 1 hora", subtitle: "prepárate para tu visita." }),
+  })
+}
+
+// ── Send reminder email (24h before appointment) ─────────────────────────
+export async function sendReminder24hEmail({
+  to,
+  clientName,
+  serviceName,
+  date,
+  time,
+  shopName,
+  appointmentLink,
+}: {
+  to: string
+  clientName: string
+  serviceName: string
+  date: string
+  time: string
+  shopName: string
+  appointmentLink: string
+}) {
+  if (!process.env.RESEND_API_KEY) return
+
+  const resend = new Resend(process.env.RESEND_API_KEY)
+
+  await resend.emails.send({
+    from: FROM,
+    to,
+    subject: `📅 Mañana tienes cita — ${serviceName} a las ${time}`,
+    html: buildReminderHtml({ clientName, serviceName, date, time, shopName, appointmentLink, title: "Tu cita es mañana", subtitle: "te recordamos tu reserva." }),
   })
 }
 
