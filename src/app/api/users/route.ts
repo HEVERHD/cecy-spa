@@ -94,9 +94,19 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: "Solo el administrador puede cambiar roles" }, { status: 403 })
   }
 
-  const { userId, role } = await req.json()
+  const { userId, role, password } = await req.json()
 
-  if (!userId || !role || !["ADMIN", "BARBER", "CLIENT"].includes(role)) {
+  if (!userId) return NextResponse.json({ error: "userId requerido" }, { status: 400 })
+
+  // Password reset
+  if (password) {
+    if (password.length < 6) return NextResponse.json({ error: "Mínimo 6 caracteres" }, { status: 400 })
+    const hashed = await bcrypt.hash(password, 10)
+    await prisma.user.update({ where: { id: userId }, data: { password: hashed } })
+    return NextResponse.json({ ok: true })
+  }
+
+  if (!role || !["ADMIN", "BARBER", "CLIENT"].includes(role)) {
     return NextResponse.json({ error: "Datos invalidos" }, { status: 400 })
   }
 

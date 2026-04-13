@@ -370,8 +370,7 @@ export async function PATCH(req: NextRequest) {
         updated.service.name,
         newDate,
         newTime,
-        shopName,
-        ""
+        shopName
       )
       sendSMS(updated.user.phone, msg).catch(() => {})
     }
@@ -385,9 +384,6 @@ export async function PATCH(req: NextRequest) {
     include: { service: true, user: true },
   })
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "http://localhost:3000"
-  const queueLink = `${baseUrl}/cola?barberId=${appointment.barberId}`
-
   // When confirming, notify the client
   if (body.status === "CONFIRMED" && appointment.user.phone) {
     try {
@@ -400,8 +396,7 @@ export async function PATCH(req: NextRequest) {
         appointment.service.name,
         formatDate(appointment.date),
         formatTime(appointment.date),
-        shopName,
-        queueLink
+        shopName
       )
       sendSMS(appointment.user.phone, msg).catch(() => {})
     } catch {}

@@ -133,6 +133,7 @@ export default function AppointmentsPage() {
   const [dayOff, setDayOff] = useState(false)
   const [barbers, setBarbers] = useState<any[]>([])
   const [selectedBarberId, setSelectedBarberId] = useState("")
+  const [barberFilter, setBarberFilter] = useState<string | null>(null)
   const [now, setNow] = useState(new Date())
   const [actionApt, setActionApt] = useState<Appointment | null>(null)
   const [completionApt, setCompletionApt] = useState<Appointment | null>(null)
@@ -180,6 +181,7 @@ export default function AppointmentsPage() {
       .filter((apt) => {
         const aptDate = colombiaDateStr(new Date(apt.date))
         return aptDate === selectedDate && apt.status !== "CANCELLED"
+          && (!barberFilter || apt.barber?.id === barberFilter)
       })
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
   }, [weekAppointments, selectedDate])
@@ -442,7 +444,8 @@ export default function AppointmentsPage() {
       return (
         colombiaDateStr(aptDate) === dayDate &&
         colombiaHour(aptDate) === hour &&
-        apt.status !== "CANCELLED"
+        apt.status !== "CANCELLED" &&
+        (!barberFilter || apt.barber?.id === barberFilter)
       )
     })
   }
@@ -451,7 +454,8 @@ export default function AppointmentsPage() {
   const getDayCount = (dayDate: string) => {
     return weekAppointments.filter((apt) => {
       const aptDateStr = colombiaDateStr(new Date(apt.date))
-      return aptDateStr === dayDate && apt.status !== "CANCELLED"
+      return aptDateStr === dayDate && apt.status !== "CANCELLED" &&
+        (!barberFilter || apt.barber?.id === barberFilter)
     }).length
   }
 
@@ -495,6 +499,43 @@ export default function AppointmentsPage() {
           </button>
         </div>
       </div>
+
+      {/* Barber filter chips — ADMIN only */}
+      {role === "ADMIN" && barbers.length > 1 && (
+        <div className="flex gap-2 overflow-x-auto pb-2 mb-4 scrollbar-hide -mx-1 px-1">
+          <button
+            onClick={() => setBarberFilter(null)}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold flex-shrink-0 transition border ${
+              !barberFilter
+                ? "bg-[#00bcd4] border-[#00bcd4] text-white shadow-md shadow-[#00bcd4]/25"
+                : "bg-[#0a1520] border-[#0e2530] text-white/50 hover:text-white hover:border-[#00bcd4]/40"
+            }`}
+          >
+            Todos
+          </button>
+          {barbers.map((b: any) => (
+            <button
+              key={b.id}
+              onClick={() => setBarberFilter(barberFilter === b.id ? null : b.id)}
+              className={`flex items-center gap-2 pl-1.5 pr-3 py-1.5 rounded-xl text-xs font-semibold flex-shrink-0 transition border ${
+                barberFilter === b.id
+                  ? "bg-[#00bcd4] border-[#00bcd4] text-white shadow-md shadow-[#00bcd4]/25"
+                  : "bg-[#0a1520] border-[#0e2530] text-white/50 hover:text-white hover:border-[#00bcd4]/40"
+              }`}
+            >
+              <div className="w-6 h-6 rounded-full overflow-hidden bg-[#00bcd4]/20 flex-shrink-0 flex items-center justify-center">
+                {b.avatarUrl || b.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={b.avatarUrl || b.image} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-[9px] font-black text-[#00bcd4]">{(b.name || "?")[0].toUpperCase()}</span>
+                )}
+              </div>
+              {b.name?.split(" ")[0] || "Profesional"}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* New appointment form */}
       {showNewForm && (

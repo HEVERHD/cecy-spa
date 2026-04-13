@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { useToast } from "@/components/ui/toast"
-import { Trash2, UserPlus, X, Camera } from "lucide-react"
+import { Trash2, UserPlus, X, Camera, KeyRound } from "lucide-react"
 
 type User = {
   id: string
@@ -26,6 +26,9 @@ export default function UsersPage() {
   const [creating, setCreating] = useState(false)
   const [newUser, setNewUser] = useState({ name: "", email: "", phone: "", password: "", role: "CLIENT" })
   const [uploadingId, setUploadingId] = useState<string | null>(null)
+  const [resetUser, setResetUser] = useState<User | null>(null)
+  const [newPassword, setNewPassword] = useState("")
+  const [resetting, setResetting] = useState(false)
   const { data: session } = useSession()
   const { toast } = useToast()
   const myId = (session?.user as any)?.id
@@ -59,6 +62,25 @@ export default function UsersPage() {
     } else {
       const data = await res.json()
       toast(data.error || "Error al cambiar rol", "error")
+    }
+  }
+
+  const handleResetPassword = async () => {
+    if (!resetUser || newPassword.length < 6) return
+    setResetting(true)
+    const res = await fetch("/api/users", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: resetUser.id, password: newPassword }),
+    })
+    setResetting(false)
+    if (res.ok) {
+      toast("Contraseña actualizada")
+      setResetUser(null)
+      setNewPassword("")
+    } else {
+      const data = await res.json()
+      toast(data.error || "Error al actualizar", "error")
     }
   }
 
@@ -151,6 +173,46 @@ export default function UsersPage() {
                 className="flex-1 px-4 py-2.5 rounded-xl bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition disabled:opacity-50"
               >
                 {deleting ? "Eliminando..." : "Eliminar"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reset password modal */}
+      {resetUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="bg-[#0a1520] border border-[#0e2530] rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h3 className="text-lg font-bold text-white">Cambiar contraseña</h3>
+                <p className="text-xs text-white/40 mt-0.5">{resetUser.name || resetUser.email}</p>
+              </div>
+              <button onClick={() => { setResetUser(null); setNewPassword("") }} className="p-1.5 rounded-lg text-white/30 hover:text-white hover:bg-white/5 transition">
+                <X size={18} />
+              </button>
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-white/40 uppercase tracking-wider block mb-1.5">Nueva contraseña</label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Mínimo 6 caracteres"
+                autoFocus
+                className="w-full p-3 bg-[#080f16] border border-[#0e2530] rounded-xl text-white placeholder-white/25 focus:border-[#00bcd4] focus:outline-none text-sm"
+              />
+            </div>
+            <div className="flex gap-3 mt-5">
+              <button onClick={() => { setResetUser(null); setNewPassword("") }} className="flex-1 px-4 py-2.5 rounded-xl border border-[#0e2530] text-sm text-white/50 hover:bg-white/5 transition">
+                Cancelar
+              </button>
+              <button
+                onClick={handleResetPassword}
+                disabled={resetting || newPassword.length < 6}
+                className="flex-1 px-4 py-2.5 rounded-xl bg-[#00bcd4] text-white text-sm font-semibold hover:bg-[#0097a7] transition disabled:opacity-50"
+              >
+                {resetting ? "Guardando..." : "Guardar"}
               </button>
             </div>
           </div>
@@ -365,6 +427,13 @@ export default function UsersPage() {
                       Quitar
                     </button>
                   )}
+                  <button
+                    onClick={() => { setResetUser(user); setNewPassword("") }}
+                    className="p-2 rounded-lg text-white/20 hover:text-[#00bcd4] hover:bg-[#00bcd4]/10 transition"
+                    title="Cambiar contraseña"
+                  >
+                    <KeyRound size={15} />
+                  </button>
                   {user.id !== myId && (
                     <button
                       onClick={() => setConfirmDelete(user)}
