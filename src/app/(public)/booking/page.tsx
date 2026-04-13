@@ -302,37 +302,56 @@ export default function BookingPage() {
         {/* ── Step: Barber ── */}
         {step === "barber" && (
           <div>
-            <div className="mb-8">
+            <div className="mb-6">
               <p className="text-xs font-bold text-[#00bcd4] tracking-[0.2em] uppercase mb-2">Paso 1</p>
               <h2 className="text-2xl font-black">Elige tu profesional</h2>
             </div>
-            <div className="space-y-3">
-              {barbers.map((barber) => (
-                <button
-                  key={barber.id}
-                  onClick={() => { setSelectedBarber(barber); setStep("service") }}
-                  className="w-full text-left p-4 rounded-2xl border border-white/12 bg-[#1a1a1a] hover:border-[#00bcd4]/50 hover:bg-[#00bcd4]/5 transition-all group"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="relative w-14 h-14 rounded-full overflow-hidden bg-white/5 flex-shrink-0 ring-2 ring-white/5 group-hover:ring-[#00bcd4]/30 transition">
+            <div className="grid grid-cols-2 gap-3">
+              {barbers.map((barber, index) => {
+                const isLastOdd = barbers.length % 2 !== 0 && index === barbers.length - 1
+                return (
+                  <button
+                    key={barber.id}
+                    onClick={() => { setSelectedBarber(barber); setStep("service") }}
+                    className={`group relative rounded-2xl overflow-hidden border border-white/10 hover:border-[#00bcd4]/70 transition-all duration-300 bg-[#111] shadow-lg hover:shadow-[0_8px_30px_rgba(0,188,212,0.15)] ${isLastOdd ? "col-span-2" : ""}`}
+                  >
+                    {/* Photo */}
+                    <div className={`relative w-full overflow-hidden ${isLastOdd ? "aspect-[21/9]" : "aspect-[3/4]"}`}>
                       {barber.avatarUrl || barber.image ? (
-                        <Image src={barber.avatarUrl || barber.image || ""} alt={barber.name || ""} fill className="object-cover" />
+                        <Image
+                          src={barber.avatarUrl || barber.image || ""}
+                          alt={barber.name || ""}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-xl font-black text-[#00bcd4]">
-                          {(barber.name || "B").charAt(0).toUpperCase()}
+                        <div className="w-full h-full bg-gradient-to-br from-[#0d2535] to-[#091820] flex items-center justify-center">
+                          <span className="text-6xl font-black text-[#00bcd4]/30">
+                            {(barber.name || "B").charAt(0).toUpperCase()}
+                          </span>
                         </div>
                       )}
+                      {/* Bottom gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent" />
+                      {/* Hover cyan tint */}
+                      <div className="absolute inset-0 bg-[#00bcd4]/0 group-hover:bg-[#00bcd4]/8 transition-colors duration-300" />
                     </div>
-                    <div>
-                      <p className="font-bold text-white text-lg">{barber.name || "Profesional"}</p>
-                      {barber.specialty && <p className="text-sm text-white/40 mt-0.5">{barber.specialty}</p>}
+
+                    {/* Name + specialty on gradient */}
+                    <div className="absolute bottom-0 left-0 right-0 p-3.5">
+                      <p className="font-bold text-white text-sm leading-snug">{barber.name || "Profesional"}</p>
+                      {barber.specialty && (
+                        <p className="text-[11px] text-white/50 mt-0.5 leading-snug line-clamp-2">{barber.specialty}</p>
+                      )}
                     </div>
-                    <div className="ml-auto w-8 h-8 rounded-full bg-white/5 group-hover:bg-[#00bcd4] flex items-center justify-center transition-all">
-                      <ChevronRight size={14} className="text-white/40 group-hover:text-white transition" />
+
+                    {/* Arrow */}
+                    <div className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-black/50 backdrop-blur-sm border border-white/15 flex items-center justify-center group-hover:bg-[#00bcd4] group-hover:border-[#00bcd4] transition-all duration-300">
+                      <ChevronRight size={12} className="text-white/60 group-hover:text-white transition" />
                     </div>
-                  </div>
-                </button>
-              ))}
+                  </button>
+                )
+              })}
             </div>
           </div>
         )}

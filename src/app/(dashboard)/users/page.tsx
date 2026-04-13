@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { useToast } from "@/components/ui/toast"
-import { Trash2, UserPlus, X } from "lucide-react"
+import { Trash2, UserPlus, X, Camera } from "lucide-react"
 
 type User = {
   id: string
@@ -11,6 +11,7 @@ type User = {
   email: string | null
   phone: string | null
   image: string | null
+  avatarUrl: string | null
   role: string
   createdAt: string
   _count: { appointments: number }
@@ -24,6 +25,7 @@ export default function UsersPage() {
   const [showCreate, setShowCreate] = useState(false)
   const [creating, setCreating] = useState(false)
   const [newUser, setNewUser] = useState({ name: "", email: "", phone: "", password: "", role: "CLIENT" })
+  const [uploadingId, setUploadingId] = useState<string | null>(null)
   const { data: session } = useSession()
   const { toast } = useToast()
   const myId = (session?.user as any)?.id
@@ -78,6 +80,30 @@ export default function UsersPage() {
       const data = await res.json()
       toast(data.error || "Error al crear usuario", "error")
     }
+  }
+
+  const handleUserAvatarUpload = async (userId: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (file.size > 3 * 1024 * 1024) { toast("La foto debe ser menor a 3MB", "error"); return }
+    setUploadingId(userId)
+    const reader = new FileReader()
+    reader.onloadend = async () => {
+      const base64 = reader.result as string
+      const res = await fetch("/api/upload/avatar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ base64, barberId: userId }),
+      })
+      if (res.ok) {
+        const { url } = await res.json()
+        setUsers((prev) => prev.map((u) => u.id === userId ? { ...u, avatarUrl: url } : u))
+        toast("Foto actualizada")
+      }
+      setUploadingId(null)
+    }
+    reader.readAsDataURL(file)
+    e.target.value = ""
   }
 
   const deleteUser = async () => {
@@ -256,18 +282,36 @@ export default function UsersPage() {
               className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]"
             >
               <div className="flex items-center gap-3">
-                {/* Avatar */}
-                {user.image ? (
-                  <img
-                    src={user.image}
-                    alt={user.name || ""}
-                    className="w-12 h-12 rounded-full object-cover"
+                {/* Avatar — click to upload (admin only) */}
+                <label className="relative flex-shrink-0 cursor-pointer group/avatar">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    disabled={uploadingId === user.id}
+                    onChange={(e) => handleUserAvatarUpload(user.id, e)}
                   />
-                ) : (
-                  <div className="w-12 h-12 bg-[#00bcd4]/20 rounded-full flex items-center justify-center text-lg font-bold text-[#00bcd4]">
-                    {(user.name || user.email || "?")[0].toUpperCase()}
-                  </div>
-                )}
+                  {user.avatarUrl || user.image ? (
+                    <img
+                      src={user.avatarUrl || user.image || ""}
+                      alt={user.name || ""}
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 bg-[#00bcd4]/20 rounded-full flex items-center justify-center text-lg font-bold text-[#00bcd4]">
+                      {(user.name || user.email || "?")[0].toUpperCase()}
+                    </div>
+                  )}
+                  {uploadingId === user.id ? (
+                    <div className="absolute inset-0 rounded-full bg-black/60 flex items-center justify-center">
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    </div>
+                  ) : (
+                    <div className="absolute inset-0 rounded-full bg-black/60 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition">
+                      <Camera size={14} className="text-white" />
+                    </div>
+                  )}
+                </label>
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">

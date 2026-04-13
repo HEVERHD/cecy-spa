@@ -19,6 +19,7 @@ export async function GET() {
       email: true,
       phone: true,
       image: true,
+      avatarUrl: true,
       role: true,
       createdAt: true,
       _count: { select: { appointments: true } },
