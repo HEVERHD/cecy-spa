@@ -63,40 +63,27 @@ export async function sendWhatsAppTemplate(
   }
 }
 
-/** Send a plain SMS via Vonage (fallback when WhatsApp fails) */
+/** Send a plain SMS via Twilio */
 export async function sendSMS(to: string, message: string) {
-  if (!process.env.VONAGE_API_KEY || !process.env.VONAGE_API_SECRET) {
+  if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN) {
     console.log(`[SMS Mock] To: ${to} | Message: ${message}`)
     return
   }
 
-  let phone = to.replace(/\s+/g, "").replace(/^0+/, "").replace(/^\+/, "")
-  if (!phone.startsWith("57")) {
-    phone = `57${phone}`
+  let phone = to.replace(/\s+/g, "").replace(/^0+/, "")
+  if (!phone.startsWith("+")) {
+    phone = phone.startsWith("57") ? `+${phone}` : `+57${phone}`
   }
 
   try {
-    const res = await fetch("https://rest.nexmo.com/sms/json", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        api_key: process.env.VONAGE_API_KEY,
-        api_secret: process.env.VONAGE_API_SECRET,
-        to: phone,
-        from: "Barberia",
-        text: message,
-        type: "unicode",
-      }),
+    const msg = await client.messages.create({
+      from: process.env.TWILIO_SMS_FROM!,
+      to: phone,
+      body: message,
     })
-    const data = await res.json() as any
-    const msg = data.messages?.[0]
-    if (msg?.status === "0") {
-      console.log(`[SMS Vonage] Sent to +${phone} | MessageId: ${msg["message-id"]}`)
-    } else {
-      throw new Error(msg?.["error-text"] || JSON.stringify(data))
-    }
+    console.log(`[SMS] Sent to ${phone} | SID: ${msg.sid}`)
   } catch (error: any) {
-    console.error(`[SMS Vonage Error] ${error.message}`)
+    console.error(`[SMS Error] ${error.message}`)
     throw error
   }
 }
