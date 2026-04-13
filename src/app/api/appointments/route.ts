@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import { sendWhatsAppMessage, sendWhatsAppTemplateWithSMSFallback, buildConfirmationMessage, buildBarberNotification, buildStatusConfirmedMessage, buildLoyaltyMessage } from "@/lib/twilio"
+import { sendSMS, sendWhatsAppTemplateWithSMSFallback, buildConfirmationMessage, buildBarberNotification, buildStatusConfirmedMessage, buildLoyaltyMessage } from "@/lib/twilio"
 import { formatDate, formatTime, formatCurrency, parseColombia, getColombiaTime, getColombiaDateStr, getColombiaDayOfWeek, to12Hour } from "@/lib/utils"
 import { sendPushToBarber } from "@/lib/push"
 import { autoScheduleFromWaitlist } from "@/lib/waitlist"
@@ -299,7 +299,7 @@ export async function POST(req: NextRequest) {
           appointmentLink,
           queueLink
         )
-        await sendWhatsAppMessage(user.phone, message)
+        await sendSMS(user.phone, message)
       }
     } catch (error) {
       console.error("Error sending WhatsApp to client:", error)
@@ -328,7 +328,7 @@ export async function POST(req: NextRequest) {
           formatCurrency(appointment.service.price),
           body.bookedBy || "CLIENT"
         )
-        sendWhatsAppMessage(barberPhone, barberMsg).catch((err) =>
+        sendSMS(barberPhone, barberMsg).catch((err) =>
           console.error("Error notifying barber:", err)
         )
       }
@@ -395,7 +395,7 @@ export async function PATCH(req: NextRequest) {
         shopName,
         queueLink
       )
-      sendWhatsAppMessage(appointment.user.phone, msg).catch(() => {})
+      sendSMS(appointment.user.phone, msg).catch(() => {})
     } catch {}
   }
 
@@ -418,7 +418,7 @@ export async function PATCH(req: NextRequest) {
       if (nextApt?.user.phone) {
         const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "http://localhost:3000"
         const msg = `¡Hola ${nextApt.user.name?.split(" ")[0] || ""}! 💈 Es casi tu turno. Tu cita de *${nextApt.service.name}* está próxima. Ve preparándote. 🙌\n\n📍 ${baseUrl}/cola?barberId=${appointment.barberId}`
-        sendWhatsAppMessage(nextApt.user.phone, msg).catch(() => {})
+        sendSMS(nextApt.user.phone, msg).catch(() => {})
       }
     } catch {}
 
@@ -455,7 +455,7 @@ export async function PATCH(req: NextRequest) {
             "2": shopName,
           }, `¡Felicidades ${clientName}! Alcanzaste 7 cortes este mes en ${shopName}. Has ganado un descuento especial en tu proxima cita. ¡Menciónalo al llegar!`).catch(() => {})
         } else {
-          sendWhatsAppMessage(clientUser.phone, buildLoyaltyMessage(clientName, shopName)).catch(() => {})
+          sendSMS(clientUser.phone, buildLoyaltyMessage(clientName, shopName)).catch(() => {})
         }
         await prisma.user.update({
           where: { id: appointment.userId },
