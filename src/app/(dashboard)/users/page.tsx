@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { useToast } from "@/components/ui/toast"
-import { Trash2 } from "lucide-react"
+import { Trash2, UserPlus, X } from "lucide-react"
 
 type User = {
   id: string
@@ -21,6 +21,9 @@ export default function UsersPage() {
   const [loading, setLoading] = useState(true)
   const [confirmDelete, setConfirmDelete] = useState<User | null>(null)
   const [deleting, setDeleting] = useState(false)
+  const [showCreate, setShowCreate] = useState(false)
+  const [creating, setCreating] = useState(false)
+  const [newUser, setNewUser] = useState({ name: "", email: "", phone: "", password: "", role: "CLIENT" })
   const { data: session } = useSession()
   const { toast } = useToast()
   const myId = (session?.user as any)?.id
@@ -54,6 +57,26 @@ export default function UsersPage() {
     } else {
       const data = await res.json()
       toast(data.error || "Error al cambiar rol", "error")
+    }
+  }
+
+  const createUser = async () => {
+    if (!newUser.name || !newUser.email || !newUser.password) return
+    setCreating(true)
+    const res = await fetch("/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newUser),
+    })
+    setCreating(false)
+    if (res.ok) {
+      toast("Usuario creado")
+      setShowCreate(false)
+      setNewUser({ name: "", email: "", phone: "", password: "", role: "CLIENT" })
+      fetchUsers()
+    } else {
+      const data = await res.json()
+      toast(data.error || "Error al crear usuario", "error")
     }
   }
 
@@ -108,11 +131,101 @@ export default function UsersPage() {
         </div>
       )}
 
+      {/* Create user modal */}
+      {showCreate && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="bg-[#0a1520] border border-[#0e2530] rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-lg font-bold text-white">Crear usuario</h3>
+              <button onClick={() => setShowCreate(false)} className="p-1.5 rounded-lg text-white/30 hover:text-white hover:bg-white/5 transition">
+                <X size={18} />
+              </button>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <label className="text-xs font-semibold text-white/40 uppercase tracking-wider block mb-1.5">Nombre *</label>
+                <input
+                  type="text"
+                  value={newUser.name}
+                  onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+                  placeholder="Nombre completo"
+                  className="w-full p-3 bg-[#080f16] border border-[#0e2530] rounded-xl text-white placeholder-white/25 focus:border-[#00bcd4] focus:outline-none text-sm"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-white/40 uppercase tracking-wider block mb-1.5">Email *</label>
+                <input
+                  type="email"
+                  value={newUser.email}
+                  onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                  placeholder="correo@ejemplo.com"
+                  className="w-full p-3 bg-[#080f16] border border-[#0e2530] rounded-xl text-white placeholder-white/25 focus:border-[#00bcd4] focus:outline-none text-sm"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-white/40 uppercase tracking-wider block mb-1.5">Teléfono</label>
+                <input
+                  type="tel"
+                  value={newUser.phone}
+                  onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })}
+                  placeholder="+57 300 123 4567"
+                  className="w-full p-3 bg-[#080f16] border border-[#0e2530] rounded-xl text-white placeholder-white/25 focus:border-[#00bcd4] focus:outline-none text-sm"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-white/40 uppercase tracking-wider block mb-1.5">Contraseña *</label>
+                <input
+                  type="password"
+                  value={newUser.password}
+                  onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+                  placeholder="Mínimo 6 caracteres"
+                  className="w-full p-3 bg-[#080f16] border border-[#0e2530] rounded-xl text-white placeholder-white/25 focus:border-[#00bcd4] focus:outline-none text-sm"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-white/40 uppercase tracking-wider block mb-1.5">Rol</label>
+                <select
+                  value={newUser.role}
+                  onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
+                  className="w-full p-3 bg-[#080f16] border border-[#0e2530] rounded-xl text-white focus:border-[#00bcd4] focus:outline-none text-sm"
+                >
+                  <option value="CLIENT">Cliente</option>
+                  <option value="BARBER">Profesional</option>
+                  <option value="ADMIN">Administrador</option>
+                </select>
+              </div>
+            </div>
+            <div className="flex gap-3 mt-5">
+              <button
+                onClick={() => setShowCreate(false)}
+                className="flex-1 px-4 py-2.5 rounded-xl border border-[#0e2530] text-sm text-white/50 hover:bg-white/5 transition"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={createUser}
+                disabled={creating || !newUser.name || !newUser.email || !newUser.password}
+                className="flex-1 px-4 py-2.5 rounded-xl bg-[#00bcd4] text-white text-sm font-semibold hover:bg-[#0097a7] transition disabled:opacity-50"
+              >
+                {creating ? "Creando..." : "Crear"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-white">Usuarios</h1>
           <p className="text-sm text-white/40 mt-1">Administra los roles de los usuarios</p>
         </div>
+        <button
+          onClick={() => setShowCreate(true)}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#00bcd4] text-white text-sm font-semibold hover:bg-[#0097a7] transition"
+        >
+          <UserPlus size={16} />
+          Crear usuario
+        </button>
       </div>
 
       {loading ? (

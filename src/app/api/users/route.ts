@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import bcrypt from "bcryptjs"
 
 export const dynamic = "force-dynamic"
 
@@ -26,6 +27,55 @@ export async function GET() {
   })
 
   return NextResponse.json(users)
+}
+
+export async function POST(req: Request) {
+  const session = await getServerSession(authOptions)
+  if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+
+  const currentUser = await prisma.user.findUnique({
+    where: { email: session.user?.email || "" },
+  })
+  if (!currentUser || currentUser.role !== "ADMIN") {
+    return NextResponse.json({ error: "Solo el administrador puede crear usuarios" }, { status: 403 })
+  }
+
+  const { name, email, phone, password, role } = await req.json()
+
+  if (!name || !email || !password) {
+    return NextResponse.json({ error: "Nombre, email y contraseña son requeridos" }, { status: 400 })
+  }
+  if (!["ADMIN", "BARBER", "CLIENT"].includes(role)) {
+    return NextResponse.json({ error: "Rol inválido" }, { status: 400 })
+  }
+
+  const existing = await prisma.user.findUnique({ where: { email } })
+  if (existing) return NextResponse.json({ error: "Ya existe un usuario con ese email" }, { status: 409 })
+
+  const hashedPassword = await bcrypt.hash(password, 10)
+
+  const user = await prisma.user.create({
+    data: { name, email, phone: phone || null, password: hashedPassword, role },
+  })
+
+  // Auto-create BarberSettings for BARBER/ADMIN
+  if (role === "BARBER" || role === "ADMIN") {
+    const adminSettings = await prisma.barberSettings.findUnique({
+      where: { userId: currentUser.id },
+    })
+    await prisma.barberSettings.create({
+      data: {
+        shopName: adminSettings?.shopName || "Mi Spa",
+        openTime: adminSettings?.openTime || "09:00",
+        closeTime: adminSettings?.closeTime || "19:00",
+        slotDuration: adminSettings?.slotDuration || 30,
+        daysOff: adminSettings?.daysOff || "0",
+        userId: user.id,
+      },
+    })
+  }
+
+  return NextResponse.json(user, { status: 201 })
 }
 
 export async function PATCH(req: Request) {
