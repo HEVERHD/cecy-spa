@@ -16,7 +16,7 @@ const DAYS = [
   { value: "6", label: "Sábado" },
 ]
 
-type Barber = { id: string; name: string | null }
+type Barber = { id: string; name: string | null; avatarUrl: string | null }
 
 export default function SettingsPage() {
   const { data: session } = useSession()
@@ -36,16 +36,18 @@ export default function SettingsPage() {
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
+  const [avatarFile, setAvatarFile] = useState<File | null>(null)
+  const [uploadingAvatar, setUploadingAvatar] = useState(false)
   const { toast } = useToast()
 
-  // Fetch barbers list (only needed for ADMIN) and auto-select first barber
+  // Fetch barbers list (for ADMIN: auto-select first; for BARBER: used for avatar)
   useEffect(() => {
-    if (!isAdmin) return
     fetch("/api/barbers")
       .then((r) => r.json())
       .then((data: Barber[]) => {
         setBarbers(data)
-        if (data.length > 0 && !selectedBarberId) {
+        if (isAdmin && data.length > 0 && !selectedBarberId) {
           setSelectedBarberId(data[0].id)
         }
       })
@@ -86,6 +88,52 @@ export default function SettingsPage() {
         setLoading(false)
       })
   }, [selectedBarberId, (session?.user as any)?.id])
+
+  // Sync avatar preview when selected barber changes
+  useEffect(() => {
+    const ownId = (session?.user as any)?.id
+    const targetId = isAdmin ? selectedBarberId : ownId
+    const barber = barbers.find((b) => b.id === targetId)
+    setAvatarPreview(barber?.avatarUrl || null)
+    setAvatarFile(null)
+  }, [selectedBarberId, barbers, isAdmin, (session?.user as any)?.id])
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (file.size > 3 * 1024 * 1024) {
+      toast("La foto debe ser menor a 3MB")
+      return
+    }
+    setAvatarFile(file)
+    const reader = new FileReader()
+    reader.onloadend = () => setAvatarPreview(reader.result as string)
+    reader.readAsDataURL(file)
+  }
+
+  const handleAvatarUpload = async () => {
+    if (!avatarFile || !avatarPreview) return
+    setUploadingAvatar(true)
+    try {
+      const targetId = isAdmin ? selectedBarberId : undefined
+      const res = await fetch("/api/upload/avatar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ base64: avatarPreview, ...(targetId ? { barberId: targetId } : {}) }),
+      })
+      if (res.ok) {
+        const { url } = await res.json()
+        setAvatarPreview(url)
+        setAvatarFile(null)
+        const ownId = (session?.user as any)?.id
+        const updatedId = isAdmin ? selectedBarberId : ownId
+        setBarbers((prev) => prev.map((b) => b.id === updatedId ? { ...b, avatarUrl: url } : b))
+        toast("Foto actualizada")
+      }
+    } finally {
+      setUploadingAvatar(false)
+    }
+  }
 
   const handleSave = async () => {
     setSaving(true)
@@ -175,6 +223,44 @@ export default function SettingsPage() {
             </div>
           </div>
         )}
+
+        {/* Profile Photo */}
+        <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530]">
+          <h3 className="font-semibold mb-4 text-white">Foto del perfil</h3>
+          <div className="flex items-center gap-5">
+            <div className="w-20 h-20 rounded-full overflow-hidden bg-[#080f16] border-2 border-[#0e2530] flex-shrink-0">
+              {avatarPreview ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={avatarPreview} alt="Avatar" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-2xl font-black text-[#00bcd4]">
+                  {(isAdmin
+                    ? barbers.find((b) => b.id === selectedBarberId)?.name
+                    : session?.user?.name || "?"
+                  )?.charAt(0).toUpperCase() ?? "?"}
+                </div>
+              )}
+            </div>
+            <div className="flex-1">
+              <p className="text-sm text-white/40 mb-3">Se muestra en la página de reservas para que los clientes te identifiquen</p>
+              <div className="flex gap-2 flex-wrap">
+                <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#0e2530] border border-[#0e2530] hover:border-[#00bcd4]/50 text-white/70 hover:text-white text-sm transition">
+                  <input type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+                  {avatarPreview ? "Cambiar foto" : "Elegir foto"}
+                </label>
+                {avatarFile && (
+                  <button
+                    onClick={handleAvatarUpload}
+                    disabled={uploadingAvatar}
+                    className="px-4 py-2 rounded-xl bg-[#00bcd4] text-white text-sm hover:bg-[#0097a7] transition disabled:opacity-50"
+                  >
+                    {uploadingAvatar ? "Subiendo..." : "Guardar foto"}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Shop Info */}
         <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530]">
