@@ -339,6 +339,16 @@ export async function PATCH(req: NextRequest) {
   }
 
   const body = await req.json()
+
+  // Reschedule: update date only
+  if (body.date && !body.status) {
+    const updated = await prisma.appointment.update({
+      where: { id: body.id },
+      data: { date: new Date(body.date), status: "CONFIRMED", notified: false },
+    })
+    return NextResponse.json(updated)
+  }
+
   const appointment = await prisma.appointment.update({
     where: { id: body.id },
     data: { status: body.status },
