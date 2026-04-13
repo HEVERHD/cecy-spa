@@ -17,18 +17,25 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "No autorizado" }, { status: 403 })
   }
 
-  const { base64, barberId } = await req.json()
+  let body: { base64?: string; barberId?: string }
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: "Cuerpo de solicitud inválido" }, { status: 400 })
+  }
+
+  const { base64, barberId } = body
   if (!base64) return NextResponse.json({ error: "No se recibió imagen" }, { status: 400 })
 
-  // ADMIN can upload for any barber; BARBER only for themselves
+  // ADMIN can upload for any user; BARBER only for themselves
   const targetId = role === "ADMIN" && barberId ? barberId : userId
 
-  const { url } = await uploadAvatar(base64)
-
-  await prisma.user.update({
-    where: { id: targetId },
-    data: { avatarUrl: url },
-  })
-
-  return NextResponse.json({ url })
+  try {
+    const { url } = await uploadAvatar(base64)
+    await prisma.user.update({ where: { id: targetId }, data: { avatarUrl: url } })
+    return NextResponse.json({ url })
+  } catch (err: any) {
+    console.error("[upload/avatar]", err)
+    return NextResponse.json({ error: err?.message || "Error al subir imagen" }, { status: 500 })
+  }
 }

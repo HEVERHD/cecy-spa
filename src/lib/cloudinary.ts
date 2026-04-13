@@ -17,7 +17,7 @@ export async function uploadImage(base64: string): Promise<{ url: string; public
 export async function uploadAvatar(base64: string): Promise<{ url: string; publicId: string }> {
   const result = await cloudinary.uploader.upload(base64, {
     folder: "cecy-spa/avatars",
-    transformation: [{ width: 400, height: 400, crop: "fill", gravity: "face", quality: "auto" }],
+    transformation: [{ width: 400, height: 400, crop: "fill", quality: "auto" }],
   })
   return { url: result.secure_url, publicId: result.public_id }
 }
