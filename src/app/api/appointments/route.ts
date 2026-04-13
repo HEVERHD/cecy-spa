@@ -285,7 +285,7 @@ export async function POST(req: NextRequest) {
         formatDate(appointment.date),
         formatTime(appointment.date),
         shopName,
-        appointmentLink,
+        // No link in SMS — keeps message under 160 chars (1 segment)
       )
       if (confirmationTemplateSid) {
         await sendWhatsAppTemplateWithSMSFallback(user.phone, confirmationTemplateSid, {
@@ -345,7 +345,37 @@ export async function PATCH(req: NextRequest) {
     const updated = await prisma.appointment.update({
       where: { id: body.id },
       data: { date: new Date(body.date), status: "CONFIRMED", notified: false },
+      include: { service: true, user: true, barber: { select: { id: true, name: true } } },
     })
+
+    const settings = await prisma.barberSettings.findUnique({ where: { userId: updated.barberId } })
+    const shopName = settings?.shopName || "Mi Spa"
+    const newDate = formatDate(updated.date)
+    const newTime = formatTime(updated.date)
+
+    // Push → barber
+    const pushPayload = {
+      title: "📅 Cita re-agendada",
+      body: `${updated.user.name || "Cliente"} · ${updated.service.name} · ${newDate} ${newTime}`,
+      url: "/appointments",
+      tag: "reschedule",
+    }
+    sendPushToBarber(updated.barberId, pushPayload).catch(() => {})
+    sendPushToAdmins(pushPayload, updated.barberId).catch(() => {})
+
+    // SMS → client
+    if (updated.user.phone) {
+      const msg = buildStatusConfirmedMessage(
+        updated.user.name?.split(" ")[0] || "Cliente",
+        updated.service.name,
+        newDate,
+        newTime,
+        shopName,
+        ""
+      )
+      sendSMS(updated.user.phone, msg).catch(() => {})
+    }
+
     return NextResponse.json(updated)
   }
 
@@ -394,8 +424,9 @@ export async function PATCH(req: NextRequest) {
         orderBy: { date: "asc" },
       })
       if (nextApt?.user.phone) {
-        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "http://localhost:3000"
-        const msg = `¡Hola ${nextApt.user.name?.split(" ")[0] || ""}! 💈 Es casi tu turno. Tu cita de *${nextApt.service.name}* está próxima. Ve preparándote. 🙌\n\n📍 ${baseUrl}/cola?barberId=${appointment.barberId}`
+        const nextTime = formatTime(nextApt.date)
+        const nextDate = formatDate(nextApt.date)
+        const msg = `Hola ${nextApt.user.name?.split(" ")[0] || ""}! Es casi tu turno.\n\nCita: ${nextApt.service.name}\nFecha: ${nextDate}\nHora: ${nextTime}\n\nVe preparandote!`
         sendSMS(nextApt.user.phone, msg).catch(() => {})
       }
     } catch {}
