@@ -15,7 +15,7 @@ type Appointment = {
   notes: string | null
   user: { name: string | null; phone: string | null }
   service: { id: string; name: string; price: number; duration: number }
-  barber?: { id: string; name: string | null }
+  barber?: { id: string; name: string | null; avatarUrl: string | null; image: string | null }
 }
 
 const STATUS_MAP: Record<string, { label: string; color: string; dot: string }> = {
@@ -840,21 +840,47 @@ export default function AppointmentsPage() {
                               style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
                               {apt.service.name}
                             </p>
+                            {role === "ADMIN" && apt.barber && (
+                              <div className="flex items-center gap-1 mt-0.5">
+                                <div className="w-3 h-3 rounded-full overflow-hidden bg-[#00bcd4]/20 flex-shrink-0">
+                                  {apt.barber.avatarUrl || apt.barber.image ? (
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img src={apt.barber.avatarUrl || apt.barber.image!} alt="" className="w-full h-full object-cover" />
+                                  ) : (
+                                    <span className="text-[6px] font-bold text-[#00bcd4] flex items-center justify-center h-full">{(apt.barber.name || "?")[0]}</span>
+                                  )}
+                                </div>
+                                <p className="text-[8px] text-[#00bcd4]/80 leading-tight truncate">{apt.barber.name?.split(" ")[0]}</p>
+                              </div>
+                            )}
                             {active && (
                               <p className="text-[9px] text-[#00bcd4] font-semibold mt-0.5">{remaining}min</p>
                             )}
                           </>
                         ) : (
-                          /* Wide (single column): client name + service name */
+                          /* Wide (single column): client name + service name + barber */
                           <>
                             <p className={`font-bold leading-tight text-[11px] ${active ? "text-white" : "text-white/85"}`}
                               style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
                               {apt.user?.name || "Cliente"}
                             </p>
                             <p className="text-[10px] text-white/55 leading-tight mt-0.5"
-                              style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                              style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
                               {apt.service.name}
                             </p>
+                            {role === "ADMIN" && apt.barber && (
+                              <div className="flex items-center gap-1 mt-0.5">
+                                <div className="w-3.5 h-3.5 rounded-full overflow-hidden bg-[#00bcd4]/20 flex-shrink-0">
+                                  {apt.barber.avatarUrl || apt.barber.image ? (
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img src={apt.barber.avatarUrl || apt.barber.image!} alt="" className="w-full h-full object-cover" />
+                                  ) : (
+                                    <span className="text-[7px] font-bold text-[#00bcd4] flex items-center justify-center h-full">{(apt.barber.name || "?")[0]}</span>
+                                  )}
+                                </div>
+                                <p className="text-[9px] text-[#00bcd4]/80 leading-tight truncate">{apt.barber.name?.split(" ")[0]}</p>
+                              </div>
+                            )}
                             {active && (
                               <p className="text-[9px] text-[#00bcd4] font-semibold mt-0.5">{remaining}min</p>
                             )}
@@ -1356,6 +1382,19 @@ export default function AppointmentsPage() {
                                 style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
                                 {apt.service.name}
                               </p>
+                              {role === "ADMIN" && apt.barber && (
+                                <div className="flex items-center gap-1 mt-0.5">
+                                  <div className="w-3.5 h-3.5 rounded-full overflow-hidden bg-[#00bcd4]/20 flex-shrink-0">
+                                    {apt.barber.avatarUrl || apt.barber.image ? (
+                                      // eslint-disable-next-line @next/next/no-img-element
+                                      <img src={apt.barber.avatarUrl || apt.barber.image!} alt="" className="w-full h-full object-cover" />
+                                    ) : (
+                                      <span className="text-[7px] font-bold text-[#00bcd4] flex items-center justify-center h-full">{(apt.barber.name || "?")[0]}</span>
+                                    )}
+                                  </div>
+                                  <p className="text-[9px] text-[#00bcd4]/80 leading-tight truncate">{apt.barber.name?.split(" ")[0]}</p>
+                                </div>
+                              )}
                               {active && (
                                 <p className="text-[9px] text-[#00bcd4] font-semibold mt-0.5">{remaining}min</p>
                               )}
@@ -1372,9 +1411,22 @@ export default function AppointmentsPage() {
                                   {apt.user?.name || "Cliente"}
                                 </p>
                                 <p className="text-xs text-white/45 leading-tight mt-0.5"
-                                  style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                                  style={{ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
                                   {apt.service.name}
                                 </p>
+                                {role === "ADMIN" && apt.barber && (
+                                  <div className="flex items-center gap-1 mt-0.5">
+                                    <div className="w-4 h-4 rounded-full overflow-hidden bg-[#00bcd4]/20 flex-shrink-0">
+                                      {apt.barber.avatarUrl || apt.barber.image ? (
+                                        // eslint-disable-next-line @next/next/no-img-element
+                                        <img src={apt.barber.avatarUrl || apt.barber.image!} alt="" className="w-full h-full object-cover" />
+                                      ) : (
+                                        <span className="text-[8px] font-bold text-[#00bcd4] flex items-center justify-center h-full">{(apt.barber.name || "?")[0]}</span>
+                                      )}
+                                    </div>
+                                    <p className="text-[10px] text-[#00bcd4]/80 leading-tight truncate">{apt.barber.name?.split(" ")[0]}</p>
+                                  </div>
+                                )}
                                 {active && (
                                   <p className="text-xs text-[#00bcd4] font-medium mt-0.5">{remaining} min restantes</p>
                                 )}
@@ -1564,8 +1616,20 @@ export default function AppointmentsPage() {
                           <p className="text-sm text-white/40">{apt.service.name}</p>
                           <p className="text-xs text-white/30">
                             {apt.user?.phone} · {apt.bookedBy === "BARBER" ? "Agendado manual" : "Reserva online"}
-                            {role === "ADMIN" && apt.barber?.name && ` · ${apt.barber.name}`}
                           </p>
+                          {role === "ADMIN" && apt.barber && (
+                            <div className="flex items-center gap-1.5 mt-1">
+                              <div className="w-5 h-5 rounded-full overflow-hidden bg-[#00bcd4]/20 flex-shrink-0">
+                                {apt.barber.avatarUrl || apt.barber.image ? (
+                                  // eslint-disable-next-line @next/next/no-img-element
+                                  <img src={apt.barber.avatarUrl || apt.barber.image!} alt="" className="w-full h-full object-cover" />
+                                ) : (
+                                  <span className="text-[9px] font-bold text-[#00bcd4] flex items-center justify-center h-full">{(apt.barber.name || "?")[0]}</span>
+                                )}
+                              </div>
+                              <p className="text-xs text-[#00bcd4]/70">{apt.barber.name}</p>
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="text-right">

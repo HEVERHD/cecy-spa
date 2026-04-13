@@ -71,7 +71,7 @@ export async function GET(req: NextRequest) {
 
   const appointments = await prisma.appointment.findMany({
     where,
-    include: { user: true, service: true, barber: { select: { id: true, name: true } } },
+    include: { user: true, service: true, barber: { select: { id: true, name: true, avatarUrl: true, image: true } } },
     orderBy: { date: "asc" },
   })
 
