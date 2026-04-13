@@ -19,6 +19,7 @@ export default function ProfilePage() {
   const { data: session } = useSession()
   const [stats, setStats] = useState<ProfileStats | null>(null)
   const [loading, setLoading] = useState(true)
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const { toast } = useToast()
 
   const bookingUrl = typeof window !== "undefined"
@@ -32,6 +33,9 @@ export default function ProfilePage() {
         setStats(data)
         setLoading(false)
       })
+    fetch("/api/users/me")
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => { if (data?.avatarUrl) setAvatarUrl(data.avatarUrl) })
   }, [])
 
   const copyLink = async () => {
@@ -68,10 +72,11 @@ export default function ProfilePage() {
         <div className="h-28 bg-gradient-to-r from-[#00bcd4] to-[#f0932b]" />
         <div className="flex flex-col items-center text-center px-6 pb-6">
           <div className="-mt-14 mb-3">
-            {session?.user?.image ? (
+            {(avatarUrl || session?.user?.image) ? (
+              // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={session.user.image}
-                alt={session.user.name || ""}
+                src={avatarUrl || session!.user!.image!}
+                alt={session?.user?.name || ""}
                 width={96}
                 height={96}
                 className="w-24 h-24 rounded-full border-[3px] border-[#0a1520] object-cover bg-[#0a1520]"

@@ -193,7 +193,7 @@ export default function AppointmentsPage() {
           && (!barberFilter || apt.barber?.id === barberFilter)
       })
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-  }, [weekAppointments, selectedDate])
+  }, [weekAppointments, selectedDate, barberFilter])
 
   useEffect(() => {
     fetchAppointments()
@@ -1610,7 +1610,7 @@ export default function AppointmentsPage() {
               </div>
             ) : (
               <div className="space-y-3">
-                {appointments.map((apt) => (
+                {appointments.filter(apt => !barberFilter || apt.barber?.id === barberFilter).map((apt) => (
                   <div
                     key={apt.id}
                     className="bg-[#0a1520] rounded-xl p-4 border border-[#0e2530]"
