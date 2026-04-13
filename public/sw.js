@@ -1,4 +1,4 @@
-const CACHE_NAME = "stylecut-v1"
+const CACHE_NAME = "cecy-spa-v2"
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -28,23 +28,20 @@ self.addEventListener("fetch", (event) => {
 
 // Push notification received
 self.addEventListener("push", (event) => {
-  if (!event.data) return
+  let data = { title: "Cecy Spa", body: "Tienes una notificación nueva." }
+  if (event.data) {
+    try { data = event.data.json() } catch { data.body = event.data.text() || data.body }
+  }
 
-  let data = {}
-  try { data = event.data.json() } catch { data = { title: "StyleCut Studio", body: event.data.text() } }
-
-  const title = data.title || "StyleCut Studio"
   const options = {
     body: data.body || "",
     icon: "/logo.png",
-    badge: "/logo.png",
-    tag: data.tag || "stylecut-notification",
+    tag: data.tag || "cecy-spa-notification",
     renotify: true,
     data: { url: data.url || "/dashboard" },
-    vibrate: [200, 100, 200],
   }
 
-  event.waitUntil(self.registration.showNotification(title, options))
+  event.waitUntil(self.registration.showNotification(data.title || "Cecy Spa", options))
 })
 
 // Notification clicked → open dashboard
