@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { sendWhatsAppMessage, sendWhatsAppTemplateWithSMSFallback, buildReminder24hMessage } from "@/lib/twilio"
+import { sendSMS, sendWhatsAppTemplateWithSMSFallback, buildReminder24hMessage } from "@/lib/twilio"
 import { formatDate, formatTime } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
             shopName,
             link
           )
-          await sendWhatsAppMessage(appointment.user.phone, message)
+          await sendSMS(appointment.user.phone, message)
         }
         sent++
         await prisma.appointment.update({

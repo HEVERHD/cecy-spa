@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { sendWhatsAppMessage, sendWhatsAppTemplateWithSMSFallback, buildReengagementMessage } from "@/lib/twilio"
+import { sendSMS, sendWhatsAppTemplateWithSMSFallback, buildReengagementMessage } from "@/lib/twilio"
 
 export const dynamic = "force-dynamic"
 
@@ -68,7 +68,7 @@ export async function GET(req: NextRequest) {
             "3": bookingLink,
           }, `¡Hola ${clientName}! Te echamos de menos en ${shopName}. Reserva tu cita aquí: ${bookingLink}`)
         } else {
-          await sendWhatsAppMessage(client.phone, buildReengagementMessage(clientName, shopName, bookingLink))
+          await sendSMS(client.phone, buildReengagementMessage(clientName, shopName, bookingLink))
         }
         sent++
       } catch (err) {
