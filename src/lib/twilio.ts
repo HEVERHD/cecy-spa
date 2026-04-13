@@ -146,7 +146,7 @@ export function buildBarberNotification(
   bookedBy: string
 ): string {
   const source = bookedBy === "CLIENT" ? "desde la web" : "manual"
-  return `🔔 *Nueva Cita Agendada* (${source})\n\n👤 Cliente: ${clientName}\n📋 Servicio: ${serviceName}\n📅 Fecha: ${date}\n🕐 Hora: ${time}\n💰 Precio: ${price}\n\n¡Revisa tu agenda!`
+  return `Nueva cita (${source})\n\nCliente: ${clientName}\nServicio: ${serviceName}\nFecha: ${date}\nHora: ${time}\nPrecio: ${price}`
 }
 
 export function buildReminderMessage(
@@ -170,7 +170,7 @@ export function buildReengagementMessage(
   shopName: string,
   bookingLink: string
 ): string {
-  return `¡Hola ${clientName}! 👋 Te echamos de menos en ${shopName}.\n\nHace más de 10 días que no tienes una cita agendada. ¿Cuándo te vemos? 💈\n\n🔗 Reserva aquí: ${bookingLink}`
+  return `Hola ${clientName.split(" ")[0]}! Te echamos de menos en ${shopName}.\n\nHace mas de 10 dias sin cita. Reserva aqui: ${bookingLink}`
 }
 
 export function buildReminder24hMessage(
@@ -181,10 +181,9 @@ export function buildReminder24hMessage(
   shopName: string,
   appointmentLink?: string
 ): string {
-  let msg = `📅 *Recordatorio — Mañana tienes cita*\n\nHola ${clientName}, te recordamos tu cita:\n\n📋 Servicio: ${serviceName}\n📅 Fecha: ${date}\n🕐 Hora: ${time}\n💈 ${shopName}`
+  let msg = `Recordatorio - ${shopName}\n\nHola ${clientName.split(" ")[0]}, manana tienes cita.\n\nServicio: ${serviceName}\nFecha: ${date}\nHora: ${time}`
   if (appointmentLink) {
-    msg += `\n\n🔗 Ver o cancelar tu cita:\n${appointmentLink}`
+    msg += `\n\nVer/cancelar: ${appointmentLink}`
   }
-  msg += `\n\n¡Te esperamos!`
   return msg
 }
