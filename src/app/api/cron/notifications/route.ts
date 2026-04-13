@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { sendWhatsAppMessage, sendWhatsAppTemplateWithSMSFallback, buildReminderMessage } from "@/lib/twilio"
-import { formatTime, getColombiaDateStr } from "@/lib/utils"
+import { formatCurrency, formatDate, formatTime, getColombiaDateStr } from "@/lib/utils"
+import { sendConfirmationEmail } from "@/lib/resend"
 
 export const dynamic = "force-dynamic"
 
@@ -64,46 +65,88 @@ export async function GET(req: NextRequest) {
       },
     },
   })
-
-  const templateSid = process.env.TWILIO_TEMPLATE_REMINDER_1H
   let sent = 0
 
-  for (const appointment of appointments) {
-    if (appointment.user.phone) {
-      try {
-        const shopName = (appointment.barber as any).barberSettings?.shopName || "Mi Barbería"
-        if (templateSid) {
-          await sendWhatsAppTemplateWithSMSFallback(appointment.user.phone, templateSid, {
+for (const appointment of appointments) {
+
+  const shopName =
+    (appointment.barber as any).barberSettings?.shopName || "Mi Barbería"
+
+  let success = false
+
+  // ── WHATSAPP + SMS ─────────────────────────────
+  if (appointment.user.phone) {
+    try {
+      const message = buildReminderMessage(
+        appointment.user.name || "Cliente",
+        appointment.service.name,
+        formatTime(appointment.date),
+        shopName
+      )
+
+      const templateSid = process.env.TWILIO_TEMPLATE_REMINDER_1H
+
+      if (templateSid) {
+        await sendWhatsAppTemplateWithSMSFallback(
+          appointment.user.phone,
+          templateSid,
+          {
             "1": appointment.user.name || "Cliente",
             "2": appointment.service.name,
             "3": formatTime(appointment.date),
             "4": shopName,
-          }, `Recordatorio: tienes una cita en 1 hora.\n\nServicio: ${appointment.service.name}\nHora: ${formatTime(appointment.date)}\nLugar: ${shopName}`)
-        } else {
-          const message = buildReminderMessage(
-            appointment.user.name || "Cliente",
-            appointment.service.name,
-            formatTime(appointment.date),
-            shopName
-          )
-          await sendWhatsAppMessage(appointment.user.phone, message)
-        }
-        sent++
-        await prisma.appointment.update({
-          where: { id: appointment.id },
-          data: { notified: true },
-        })
-      } catch (error) {
-        console.error(`Error sending reminder for appointment ${appointment.id}:`, error)
+          },
+          message
+        )
+      } else {
+        // sin template → igual envía (fallback interno a SMS)
+        await sendWhatsAppTemplateWithSMSFallback(
+          appointment.user.phone,
+          "",
+          {},
+          message
+        )
       }
-    } else {
-      // No phone number — mark as notified to avoid reprocessing
-      await prisma.appointment.update({
-        where: { id: appointment.id },
-        data: { notified: true },
-      })
+
+      sent++
+      success = true
+
+    } catch (error) {
+      console.error(`Error WhatsApp ${appointment.id}:`, error)
     }
   }
+
+  // ── EMAIL (SIEMPRE) ─────────────────────────────
+  if (appointment.user.email) {
+    try {
+      await sendConfirmationEmail({
+        to: appointment.user.email,
+        clientName: appointment.user.name || "Cliente",
+        serviceName: appointment.service.name,
+        date: formatDate(appointment.date),
+        time: formatTime(appointment.date),
+        duration: appointment.service.duration,
+        price: formatCurrency(appointment.service.price),
+        shopName,
+        appointmentLink: `${process.env.NEXT_PUBLIC_APP_URL}/cita/${appointment.token}`,
+      })
+
+      console.log("📩 Email recordatorio enviado:", appointment.user.email)
+      success = true
+
+    } catch (err) {
+      console.error("❌ Error email:", err)
+    }
+  }
+
+  // ── MARCAR COMO NOTIFICADO SOLO SI ALGO FUNCIONÓ ──
+  if (success) {
+    await prisma.appointment.update({
+      where: { id: appointment.id },
+      data: { notified: true },
+    })
+  }
+}
 
   return NextResponse.json({
     checked: appointments.length,
