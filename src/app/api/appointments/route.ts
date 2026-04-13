@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { sendSMS, sendWhatsAppTemplateWithSMSFallback, buildConfirmationMessage, buildStatusConfirmedMessage, buildLoyaltyMessage } from "@/lib/twilio"
 import { formatDate, formatTime, formatCurrency, parseColombia, getColombiaTime, getColombiaDateStr, getColombiaDayOfWeek, to12Hour } from "@/lib/utils"
-import { sendPushToBarber } from "@/lib/push"
+import { sendPushToBarber, sendPushToAdmins } from "@/lib/push"
 import { autoScheduleFromWaitlist } from "@/lib/waitlist"
 import { sendConfirmationEmail } from "@/lib/resend"
 
@@ -319,13 +319,15 @@ export async function POST(req: NextRequest) {
     }).catch((err) => console.error("Error sending confirmation email:", err))
   }
 
-  // Push notification to the assigned barber
-  sendPushToBarber(appointment.barber.id, {
+  // Push notification to the assigned barber and all admins
+  const pushPayload = {
     title: "📅 Nueva cita",
     body: `${user.name || "Cliente"} · ${appointment.service.name} · ${formatDate(appointment.date)} ${formatTime(appointment.date)}`,
     url: "/appointments",
     tag: "new-appointment",
-  }).catch(() => {})
+  }
+  sendPushToBarber(appointment.barber.id, pushPayload).catch(() => {})
+  sendPushToAdmins(pushPayload, appointment.barber.id).catch(() => {})
 
   return NextResponse.json(appointment, { status: 201 })
 }

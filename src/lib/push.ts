@@ -62,3 +62,12 @@ export async function sendPushToBarbers(payload: PushPayload) {
 export async function sendPushToBarber(barberId: string, payload: PushPayload) {
   await sendPushToUser(barberId, payload)
 }
+
+// Send push to all ADMINs except the given userId (to avoid duplicates)
+export async function sendPushToAdmins(payload: PushPayload, excludeUserId?: string) {
+  const admins = await prisma.user.findMany({
+    where: { role: "ADMIN", ...(excludeUserId ? { id: { not: excludeUserId } } : {}) },
+    select: { id: true },
+  })
+  await Promise.allSettled(admins.map((a) => sendPushToUser(a.id, payload)))
+}
