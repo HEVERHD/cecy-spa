@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { QRCodeSVG } from "qrcode.react"
 import { useToast } from "@/components/ui/toast"
+import { PushSubscribeButton } from "@/components/ui/push-subscribe-button"
 
 const DAYS = [
   { value: "0", label: "Domingo" },
@@ -405,6 +406,12 @@ export default function SettingsPage() {
           >
             Descargar QR como imagen
           </button>
+        </div>
+
+        {/* Push notifications */}
+        <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530]">
+          <h3 className="font-semibold mb-4 text-white">Notificaciones</h3>
+          <PushSubscribeButton />
         </div>
 
         {/* Save */}
