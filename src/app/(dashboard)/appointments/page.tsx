@@ -75,9 +75,10 @@ function aptEndTime(apt: { date: string; service: { duration: number } }): Date 
 // ── Column layout for overlapping appointments ───────────────
 function computeColumns(apts: Appointment[]): Map<string, { col: number; totalCols: number }> {
   const sorted = [...apts].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-  const colEnds: number[] = [] // end time (ms) of the last apt in each column
-  const aptCol = new Map<string, number>()
 
+  // Assign columns greedily
+  const colEnds: number[] = []
+  const aptCol = new Map<string, number>()
   for (const apt of sorted) {
     const start = new Date(apt.date).getTime()
     const end = aptEndTime(apt).getTime()
@@ -87,21 +88,29 @@ function computeColumns(apts: Appointment[]): Map<string, { col: number; totalCo
     colEnds[col] = end
   }
 
+  // Build connected groups via BFS so all transitive overlaps share the same totalCols
+  const aptOverlaps = (a: Appointment, b: Appointment) => {
+    const aS = new Date(a.date).getTime(), aE = aptEndTime(a).getTime()
+    const bS = new Date(b.date).getTime(), bE = aptEndTime(b).getTime()
+    return aS < bE && aE > bS
+  }
+  const visited = new Set<string>()
   const result = new Map<string, { col: number; totalCols: number }>()
   for (const apt of sorted) {
-    const col = aptCol.get(apt.id)!
-    const start = new Date(apt.date).getTime()
-    const end = aptEndTime(apt).getTime()
-    let maxCol = col
-    for (const other of sorted) {
-      if (other.id === apt.id) continue
-      const oStart = new Date(other.date).getTime()
-      const oEnd = aptEndTime(other).getTime()
-      if (start < oEnd && end > oStart) {
-        maxCol = Math.max(maxCol, aptCol.get(other.id)!)
+    if (visited.has(apt.id)) continue
+    const group: Appointment[] = []
+    const queue = [apt]
+    while (queue.length) {
+      const curr = queue.shift()!
+      if (visited.has(curr.id)) continue
+      visited.add(curr.id)
+      group.push(curr)
+      for (const other of sorted) {
+        if (!visited.has(other.id) && aptOverlaps(curr, other)) queue.push(other)
       }
     }
-    result.set(apt.id, { col, totalCols: maxCol + 1 })
+    const totalCols = Math.max(...group.map(a => aptCol.get(a.id)!)) + 1
+    for (const a of group) result.set(a.id, { col: aptCol.get(a.id)!, totalCols })
   }
   return result
 }
@@ -780,7 +789,7 @@ export default function AppointmentsPage() {
                 return dayAppointments.map((apt) => {
                 const { h, m } = { h: colombiaHour(new Date(apt.date)), m: getColombiaMinute(new Date(apt.date)) }
                 const top = timeToY(h, m)
-                const height = Math.max((apt.service.duration / 60) * HOUR_HEIGHT, 52)
+                const height = Math.max((apt.service.duration / 60) * HOUR_HEIGHT, 64)
                 const active = isActive(apt)
                 const past = isPast(apt)
                 const progress = active ? getProgress(apt) : 0
@@ -1323,7 +1332,7 @@ export default function AppointmentsPage() {
                     const h = colombiaHour(new Date(apt.date))
                     const m = getColombiaMinute(new Date(apt.date))
                     const top = timeToY(h, m)
-                    const height = Math.max((apt.service.duration / 60) * HOUR_HEIGHT, 48)
+                    const height = Math.max((apt.service.duration / 60) * HOUR_HEIGHT, 64)
                     const active = isActive(apt)
                     const past = isPast(apt)
                     const progress = active ? getProgress(apt) : 0
