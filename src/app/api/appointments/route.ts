@@ -279,6 +279,14 @@ export async function POST(req: NextRequest) {
 
   if (user.phone) {
     try {
+      const smsBody = buildConfirmationMessage(
+        user.name || "Cliente",
+        appointment.service.name,
+        formatDate(appointment.date),
+        formatTime(appointment.date),
+        shopName,
+        appointmentLink,
+      )
       if (confirmationTemplateSid) {
         await sendWhatsAppTemplateWithSMSFallback(user.phone, confirmationTemplateSid, {
           "1": appointment.service.name,
@@ -286,17 +294,9 @@ export async function POST(req: NextRequest) {
           "3": formatTime(appointment.date),
           "4": shopName,
           "5": appointmentLink,
-        }, `Tu cita ha sido confirmada.\n\nServicio: ${appointment.service.name}\nFecha: ${formatDate(appointment.date)}\nHora: ${formatTime(appointment.date)}\nLugar: ${shopName}\n\nVer tu cita: ${appointmentLink}`)
+        }, smsBody)
       } else {
-        const message = buildConfirmationMessage(
-          user.name || "Cliente",
-          appointment.service.name,
-          formatDate(appointment.date),
-          formatTime(appointment.date),
-          shopName,
-          appointmentLink,
-        )
-        await sendSMS(user.phone, message)
+        await sendSMS(user.phone, smsBody)
       }
     } catch (error) {
       console.error("Error sending WhatsApp to client:", error)
