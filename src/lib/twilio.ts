@@ -87,7 +87,8 @@ export function buildReminderMessage(
   time: string,
   shopName: string
 ): string {
-  return `⏰ *Recordatorio de Cita*\n\nHola ${clientName}, tu cita es en 1 hora:\n\n📋 Servicio: ${serviceName}\n🕐 Hora: ${time}\n💈 ${shopName}\n\n¡Te esperamos!`
+  const nombre = clientName.split(" ")[0]
+  return `🌸 ¡Hola ${nombre}!\n\nQue no se te olvide — ¡ya es casi tu hora! 🕐\n\n💆‍♀️ Servicio: ${serviceName}\n🕐 Hora: ${time}\n📍 ${shopName}\n\nTe esperamos con todo listo. ¡Nos vemos! 💖`
 }
 
 export function buildLoyaltyMessage(
