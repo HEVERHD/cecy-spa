@@ -129,11 +129,12 @@ export default function AppointmentsPage() {
   const [newApt, setNewApt] = useState({
     clientName: "",
     phone: "",
+    email: "",
     serviceId: "",
     time: "",
     notes: "",
     notifyWhatsApp: true,
-    notifyEmail: true,
+    notifyEmail: false,
     notifySMS: false,
   })
   const [formError, setFormError] = useState("")
@@ -407,6 +408,7 @@ export default function AppointmentsPage() {
         body: JSON.stringify({
           clientName: newApt.clientName,
           phone: newApt.phone,
+          email: newApt.email || undefined,
           serviceId: newApt.serviceId,
           barberId: selectedBarberId,
           date: dateTimeStr,
@@ -426,7 +428,7 @@ export default function AppointmentsPage() {
         return
       }
 
-      setNewApt({ clientName: "", phone: "", serviceId: "", time: "", notes: "", notifyWhatsApp: true, notifyEmail: true, notifySMS: false })
+      setNewApt({ clientName: "", phone: "", email: "", serviceId: "", time: "", notes: "", notifyWhatsApp: true, notifyEmail: false, notifySMS: false })
       setShowNewForm(false)
       setSlots([])
       toast("Cita creada exitosamente ✓")
@@ -581,6 +583,7 @@ export default function AppointmentsPage() {
                           ...newApt,
                           clientName: c.name || "",
                           phone: isBarber ? (c.phone || "") : newApt.phone,
+                          email: isBarber ? (c.email || "") : newApt.email,
                         })
                         setShowClientDropdown(false)
                       }}
@@ -605,6 +608,13 @@ export default function AppointmentsPage() {
               placeholder="WhatsApp (+57...)"
               value={newApt.phone}
               onChange={(e) => setNewApt({ ...newApt, phone: e.target.value })}
+              className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40 text-sm"
+            />
+            <input
+              type="email"
+              placeholder="Email (opcional)"
+              value={newApt.email}
+              onChange={(e) => setNewApt({ ...newApt, email: e.target.value })}
               className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40 text-sm"
             />
             <select
