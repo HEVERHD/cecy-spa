@@ -411,9 +411,11 @@ export async function PATCH(req: NextRequest) {
         orderBy: { date: "asc" },
       })
       if (nextApt?.user.phone) {
+        const nextSettings = await prisma.barberSettings.findUnique({ where: { userId: appointment.barberId } })
+        const nextShopName = nextSettings?.shopName || "Mi Spa"
         const nextTime = formatTime(nextApt.date)
         const nextDate = formatDate(nextApt.date)
-        const msg = `Hola ${nextApt.user.name?.split(" ")[0] || ""}! Es casi tu turno.\n\nCita: ${nextApt.service.name}\nFecha: ${nextDate}\nHora: ${nextTime}\n\nVe preparandote!`
+        const msg = `Hola ${nextApt.user.name?.split(" ")[0] || ""}! Es casi tu turno en ${nextShopName}.\n\nCita: ${nextApt.service.name}\nFecha: ${nextDate}\nHora: ${nextTime}\n\n¡Te esperamos!`
         sendSMS(nextApt.user.phone, msg).catch(() => {})
       }
     } catch {}
@@ -453,8 +455,37 @@ export async function PATCH(req: NextRequest) {
     } catch {}
   }
 
-  // When cancelling or no-show, auto-schedule the next person in the waitlist
+  // When cancelling or no-show: notify client + auto-schedule waitlist
   if (body.status === "CANCELLED" || body.status === "NO_SHOW") {
+    try {
+      const cancelSettings = await prisma.barberSettings.findUnique({ where: { userId: appointment.barberId } })
+      const cancelShopName = cancelSettings?.shopName || "Mi Spa"
+      const channels = appointment.notificationChannels?.split(",") ?? ["whatsapp", "email"]
+      const clientFirstName = appointment.user.name?.split(" ")[0] || "Cliente"
+      const bookingUrl = `${process.env.NEXT_PUBLIC_APP_URL}/booking`
+      const cancelMsg = `Hola ${clientFirstName}, tu cita en ${cancelShopName} fue cancelada.\n\nServicio: ${appointment.service.name}\nFecha: ${formatDate(appointment.date)}\nHora: ${formatTime(appointment.date)}\n\nSi deseas reagendar puedes hacerlo aquí:\n${bookingUrl}`
+
+      if (appointment.user.phone && channels.includes("whatsapp")) {
+        sendWhatsAppMessage(appointment.user.phone, cancelMsg).catch(() => {})
+      }
+
+      if (appointment.user.email && channels.includes("email")) {
+        sendConfirmationEmail({
+          to: appointment.user.email,
+          clientName: appointment.user.name || "Cliente",
+          serviceName: appointment.service.name,
+          date: formatDate(appointment.date),
+          time: formatTime(appointment.date),
+          duration: appointment.service.duration,
+          price: formatCurrency(appointment.service.price),
+          shopName: cancelShopName,
+          appointmentLink: `${process.env.NEXT_PUBLIC_APP_URL}/booking`,
+        }).catch(() => {})
+      }
+    } catch (err) {
+      console.error("Error notifying client about cancellation:", err)
+    }
+
     autoScheduleFromWaitlist(
       new Date(appointment.date),
       appointment.barberId,
