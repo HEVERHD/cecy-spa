@@ -142,7 +142,7 @@ export default function PlanesPage() {
           </p>
 
           {/* Stats */}
-          <div className="inline-grid grid-cols-3 gap-px bg-white/8 rounded-2xl overflow-hidden border border-white/8 mb-6">
+          <div className="inline-grid grid-cols-1 sm:grid-cols-3 gap-px bg-white/8 rounded-2xl overflow-hidden border border-white/8 mb-6">
             {[
               { value: "14 días", label: "Gratis" },
               { value: "10 min", label: "Configuración" },
@@ -205,7 +205,7 @@ export default function PlanesPage() {
             </div>
 
             <div className="overflow-x-auto -mx-2 px-2">
-            <div className="min-w-[480px] rounded-2xl border border-white/8 overflow-hidden">
+            <div className="min-w-[320px] sm:min-w-[480px] rounded-2xl border border-white/8 overflow-hidden">
               <div className="grid grid-cols-3 bg-[#0b0f1a] border-b border-white/8">
                 <div className="p-5">
                   <p className="text-xs font-bold text-white/25 uppercase tracking-wider">Función</p>
@@ -288,7 +288,7 @@ export default function PlanesPage() {
               <p className="text-xs font-bold text-[#00bcd4] tracking-[0.25em] uppercase mb-4">La plataforma completa</p>
               <h2 className="text-4xl md:text-5xl font-black">Todo lo que necesita tu negocio</h2>
             </div>
-            <div className="grid md:grid-cols-3 gap-5">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
               {[
                 { icon: "📱", title: "Citas online 24/7",            desc: "Tus clientes agendan desde el celular en menos de 1 minuto, sin llamadas." },
                 { icon: "💬", title: "WhatsApp automático incluido",  desc: "Confirmaciones y recordatorios por WhatsApp incluidos en todos los planes." },

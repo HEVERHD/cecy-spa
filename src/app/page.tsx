@@ -155,7 +155,7 @@ export default async function Home() {
             </Link>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-5">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
             {services.map((service: (typeof services)[number], i: number) => (
               <div
                 key={service.id}

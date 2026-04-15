@@ -237,7 +237,7 @@ export default function HeroSection({ galleryImages = [], shopName = "Mi Spa" }:
             {/* ─── HUD Logo — top on mobile, right on desktop ─── */}
             <div className="order-1 lg:order-2 flex items-center justify-center">
               <div
-                className="fs-logo-in fs-hud relative flex items-center justify-center mx-auto w-[240px] h-[240px] lg:w-[400px] lg:h-[400px]"
+                className="fs-logo-in fs-hud relative flex items-center justify-center mx-auto w-[240px] h-[240px] md:w-[320px] md:h-[320px] lg:w-[400px] lg:h-[400px]"
               >
 
                 {/* ── Photo slider (behind everything) ── */}

@@ -197,7 +197,7 @@ export default function ClientsPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           {[
             { label: "Visitas", value: stats.totalVisits.toString(), icon: "✂️" },
             { label: "Total gastado", value: formatPrice(stats.totalSpent), icon: "💰" },
