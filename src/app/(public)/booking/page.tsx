@@ -23,7 +23,7 @@ type Service = {
   category: string
 }
 
-type Step = "barber" | "service" | "datetime" | "info" | "confirm"
+type Step = "barber" | "service" | "datetime" | "info" | "notify" | "confirm"
 
 // ── Week helpers ──────────────────────────────────────────────
 function getWeekStart(date: Date): Date {
@@ -249,12 +249,12 @@ export default function BookingPage() {
   const formatPrice = (price: number) =>
     new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0 }).format(price)
 
-  const progressSteps: Step[] = ["barber", "service", "datetime", "info"]
+  const progressSteps: Step[] = ["barber", "service", "datetime", "info", "notify"]
   const visibleProgressSteps = barbers.length <= 1 ? progressSteps.filter((s) => s !== "barber") : progressSteps
   const allSteps: Step[] =
     barbers.length <= 1
-      ? ["service", "datetime", "info", "confirm"]
-      : ["barber", "service", "datetime", "info", "confirm"]
+      ? ["service", "datetime", "info", "notify", "confirm"]
+      : ["barber", "service", "datetime", "info", "notify", "confirm"]
 
   // ── Category filter ────────────────────────────────────────
   const categories = ["Todos", ...Array.from(new Set(services.map((s: Service) => s.category).filter(Boolean)))]
@@ -529,7 +529,7 @@ export default function BookingPage() {
                   return (
                     <button
                       key={slot}
-                      onClick={() => setSelectedTime(slot)}
+                      onClick={() => { setSelectedTime(slot); setStep("info") }}
                       className={`py-3 rounded-xl border transition flex flex-col items-center gap-0.5
                         ${isSelected
                           ? "bg-[#00bcd4] border-[#00bcd4] text-white shadow-lg shadow-[#00bcd4]/25"
@@ -610,41 +610,99 @@ export default function BookingPage() {
                 <label className="text-xs font-semibold text-white/40 uppercase tracking-wider block mb-2">Email <span className="normal-case font-normal text-white/20">(opcional)</span></label>
                 <input type="email" value={clientEmail} onChange={(e) => setClientEmail(e.target.value)} placeholder="tu@email.com" className={inputCls} />
               </div>
-              <div>
-                <label className="text-xs font-semibold text-white/40 uppercase tracking-wider block mb-3">Recibir notificaciones por</label>
-                <div className="space-y-2.5">
-                  <label className="flex items-center gap-3 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={notifyWhatsApp}
-                      onChange={(e) => setNotifyWhatsApp(e.target.checked)}
-                      className="w-4 h-4 accent-[#00bcd4]"
-                    />
-                    <span className="text-sm text-white/70 group-hover:text-white transition">WhatsApp</span>
-                  </label>
-                  <label className="flex items-center gap-3 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={notifyEmail}
-                      onChange={(e) => setNotifyEmail(e.target.checked)}
-                      className="w-4 h-4 accent-[#00bcd4]"
-                    />
-                    <span className="text-sm text-white/70 group-hover:text-white transition">Email</span>
-                  </label>
-                  <label className="flex items-center gap-3 cursor-not-allowed opacity-40">
-                    <input type="checkbox" checked={false} disabled className="w-4 h-4" />
-                    <span className="text-sm text-white/50">SMS <span className="text-xs text-white/30">(no disponible)</span></span>
-                  </label>
-                </div>
-              </div>
             </div>
             <div className="flex gap-3 mt-8">
               <button onClick={() => setStep("datetime")} className="flex-1 py-3.5 rounded-xl border border-white/12 text-white/50 hover:text-white hover:border-white/20 transition text-sm font-medium flex items-center justify-center gap-2">
                 <ArrowLeft size={14} /> Atrás
               </button>
               <button
-                onClick={() => clientName && clientPhone && setStep("confirm")}
+                onClick={() => clientName && clientPhone && setStep("notify")}
                 disabled={!clientName || !clientPhone}
+                className="flex-1 py-3.5 rounded-xl bg-[#00bcd4] text-white font-semibold hover:bg-[#0097a7] transition disabled:opacity-30 text-sm"
+              >
+                Siguiente
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ── Step: Notify ── */}
+        {step === "notify" && (
+          <div>
+            <div className="mb-8">
+              <p className="text-xs font-bold text-[#00bcd4] tracking-[0.2em] uppercase mb-2">
+                {barbers.length > 1 ? "Paso 5" : "Paso 4"}
+              </p>
+              <h2 className="text-2xl font-black">¿Cómo te avisamos?</h2>
+              <p className="text-white/40 text-sm mt-2">Confirmación y recordatorio 1 hora antes</p>
+            </div>
+            <div className="space-y-3">
+
+              {/* WhatsApp */}
+              <button
+                type="button"
+                onClick={() => setNotifyWhatsApp(!notifyWhatsApp)}
+                className={`w-full p-4 rounded-2xl border transition-all flex items-center gap-4 text-left ${
+                  notifyWhatsApp
+                    ? "border-[#00bcd4] bg-[#00bcd4]/10"
+                    : "border-white/10 bg-[#1a1a1a] hover:border-white/20"
+                }`}
+              >
+                <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-xl ${notifyWhatsApp ? "bg-green-500/20" : "bg-white/5"}`}>
+                  💬
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-white text-sm">WhatsApp</p>
+                  <p className="text-xs text-white/40 truncate">{clientPhone || "Tu número celular"}</p>
+                </div>
+                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${notifyWhatsApp ? "border-[#00bcd4] bg-[#00bcd4]" : "border-white/20"}`}>
+                  {notifyWhatsApp && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                </div>
+              </button>
+
+              {/* Email */}
+              <button
+                type="button"
+                onClick={() => { if (clientEmail) setNotifyEmail(!notifyEmail) }}
+                disabled={!clientEmail}
+                className={`w-full p-4 rounded-2xl border transition-all flex items-center gap-4 text-left ${
+                  !clientEmail
+                    ? "border-white/5 opacity-40 cursor-not-allowed"
+                    : notifyEmail
+                    ? "border-[#00bcd4] bg-[#00bcd4]/10"
+                    : "border-white/10 bg-[#1a1a1a] hover:border-white/20"
+                }`}
+              >
+                <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-xl ${notifyEmail && clientEmail ? "bg-blue-500/20" : "bg-white/5"}`}>
+                  ✉️
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-white text-sm">Email</p>
+                  <p className="text-xs text-white/40 truncate">{clientEmail || "Vuelve atrás y agrega tu email"}</p>
+                </div>
+                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${notifyEmail && clientEmail ? "border-[#00bcd4] bg-[#00bcd4]" : "border-white/20"}`}>
+                  {notifyEmail && clientEmail && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                </div>
+              </button>
+
+              {/* SMS - disabled */}
+              <div className="w-full p-4 rounded-2xl border border-white/5 flex items-center gap-4 opacity-30 cursor-not-allowed">
+                <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center text-xl flex-shrink-0">📱</div>
+                <div className="flex-1">
+                  <p className="font-semibold text-white text-sm">SMS</p>
+                  <p className="text-xs text-white/40">No disponible actualmente</p>
+                </div>
+                <div className="w-6 h-6 rounded-full border-2 border-white/20 flex-shrink-0" />
+              </div>
+
+            </div>
+            <div className="flex gap-3 mt-8">
+              <button onClick={() => setStep("info")} className="flex-1 py-3.5 rounded-xl border border-white/12 text-white/50 hover:text-white hover:border-white/20 transition text-sm font-medium flex items-center justify-center gap-2">
+                <ArrowLeft size={14} /> Atrás
+              </button>
+              <button
+                onClick={() => (notifyWhatsApp || notifyEmail) && setStep("confirm")}
+                disabled={!notifyWhatsApp && !notifyEmail}
                 className="flex-1 py-3.5 rounded-xl bg-[#00bcd4] text-white font-semibold hover:bg-[#0097a7] transition disabled:opacity-30 text-sm"
               >
                 Revisar

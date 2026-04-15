@@ -247,6 +247,7 @@ export async function POST(req: NextRequest) {
       bookedBy: body.bookedBy || "CLIENT",
       notes: body.notes || null,
       status: "CONFIRMED",
+      notificationChannels: (body.notificationChannels as string[] ?? ["whatsapp", "email"]).join(","),
     },
     include: { service: true, user: true, barber: { select: { id: true, name: true, phone: true, barberSettings: { select: { phone: true } } } } },
   })
