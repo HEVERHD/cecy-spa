@@ -132,6 +132,9 @@ export default function AppointmentsPage() {
     serviceId: "",
     time: "",
     notes: "",
+    notifyWhatsApp: true,
+    notifyEmail: true,
+    notifySMS: false,
   })
   const [formError, setFormError] = useState("")
   const [creating, setCreating] = useState(false)
@@ -409,6 +412,11 @@ export default function AppointmentsPage() {
           date: dateTimeStr,
           bookedBy: "BARBER",
           notes: newApt.notes,
+          notificationChannels: [
+            ...(newApt.notifyWhatsApp ? ["whatsapp"] : []),
+            ...(newApt.notifyEmail ? ["email"] : []),
+            ...(newApt.notifySMS ? ["sms"] : []),
+          ],
         }),
       })
 
@@ -418,7 +426,7 @@ export default function AppointmentsPage() {
         return
       }
 
-      setNewApt({ clientName: "", phone: "", serviceId: "", time: "", notes: "" })
+      setNewApt({ clientName: "", phone: "", serviceId: "", time: "", notes: "", notifyWhatsApp: true, notifyEmail: true, notifySMS: false })
       setShowNewForm(false)
       setSlots([])
       toast("Cita creada exitosamente ✓")
@@ -662,6 +670,33 @@ export default function AppointmentsPage() {
               onChange={(e) => setNewApt({ ...newApt, notes: e.target.value })}
               className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40 sm:col-span-2 text-sm"
             />
+            <div className="sm:col-span-2">
+              <p className="text-[10px] text-white/40 uppercase tracking-wider mb-2">Notificar al cliente por</p>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={newApt.notifyWhatsApp}
+                    onChange={(e) => setNewApt({ ...newApt, notifyWhatsApp: e.target.checked })}
+                    className="w-3.5 h-3.5 accent-[#00bcd4]"
+                  />
+                  <span className="text-xs text-white/70">WhatsApp</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={newApt.notifyEmail}
+                    onChange={(e) => setNewApt({ ...newApt, notifyEmail: e.target.checked })}
+                    className="w-3.5 h-3.5 accent-[#00bcd4]"
+                  />
+                  <span className="text-xs text-white/70">Email</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-not-allowed opacity-40">
+                  <input type="checkbox" checked={false} disabled className="w-3.5 h-3.5" />
+                  <span className="text-xs text-white/50">SMS</span>
+                </label>
+              </div>
+            </div>
           </div>
           {formError && (
             <div className="mt-3 p-3 bg-red-900/30 border border-red-800 rounded-xl text-red-400 text-xs">

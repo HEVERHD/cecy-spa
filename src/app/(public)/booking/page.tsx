@@ -73,6 +73,9 @@ export default function BookingPage() {
   const [clientName, setClientName] = useState("")
   const [clientPhone, setClientPhone] = useState("")
   const [clientEmail, setClientEmail] = useState("")
+  const [notifyWhatsApp, setNotifyWhatsApp] = useState(true)
+  const [notifyEmail, setNotifyEmail] = useState(true)
+  const [notifySMS, setNotifySMS] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState("")
   const [nameSuggestions, setNameSuggestions] = useState<{ name: string; phone: string }[]>([])
@@ -154,6 +157,11 @@ export default function BookingPage() {
         phone: clientPhone,
         email: clientEmail,
         bookedBy: "CLIENT",
+        notificationChannels: [
+          ...(notifyWhatsApp ? ["whatsapp"] : []),
+          ...(notifyEmail ? ["email"] : []),
+          ...(notifySMS ? ["sms"] : []),
+        ],
       }),
     })
     if (res.ok) {
@@ -601,6 +609,33 @@ export default function BookingPage() {
               <div>
                 <label className="text-xs font-semibold text-white/40 uppercase tracking-wider block mb-2">Email <span className="normal-case font-normal text-white/20">(opcional)</span></label>
                 <input type="email" value={clientEmail} onChange={(e) => setClientEmail(e.target.value)} placeholder="tu@email.com" className={inputCls} />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-white/40 uppercase tracking-wider block mb-3">Recibir notificaciones por</label>
+                <div className="space-y-2.5">
+                  <label className="flex items-center gap-3 cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      checked={notifyWhatsApp}
+                      onChange={(e) => setNotifyWhatsApp(e.target.checked)}
+                      className="w-4 h-4 accent-[#00bcd4]"
+                    />
+                    <span className="text-sm text-white/70 group-hover:text-white transition">WhatsApp</span>
+                  </label>
+                  <label className="flex items-center gap-3 cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      checked={notifyEmail}
+                      onChange={(e) => setNotifyEmail(e.target.checked)}
+                      className="w-4 h-4 accent-[#00bcd4]"
+                    />
+                    <span className="text-sm text-white/70 group-hover:text-white transition">Email</span>
+                  </label>
+                  <label className="flex items-center gap-3 cursor-not-allowed opacity-40">
+                    <input type="checkbox" checked={false} disabled className="w-4 h-4" />
+                    <span className="text-sm text-white/50">SMS <span className="text-xs text-white/30">(no disponible)</span></span>
+                  </label>
+                </div>
               </div>
             </div>
             <div className="flex gap-3 mt-8">

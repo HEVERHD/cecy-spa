@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import { sendSMS, sendWhatsAppTemplateWithSMSFallback, buildConfirmationMessage, buildStatusConfirmedMessage, buildLoyaltyMessage } from "@/lib/twilio"
+import { sendWhatsAppMessage, sendSMS, buildConfirmationMessage, buildStatusConfirmedMessage, buildLoyaltyMessage } from "@/lib/twilio"
 import { formatDate, formatTime, formatCurrency, parseColombia, getColombiaTime, getColombiaDateStr, getColombiaDayOfWeek, to12Hour } from "@/lib/utils"
 import { sendPushToBarber, sendPushToAdmins } from "@/lib/push"
 import { autoScheduleFromWaitlist } from "@/lib/waitlist"
@@ -272,40 +272,31 @@ export async function POST(req: NextRequest) {
   // Build appointment link for client
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "http://localhost:3000"
   const appointmentLink = `${baseUrl}/cita/${appointment.token}`
-
-  // Send WhatsApp confirmation to client
   const shopName = settings?.shopName || "Mi Barbería"
-  const confirmationTemplateSid = process.env.TWILIO_TEMPLATE_CONFIRMATION
 
-  if (user.phone) {
+  // Channels selected by the user (default: whatsapp + email)
+  const channels: string[] = body.notificationChannels ?? ["whatsapp", "email"]
+
+  // WhatsApp confirmation
+  if (user.phone && channels.includes("whatsapp")) {
     try {
-      const smsBody = buildConfirmationMessage(
+      const whatsAppMsg = buildConfirmationMessage(
         user.name || "Cliente",
         appointment.service.name,
         formatDate(appointment.date),
         formatTime(appointment.date),
         shopName,
-        // No link in SMS — keeps message under 160 chars (1 segment)
+        appointmentLink,
       )
-      if (confirmationTemplateSid) {
-        await sendWhatsAppTemplateWithSMSFallback(user.phone, confirmationTemplateSid, {
-          "1": appointment.service.name,
-          "2": formatDate(appointment.date),
-          "3": formatTime(appointment.date),
-          "4": shopName,
-          "5": appointmentLink,
-        }, smsBody)
-      } else {
-        await sendSMS(user.phone, smsBody)
-      }
+      await sendWhatsAppMessage(user.phone, whatsAppMsg)
     } catch (error) {
       console.error("Error sending WhatsApp to client:", error)
     }
   }
 
-  // Email confirmation to client (use body.email as fallback if user.email conflicts with another account)
+  // Email confirmation
   const emailTo = user.email || body.email || null
-  if (emailTo) {
+  if (emailTo && channels.includes("email")) {
     sendConfirmationEmail({
       to: emailTo,
       clientName: user.name || "Cliente",
@@ -451,16 +442,8 @@ export async function PATCH(req: NextRequest) {
       ) {
         const settings = await prisma.barberSettings.findFirst({ select: { shopName: true } })
         const shopName = settings?.shopName || "Mi Barbería"
-        const loyaltyTemplateSid = process.env.TWILIO_TEMPLATE_LOYALTY
         const clientName = clientUser.name?.split(" ")[0] || "Cliente"
-        if (loyaltyTemplateSid) {
-          sendWhatsAppTemplateWithSMSFallback(clientUser.phone, loyaltyTemplateSid, {
-            "1": clientName,
-            "2": shopName,
-          }, `¡Felicidades ${clientName}! Alcanzaste 7 cortes este mes en ${shopName}. Has ganado un descuento especial en tu proxima cita. ¡Menciónalo al llegar!`).catch(() => {})
-        } else {
-          sendSMS(clientUser.phone, buildLoyaltyMessage(clientName, shopName)).catch(() => {})
-        }
+        sendWhatsAppMessage(clientUser.phone, buildLoyaltyMessage(clientName, shopName)).catch(() => {})
         await prisma.user.update({
           where: { id: appointment.userId },
           data: { loyaltyNotifiedMonth: currentMonth },

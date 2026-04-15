@@ -1,107 +1,44 @@
-import twilio from "twilio"
+import { sendWhatsAppViaWasender } from "./wasender"
 
-const client = twilio(
-  process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN
-)
-
-const from = process.env.TWILIO_WHATSAPP_FROM || "whatsapp:+14155238886"
-
-function formatPhone(to: string): string {
-  let phone = to.replace(/\s+/g, "").replace(/^0+/, "")
-  if (!phone.startsWith("+")) {
-    phone = phone.startsWith("57") ? `+${phone}` : `+57${phone}`
-  }
-  return phone.startsWith("whatsapp:") ? phone : `whatsapp:${phone}`
+/** Send a WhatsApp message via WASenderAPI */
+export async function sendWhatsAppMessage(to: string, message: string): Promise<void> {
+  await sendWhatsAppViaWasender(to, message)
 }
 
-export async function sendWhatsAppMessage(to: string, message: string) {
-  if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN) {
-    console.log(`[WhatsApp Mock] To: ${to} | Message: ${message}`)
-    return
-  }
-
-  const formattedTo = formatPhone(to)
-
-  try {
-    const msg = await client.messages.create({
-      from,
-      to: formattedTo,
-      body: message,
-    })
-    console.log(`[WhatsApp] Sent to ${formattedTo} | SID: ${msg.sid}`)
-  } catch (error: any) {
-    console.error(`[WhatsApp Error] ${error.message}`)
-    throw error
-  }
-}
-
-/** Send a WhatsApp message using a Twilio Content Template (for business-initiated messages) */
+/**
+ * Send a WhatsApp message using a template (now sends plain text via WASenderAPI).
+ * The templateSid and variables are ignored — WASenderAPI uses plain text only.
+ */
 export async function sendWhatsAppTemplate(
-  to: string,
-  contentSid: string,
-  variables: Record<string, string>
-) {
-  if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN) {
-    console.log(`[WhatsApp Mock Template] To: ${to} | Template: ${contentSid} | Vars: ${JSON.stringify(variables)}`)
-    return
-  }
-
-  const formattedTo = formatPhone(to)
-
-  try {
-    const msg = await client.messages.create({
-      from,
-      to: formattedTo,
-      contentSid,
-      contentVariables: JSON.stringify(variables),
-    })
-    console.log(`[WhatsApp Template] Sent to ${formattedTo} | SID: ${msg.sid}`)
-  } catch (error: any) {
-    console.error(`[WhatsApp Template Error] ${error.message}`)
-    throw error
-  }
+  _to: string,
+  _contentSid: string,
+  _variables: Record<string, string>
+): Promise<void> {
+  console.log(`[WhatsApp] sendWhatsAppTemplate called — templates not used with WASenderAPI`)
 }
 
-/** Send a plain SMS via Twilio */
-export async function sendSMS(to: string, message: string) {
-  if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN) {
-    console.log(`[SMS Mock] To: ${to} | Message: ${message}`)
-    return
-  }
-
-  let phone = to.replace(/\s+/g, "").replace(/^0+/, "")
-  if (!phone.startsWith("+")) {
-    phone = phone.startsWith("57") ? `+${phone}` : `+57${phone}`
-  }
-
-  try {
-    const msg = await client.messages.create({
-      from: process.env.TWILIO_SMS_FROM!,
-      to: phone,
-      body: message,
-    })
-    console.log(`[SMS] Sent to ${phone} | SID: ${msg.sid}`)
-  } catch (error: any) {
-    console.error(`[SMS Error] ${error.message}`)
-    throw error
-  }
-}
-
-/** Try WhatsApp template; also always send SMS while WhatsApp has delivery issues */
+/**
+ * Send a WhatsApp message via WASenderAPI using the plain-text fallback body.
+ * The templateSid and variables are ignored (Twilio templates no longer used).
+ */
 export async function sendWhatsAppTemplateWithSMSFallback(
   to: string,
-  contentSid: string,
-  variables: Record<string, string>,
+  _contentSid: string,
+  _variables: Record<string, string>,
   smsFallbackBody: string
 ): Promise<void> {
-  // Fire WhatsApp (don't await — 63005 failures are async, won't throw here)
-  sendWhatsAppTemplate(to, contentSid, variables).catch((err) => {
-    console.log(`[WhatsApp Failed] ${err.message} for ${to}`)
+  await sendWhatsAppViaWasender(to, smsFallbackBody).catch((err) => {
+    console.error(`[WhatsApp Failed] ${err.message} for ${to}`)
   })
-  // Always send SMS as guaranteed delivery while WhatsApp is broken
-  await sendSMS(to, smsFallbackBody).catch((err) => {
-    console.error(`[SMS Error] ${err.message} for ${to}`)
+}
+
+/**
+ * Send a plain message via WhatsApp (WASenderAPI).
+ * Kept as sendSMS for backwards compatibility — all notifications go through WhatsApp now.
+ */
+export async function sendSMS(to: string, message: string): Promise<void> {
+  await sendWhatsAppViaWasender(to, message).catch((err) => {
+    console.error(`[WhatsApp/SMS Failed] ${err.message} for ${to}`)
   })
 }
 
