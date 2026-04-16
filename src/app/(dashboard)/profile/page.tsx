@@ -25,6 +25,7 @@ type ProfileStats = {
 
 export default function ProfilePage() {
   const { data: session } = useSession()
+  const role = (session?.user as any)?.role
   const [stats, setStats] = useState<ProfileStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
@@ -226,13 +227,15 @@ export default function ProfilePage() {
             <span className="text-2xl" suppressHydrationWarning>🔑</span>
             <span className="text-xs text-white/60">Usuarios</span>
           </a>
-          <a
-            href="/blocked-slots"
-            className="flex flex-col items-center gap-2 p-4 bg-[#080f16] border border-[#0e2530] rounded-xl hover:border-[#00bcd4]/50 transition"
-          >
-            <span className="text-2xl" suppressHydrationWarning>🚫</span>
-            <span className="text-xs text-white/60">Bloqueos</span>
-          </a>
+          {role === "ADMIN" && (
+            <a
+              href="/blocked-slots"
+              className="flex flex-col items-center gap-2 p-4 bg-[#080f16] border border-[#0e2530] rounded-xl hover:border-[#00bcd4]/50 transition"
+            >
+              <span className="text-2xl" suppressHydrationWarning>🚫</span>
+              <span className="text-xs text-white/60">Bloqueos</span>
+            </a>
+          )}
           <a
             href="/settings"
             className="flex flex-col items-center gap-2 p-4 bg-[#080f16] border border-[#0e2530] rounded-xl hover:border-[#00bcd4]/50 transition"

@@ -373,8 +373,25 @@ export async function PATCH(req: NextRequest) {
   const appointment = await prisma.appointment.update({
     where: { id: body.id },
     data: { status: body.status },
-    include: { service: true, user: true },
+    include: { service: true, user: true, barber: { select: { id: true } } },
   })
+
+  // Push notification to barber and admins for any status change
+  const sessionUserId = (session.user as any).id
+  const statusPushPayload = {
+    title: body.status === "CONFIRMED" ? "✅ Cita confirmada"
+         : body.status === "COMPLETED" ? "✓ Cita completada"
+         : body.status === "CANCELLED" ? "❌ Cita cancelada"
+         : body.status === "NO_SHOW"   ? "⚠️ No show"
+         : "📋 Cita actualizada",
+    body: `${appointment.user.name || "Cliente"} · ${appointment.service.name} · ${formatDate(appointment.date)} ${formatTime(appointment.date)}`,
+    url: "/appointments",
+    tag: `status-${body.status?.toLowerCase()}`,
+  }
+  sendPushToAdmins(statusPushPayload, sessionUserId).catch(() => {})
+  if ((appointment.barber as any).id !== sessionUserId) {
+    sendPushToBarber((appointment.barber as any).id, statusPushPayload).catch(() => {})
+  }
 
   // When confirming, notify the client
   if (body.status === "CONFIRMED" && appointment.user.phone) {

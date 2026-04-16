@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft, Clock, Scissors, ChevronLeft, ChevronRight } from "lucide-react"
+import { ArrowLeft, Clock, Scissors, ChevronLeft, ChevronRight, Search } from "lucide-react"
 
 type Barber = {
   id: string
@@ -81,6 +81,7 @@ export default function BookingPage() {
   const [nameSuggestions, setNameSuggestions] = useState<{ name: string; phone: string }[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [activeCategory, setActiveCategory] = useState("Todos")
+  const [serviceSearch, setServiceSearch] = useState("")
   const [showWaitlist, setShowWaitlist] = useState(false)
   const [waitlistName, setWaitlistName] = useState("")
   const [waitlistPhone, setWaitlistPhone] = useState("")
@@ -256,11 +257,18 @@ export default function BookingPage() {
       ? ["service", "datetime", "info", "notify", "confirm"]
       : ["barber", "service", "datetime", "info", "notify", "confirm"]
 
+  // Auto-select category based on barber specialty when services load or barber changes
+  useEffect(() => {
+    if (services.length === 0 || !selectedBarber?.specialty) { setActiveCategory("Todos"); return }
+    const cats = Array.from(new Set(services.map((s: Service) => s.category).filter(Boolean)))
+    setActiveCategory(cats.includes(selectedBarber.specialty) ? selectedBarber.specialty : "Todos")
+  }, [selectedBarber?.id, services.length])
+
   // ── Category filter ────────────────────────────────────────
   const categories = ["Todos", ...Array.from(new Set(services.map((s: Service) => s.category).filter(Boolean)))]
-  const filteredServices = activeCategory === "Todos"
-    ? services
-    : services.filter((s: Service) => s.category === activeCategory)
+  const filteredServices = services
+    .filter((s: Service) => activeCategory === "Todos" || s.category === activeCategory)
+    .filter((s: Service) => !serviceSearch || s.name.toLowerCase().includes(serviceSearch.toLowerCase()) || (s.description ?? "").toLowerCase().includes(serviceSearch.toLowerCase()))
 
   // ── Input styles ───────────────────────────────────────────
   const inputCls = "w-full p-3.5 bg-[#151515] border border-white/12 rounded-xl text-white placeholder-white/25 focus:border-[#00bcd4] focus:outline-none transition text-sm"
@@ -372,6 +380,18 @@ export default function BookingPage() {
                 {barbers.length > 1 ? "Paso 2" : "Paso 1"}
               </p>
               <h2 className="text-2xl font-black">Elige tu servicio</h2>
+            </div>
+
+            {/* Search bar */}
+            <div className="relative mb-5">
+              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/25 pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Buscar servicio..."
+                value={serviceSearch}
+                onChange={(e) => setServiceSearch(e.target.value)}
+                className="w-full py-3 pl-10 pr-4 bg-[#151515] border border-white/12 rounded-xl text-white placeholder-white/25 focus:border-[#00bcd4] focus:outline-none transition text-sm"
+              />
             </div>
 
             {/* Category chips */}

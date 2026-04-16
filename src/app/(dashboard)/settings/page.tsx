@@ -299,124 +299,130 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* Schedule */}
-        <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530]">
-          <h3 className="font-semibold mb-4 text-white">Horario</h3>
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm font-medium text-white/60">Hora de apertura</label>
-              <input
-                type="time"
-                value={settings.openTime}
-                onChange={(e) => setSettings({ ...settings, openTime: e.target.value })}
-                className="w-full mt-1 p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium text-white/60">Hora de cierre</label>
-              <input
-                type="time"
-                value={settings.closeTime}
-                onChange={(e) => setSettings({ ...settings, closeTime: e.target.value })}
-                className="w-full mt-1 p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
-              />
+        {/* Schedule — admin only */}
+        {isAdmin && (
+          <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530]">
+            <h3 className="font-semibold mb-4 text-white">Horario</h3>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium text-white/60">Hora de apertura</label>
+                <input
+                  type="time"
+                  value={settings.openTime}
+                  onChange={(e) => setSettings({ ...settings, openTime: e.target.value })}
+                  className="w-full mt-1 p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-white/60">Hora de cierre</label>
+                <input
+                  type="time"
+                  value={settings.closeTime}
+                  onChange={(e) => setSettings({ ...settings, closeTime: e.target.value })}
+                  className="w-full mt-1 p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
+                />
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
-        {/* Days off */}
-        <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530]">
-          <h3 className="font-semibold mb-4 text-white">Días de descanso</h3>
-          <div className="flex flex-wrap gap-2">
-            {DAYS.map((day) => (
-              <button
-                key={day.value}
-                onClick={() => toggleDay(day.value)}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
-                  settings.daysOff.includes(day.value)
-                    ? "bg-red-100 text-red-700 border-2 border-red-300"
-                    : "bg-[#0e2530] text-white/60 border-2 border-transparent hover:bg-[#4d2c2c]"
-                }`}
-              >
-                {day.label}
-              </button>
-            ))}
+        {/* Days off — admin only */}
+        {isAdmin && (
+          <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530]">
+            <h3 className="font-semibold mb-4 text-white">Días de descanso</h3>
+            <div className="flex flex-wrap gap-2">
+              {DAYS.map((day) => (
+                <button
+                  key={day.value}
+                  onClick={() => toggleDay(day.value)}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
+                    settings.daysOff.includes(day.value)
+                      ? "bg-red-100 text-red-700 border-2 border-red-300"
+                      : "bg-[#0e2530] text-white/60 border-2 border-transparent hover:bg-[#4d2c2c]"
+                  }`}
+                >
+                  {day.label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Per-day custom schedules */}
-        <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530]">
-          <h3 className="font-semibold mb-1 text-white">Horarios especiales por día</h3>
-          <p className="text-sm text-white/40 mb-4">
-            Define un horario diferente al general para días específicos. Los días de descanso no aplican.
-          </p>
-          {DAYS.filter((day) => !settings.daysOff.includes(day.value)).length === 0 ? (
-            <p className="text-white/30 text-sm">Todos los días están marcados como descanso.</p>
-          ) : (
-            <div className="space-y-3">
-              {DAYS.filter((day) => !settings.daysOff.includes(day.value)).map((day) => {
-                const custom = settings.daySchedules[day.value]
-                const openVal = custom?.open ?? settings.openTime
-                const closeVal = custom?.close ?? settings.closeTime
-                const hasCustom = !!custom
+        {/* Per-day custom schedules — admin only */}
+        {isAdmin && (
+          <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530]">
+            <h3 className="font-semibold mb-1 text-white">Horarios especiales por día</h3>
+            <p className="text-sm text-white/40 mb-4">
+              Define un horario diferente al general para días específicos. Los días de descanso no aplican.
+            </p>
+            {DAYS.filter((day) => !settings.daysOff.includes(day.value)).length === 0 ? (
+              <p className="text-white/30 text-sm">Todos los días están marcados como descanso.</p>
+            ) : (
+              <div className="space-y-3">
+                {DAYS.filter((day) => !settings.daysOff.includes(day.value)).map((day) => {
+                  const custom = settings.daySchedules[day.value]
+                  const openVal = custom?.open ?? settings.openTime
+                  const closeVal = custom?.close ?? settings.closeTime
+                  const hasCustom = !!custom
 
-                const updateDay = (field: "open" | "close", value: string) => {
-                  setSettings((prev) => ({
-                    ...prev,
-                    daySchedules: {
-                      ...prev.daySchedules,
-                      [day.value]: {
-                        open: field === "open" ? value : openVal,
-                        close: field === "close" ? value : closeVal,
+                  const updateDay = (field: "open" | "close", value: string) => {
+                    setSettings((prev) => ({
+                      ...prev,
+                      daySchedules: {
+                        ...prev.daySchedules,
+                        [day.value]: {
+                          open: field === "open" ? value : openVal,
+                          close: field === "close" ? value : closeVal,
+                        },
                       },
-                    },
-                  }))
-                }
+                    }))
+                  }
 
-                const resetDay = () => {
-                  setSettings((prev) => {
-                    const { [day.value]: _, ...rest } = prev.daySchedules
-                    return { ...prev, daySchedules: rest }
-                  })
-                }
+                  const resetDay = () => {
+                    setSettings((prev) => {
+                      const { [day.value]: _, ...rest } = prev.daySchedules
+                      return { ...prev, daySchedules: rest }
+                    })
+                  }
 
-                return (
-                  <div key={day.value} className="flex items-center gap-3 flex-wrap">
-                    <span className={`w-24 text-sm font-medium ${hasCustom ? "text-[#00bcd4]" : "text-white/50"}`}>
-                      {day.label}
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="time"
-                        value={openVal}
-                        onChange={(e) => updateDay("open", e.target.value)}
-                        className="p-2 border border-[#0e2530] rounded-xl bg-[#080f16] text-white text-sm focus:border-[#00bcd4] focus:outline-none [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
-                      />
-                      <span className="text-white/30 text-sm">—</span>
-                      <input
-                        type="time"
-                        value={closeVal}
-                        onChange={(e) => updateDay("close", e.target.value)}
-                        className="p-2 border border-[#0e2530] rounded-xl bg-[#080f16] text-white text-sm focus:border-[#00bcd4] focus:outline-none [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
-                      />
+                  return (
+                    <div key={day.value} className="flex items-center gap-3 flex-wrap">
+                      <span className={`w-24 text-sm font-medium ${hasCustom ? "text-[#00bcd4]" : "text-white/50"}`}>
+                        {day.label}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="time"
+                          value={openVal}
+                          onChange={(e) => updateDay("open", e.target.value)}
+                          className="p-2 border border-[#0e2530] rounded-xl bg-[#080f16] text-white text-sm focus:border-[#00bcd4] focus:outline-none [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
+                        />
+                        <span className="text-white/30 text-sm">—</span>
+                        <input
+                          type="time"
+                          value={closeVal}
+                          onChange={(e) => updateDay("close", e.target.value)}
+                          className="p-2 border border-[#0e2530] rounded-xl bg-[#080f16] text-white text-sm focus:border-[#00bcd4] focus:outline-none [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
+                        />
+                      </div>
+                      {hasCustom ? (
+                        <button
+                          onClick={resetDay}
+                          title="Restablecer al horario general"
+                          className="text-xs text-white/30 hover:text-red-400 transition px-2 py-1 rounded-lg border border-[#0e2530] hover:border-red-400"
+                        >
+                          ↺ general
+                        </button>
+                      ) : (
+                        <span className="text-xs text-white/20">horario general</span>
+                      )}
                     </div>
-                    {hasCustom ? (
-                      <button
-                        onClick={resetDay}
-                        title="Restablecer al horario general"
-                        className="text-xs text-white/30 hover:text-red-400 transition px-2 py-1 rounded-lg border border-[#0e2530] hover:border-red-400"
-                      >
-                        ↺ general
-                      </button>
-                    ) : (
-                      <span className="text-xs text-white/20">horario general</span>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-          )}
-        </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Booking Link + QR */}
         <div className="bg-[#0a1520] rounded-xl p-6 border border-[#0e2530]">

@@ -30,7 +30,7 @@ const allNavItems = [
   { href: "/services", label: "Servicios", Icon: Scissors, roles: ["ADMIN"] },
   { href: "/gallery", label: "Galería", Icon: ImageIcon, roles: ["ADMIN", "BARBER"] },
   { href: "/waitlist", label: "Lista espera", Icon: Clock, roles: ["ADMIN", "BARBER"] },
-  { href: "/blocked-slots", label: "Bloqueos", Icon: Ban, roles: ["ADMIN", "BARBER"] },
+  { href: "/blocked-slots", label: "Bloqueos", Icon: Ban, roles: ["ADMIN"] },
   { href: "/users", label: "Usuarios", Icon: KeyRound, roles: ["ADMIN"] },
   { href: "/profile", label: "Mi Perfil", Icon: UserCircle, roles: ["ADMIN", "BARBER"] },
   { href: "/settings", label: "Configuración", Icon: Settings, roles: ["ADMIN", "BARBER"] },
@@ -41,7 +41,7 @@ const allMobileNavItems = [
   { href: "/appointments", label: "Citas",     Icon: CalendarDays,    roles: ["ADMIN", "BARBER"] },
   { href: "/activity",     label: "Historial", Icon: ActivitySquare,  roles: ["ADMIN", "BARBER"] },
   { href: "/clients",      label: "Clientes",  Icon: Users,           roles: ["ADMIN"] },
-  { href: "/blocked-slots",label: "Bloqueos",  Icon: Ban,             roles: ["ADMIN", "BARBER"] },
+  { href: "/blocked-slots",label: "Bloqueos",  Icon: Ban,             roles: ["ADMIN"] },
 ]
 
 type PushState = "unsupported" | "denied" | "subscribed" | "unsubscribed"
