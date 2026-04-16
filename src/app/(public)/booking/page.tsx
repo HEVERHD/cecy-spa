@@ -281,8 +281,8 @@ export default function BookingPage() {
     <div className="min-h-screen text-white">
       {/* Background */}
       <div className="fixed inset-0 z-0 overflow-hidden">
-        <Image src="/barberia.jpg" alt="" fill className="object-cover object-top scale-105" priority />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black/80" />
+        <Image src="/barberia.jpg" alt="" fill className="object-cover object-center scale-105" priority />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/40 to-black/75" />
       </div>
 
       {/* Ambient glow */}
