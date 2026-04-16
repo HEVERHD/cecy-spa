@@ -279,10 +279,29 @@ export default function BookingPage() {
   // ── Render ─────────────────────────────────────────────────
   return (
     <div className="min-h-screen text-white">
-      {/* Background */}
-      <div className="fixed inset-0 z-0">
-        <Image src="/barberia.jpg" alt="" fill className="object-cover scale-105" style={{ opacity: 0.85 }} priority />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/15 to-black/55" />
+      {/* Background — mosaic of professionals */}
+      <div className="fixed inset-0 z-0 overflow-hidden">
+        {barbers.length > 0 ? (
+          <div className="absolute inset-0 grid grid-cols-4 grid-rows-2">
+            {Array.from({ length: 8 }, (_, i) => barbers[i % barbers.length]).map((barber, i) => (
+              <div key={i} className="relative overflow-hidden">
+                {(barber.avatarUrl || barber.image) ? (
+                  <Image
+                    src={barber.avatarUrl || barber.image || ""}
+                    alt=""
+                    fill
+                    className="object-cover object-top scale-110"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-[#0d1520]" />
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <Image src="/barberia.jpg" alt="" fill className="object-cover scale-105" priority />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/50 to-black/75" />
       </div>
 
       {/* Ambient glow */}
