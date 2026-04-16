@@ -259,9 +259,12 @@ export default function BookingPage() {
 
   // Auto-select category based on barber specialty when services load or barber changes
   useEffect(() => {
-    if (services.length === 0 || !selectedBarber?.specialty) { setActiveCategory("Todos"); return }
+    if (services.length === 0) return
+    if (!selectedBarber?.specialty) { setActiveCategory("Todos"); return }
+    const specialty = selectedBarber.specialty.trim().toLowerCase()
     const cats = Array.from(new Set(services.map((s: Service) => s.category).filter(Boolean)))
-    setActiveCategory(cats.includes(selectedBarber.specialty) ? selectedBarber.specialty : "Todos")
+    const match = cats.find((c) => c.toLowerCase() === specialty)
+    setActiveCategory(match ?? "Todos")
   }, [selectedBarber?.id, services.length])
 
   // ── Category filter ────────────────────────────────────────
@@ -276,10 +279,10 @@ export default function BookingPage() {
   // ── Render ─────────────────────────────────────────────────
   return (
     <div className="min-h-screen text-white">
-      {/* Barbershop background */}
+      {/* Background */}
       <div className="fixed inset-0 z-0">
-        <Image src="/barberia.jpg" alt="" fill className="object-cover blur-sm scale-105" style={{ opacity: 0.45 }} priority />
-        <div className="absolute inset-0 bg-black/70" />
+        <Image src="/barberia.jpg" alt="" fill className="object-cover scale-105" style={{ opacity: 0.35 }} priority />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/55 to-black/90" />
       </div>
 
       {/* Ambient glow */}
