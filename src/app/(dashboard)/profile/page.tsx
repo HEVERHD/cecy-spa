@@ -206,27 +206,33 @@ export default function ProfilePage() {
             <span className="text-2xl" suppressHydrationWarning>📅</span>
             <span className="text-xs text-white/60">Ver citas</span>
           </a>
-          <a
-            href="/clients"
-            className="flex flex-col items-center gap-2 p-4 bg-[#080f16] border border-[#0e2530] rounded-xl hover:border-[#00bcd4]/50 transition"
-          >
-            <span className="text-2xl" suppressHydrationWarning>👥</span>
-            <span className="text-xs text-white/60">Clientes</span>
-          </a>
-          <a
-            href="/services"
-            className="flex flex-col items-center gap-2 p-4 bg-[#080f16] border border-[#0e2530] rounded-xl hover:border-[#00bcd4]/50 transition"
-          >
-            <span className="text-2xl" suppressHydrationWarning>✂️</span>
-            <span className="text-xs text-white/60">Servicios</span>
-          </a>
-          <a
-            href="/users"
-            className="flex flex-col items-center gap-2 p-4 bg-[#080f16] border border-[#0e2530] rounded-xl hover:border-[#00bcd4]/50 transition"
-          >
-            <span className="text-2xl" suppressHydrationWarning>🔑</span>
-            <span className="text-xs text-white/60">Usuarios</span>
-          </a>
+          {role === "ADMIN" && (
+            <a
+              href="/clients"
+              className="flex flex-col items-center gap-2 p-4 bg-[#080f16] border border-[#0e2530] rounded-xl hover:border-[#00bcd4]/50 transition"
+            >
+              <span className="text-2xl" suppressHydrationWarning>👥</span>
+              <span className="text-xs text-white/60">Clientes</span>
+            </a>
+          )}
+          {role === "ADMIN" && (
+            <a
+              href="/services"
+              className="flex flex-col items-center gap-2 p-4 bg-[#080f16] border border-[#0e2530] rounded-xl hover:border-[#00bcd4]/50 transition"
+            >
+              <span className="text-2xl" suppressHydrationWarning>✂️</span>
+              <span className="text-xs text-white/60">Servicios</span>
+            </a>
+          )}
+          {role === "ADMIN" && (
+            <a
+              href="/users"
+              className="flex flex-col items-center gap-2 p-4 bg-[#080f16] border border-[#0e2530] rounded-xl hover:border-[#00bcd4]/50 transition"
+            >
+              <span className="text-2xl" suppressHydrationWarning>🔑</span>
+              <span className="text-xs text-white/60">Usuarios</span>
+            </a>
+          )}
           {role === "ADMIN" && (
             <a
               href="/blocked-slots"
