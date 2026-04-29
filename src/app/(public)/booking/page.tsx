@@ -89,8 +89,24 @@ export default function BookingPage() {
   const [waitlistDone, setWaitlistDone] = useState(false)
   const [weekStart, setWeekStart] = useState(() => getWeekStart(new Date()))
   const [shopName, setShopName] = useState("Mi Spa")
+  const [rememberMe, setRememberMe] = useState(false)
+  const [weekAvailability, setWeekAvailability] = useState<Record<string, "available" | "full" | "off">>({})
 
   // ── Data fetching ──────────────────────────────────────────
+  // Pre-fill client info from localStorage on first render
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("cecy-client-info")
+      if (saved) {
+        const info = JSON.parse(saved)
+        if (info.name) setClientName(info.name)
+        if (info.phone) setClientPhone(info.phone)
+        if (info.email) setClientEmail(info.email)
+        setRememberMe(true)
+      }
+    } catch {}
+  }, [])
+
   useEffect(() => {
     fetch("/api/settings")
       .then((r) => r.json())
@@ -142,6 +158,18 @@ export default function BookingPage() {
         })
     }
   }, [selectedDate, selectedService, selectedBarber])
+
+  // Fetch week availability for dot indicators — one request covers all 7 days
+  useEffect(() => {
+    if (!selectedService || !selectedBarber) return
+    const wStr = toLocalDateStr(weekStart)
+    fetch(
+      `/api/appointments/week-availability?weekStart=${wStr}&serviceId=${selectedService.id}&barberId=${selectedBarber.id}`
+    )
+      .then((r) => r.json())
+      .then((data) => setWeekAvailability(data.availability ?? {}))
+      .catch(() => {})
+  }, [weekStart, selectedService, selectedBarber])
 
   // ── Handlers ───────────────────────────────────────────────
   const handleSubmit = async () => {
@@ -479,21 +507,32 @@ export default function BookingPage() {
                 const isPast = day.getTime() < todayLocal.getTime()
                 const isToday = dateStr === todayStr
                 const isSelected = dateStr === selectedDate
+                const avail = weekAvailability[dateStr]
+                const isOff = avail === "off"
                 return (
-                  <div key={i} className="flex flex-col items-center gap-1.5">
+                  <div key={i} className="flex flex-col items-center gap-1">
                     <span className="text-[10px] font-medium text-white/25 uppercase">{DAY_LABELS[i]}</span>
                     <button
                       onClick={() => handleDateSelect(day)}
-                      disabled={isPast}
+                      disabled={isPast || isOff}
                       className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition select-none
                         ${isSelected ? "bg-[#00bcd4] text-white shadow-lg shadow-[#00bcd4]/30"
                           : isToday ? "bg-white/8 text-white ring-1 ring-white/20"
-                          : isPast ? "text-white/15 cursor-not-allowed"
+                          : (isPast || isOff) ? "text-white/15 cursor-not-allowed"
                           : "text-white/60 hover:bg-white/8 hover:text-white"
                         }`}
                     >
                       {day.getDate()}
                     </button>
+                    {/* Availability dot */}
+                    <div className="h-1.5 flex items-center justify-center">
+                      {!isPast && avail === "available" && (
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      )}
+                      {!isPast && avail === "full" && (
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-400/70" />
+                      )}
+                    </div>
                   </div>
                 )
               })}
@@ -552,7 +591,7 @@ export default function BookingPage() {
                   return (
                     <button
                       key={slot}
-                      onClick={() => { setSelectedTime(slot); setStep("info") }}
+                      onClick={() => { setSelectedTime(slot); setTimeout(() => setStep("info"), 150) }}
                       className={`py-3 rounded-xl border transition flex flex-col items-center gap-0.5
                         ${isSelected
                           ? "bg-[#00bcd4] border-[#00bcd4] text-white shadow-lg shadow-[#00bcd4]/25"
@@ -633,13 +672,39 @@ export default function BookingPage() {
                 <label className="text-xs font-semibold text-white/40 uppercase tracking-wider block mb-2">Email <span className="normal-case font-normal text-white/20">(opcional)</span></label>
                 <input type="email" value={clientEmail} onChange={(e) => setClientEmail(e.target.value)} placeholder="tu@email.com" className={inputCls} />
               </div>
+
+              {/* Recuérdame */}
+              <button
+                type="button"
+                onClick={() => {
+                  const next = !rememberMe
+                  setRememberMe(next)
+                  if (!next) { try { localStorage.removeItem("cecy-client-info") } catch {} }
+                }}
+                className="flex items-center gap-3 pt-1 group"
+              >
+                <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all flex-shrink-0 ${rememberMe ? "border-[#00bcd4] bg-[#00bcd4]" : "border-white/20 group-hover:border-white/40"}`}>
+                  {rememberMe && (
+                    <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                      <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                </div>
+                <span className="text-sm text-white/50 group-hover:text-white/70 transition">Recuérdame para la próxima vez</span>
+              </button>
             </div>
             <div className="flex gap-3 mt-8">
               <button onClick={() => setStep("datetime")} className="flex-1 py-3.5 rounded-xl border border-white/12 text-white/50 hover:text-white hover:border-white/20 transition text-sm font-medium flex items-center justify-center gap-2">
                 <ArrowLeft size={14} /> Atrás
               </button>
               <button
-                onClick={() => clientName && clientPhone && setStep("notify")}
+                onClick={() => {
+                  if (!clientName || !clientPhone) return
+                  if (rememberMe) {
+                    try { localStorage.setItem("cecy-client-info", JSON.stringify({ name: clientName, phone: clientPhone, email: clientEmail })) } catch {}
+                  }
+                  setStep("notify")
+                }}
                 disabled={!clientName || !clientPhone}
                 className="flex-1 py-3.5 rounded-xl bg-[#00bcd4] text-white font-semibold hover:bg-[#0097a7] transition disabled:opacity-30 text-sm"
               >
@@ -659,24 +724,26 @@ export default function BookingPage() {
               <h2 className="text-2xl font-black">¿Cómo te avisamos?</h2>
               <p className="text-white/40 text-sm mt-2">Confirmación y recordatorio 1 hora antes</p>
             </div>
-            <div className="space-y-3">
+
+            {/* Panel oscuro con blur para que las cards sean legibles sobre el fondo */}
+            <div className="space-y-2.5 bg-black/55 backdrop-blur-xl rounded-2xl p-4 border border-white/8">
 
               {/* WhatsApp */}
               <button
                 type="button"
                 onClick={() => setNotifyWhatsApp(!notifyWhatsApp)}
-                className={`w-full p-4 rounded-2xl border transition-all flex items-center gap-4 text-left ${
+                className={`w-full p-4 rounded-xl border transition-all flex items-center gap-4 text-left ${
                   notifyWhatsApp
-                    ? "border-[#00bcd4] bg-[#00bcd4]/10"
-                    : "border-white/10 bg-[#1a1a1a] hover:border-white/20"
+                    ? "border-[#00bcd4] bg-[#00bcd4]/20"
+                    : "border-white/10 bg-white/5 hover:bg-white/8 hover:border-white/20"
                 }`}
               >
-                <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-xl ${notifyWhatsApp ? "bg-green-500/20" : "bg-white/5"}`}>
+                <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-xl ${notifyWhatsApp ? "bg-green-500/25" : "bg-white/8"}`}>
                   💬
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-white text-sm">WhatsApp</p>
-                  <p className="text-xs text-white/40 truncate">{clientPhone || "Tu número celular"}</p>
+                  <p className="text-xs text-white/50 truncate">{clientPhone || "Tu número celular"}</p>
                 </div>
                 <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${notifyWhatsApp ? "border-[#00bcd4] bg-[#00bcd4]" : "border-white/20"}`}>
                   {notifyWhatsApp && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>}
@@ -688,20 +755,20 @@ export default function BookingPage() {
                 type="button"
                 onClick={() => { if (clientEmail) setNotifyEmail(!notifyEmail) }}
                 disabled={!clientEmail}
-                className={`w-full p-4 rounded-2xl border transition-all flex items-center gap-4 text-left ${
+                className={`w-full p-4 rounded-xl border transition-all flex items-center gap-4 text-left ${
                   !clientEmail
-                    ? "border-white/5 opacity-40 cursor-not-allowed"
+                    ? "border-white/5 bg-white/3 opacity-40 cursor-not-allowed"
                     : notifyEmail
-                    ? "border-[#00bcd4] bg-[#00bcd4]/10"
-                    : "border-white/10 bg-[#1a1a1a] hover:border-white/20"
+                    ? "border-[#00bcd4] bg-[#00bcd4]/20"
+                    : "border-white/10 bg-white/5 hover:bg-white/8 hover:border-white/20"
                 }`}
               >
-                <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-xl ${notifyEmail && clientEmail ? "bg-blue-500/20" : "bg-white/5"}`}>
+                <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-xl ${notifyEmail && clientEmail ? "bg-blue-500/25" : "bg-white/8"}`}>
                   ✉️
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-white text-sm">Email</p>
-                  <p className="text-xs text-white/40 truncate">{clientEmail || "Vuelve atrás y agrega tu email"}</p>
+                  <p className="text-xs text-white/50 truncate">{clientEmail || "Vuelve atrás y agrega tu email"}</p>
                 </div>
                 <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${notifyEmail && clientEmail ? "border-[#00bcd4] bg-[#00bcd4]" : "border-white/20"}`}>
                   {notifyEmail && clientEmail && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>}
@@ -709,11 +776,11 @@ export default function BookingPage() {
               </button>
 
               {/* SMS - disabled */}
-              <div className="w-full p-4 rounded-2xl border border-white/5 flex items-center gap-4 opacity-30 cursor-not-allowed">
-                <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center text-xl flex-shrink-0">📱</div>
+              <div className="w-full p-4 rounded-xl border border-white/8 bg-white/3 flex items-center gap-4 opacity-35 cursor-not-allowed">
+                <div className="w-11 h-11 rounded-xl bg-white/8 flex items-center justify-center text-xl flex-shrink-0">📱</div>
                 <div className="flex-1">
                   <p className="font-semibold text-white text-sm">SMS</p>
-                  <p className="text-xs text-white/40">No disponible actualmente</p>
+                  <p className="text-xs text-white/50">No disponible actualmente</p>
                 </div>
                 <div className="w-6 h-6 rounded-full border-2 border-white/20 flex-shrink-0" />
               </div>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { sendReminderEmail } from "@/lib/resend"
+import { sendWhatsAppMessage, buildReminderMessage } from "@/lib/twilio"
 import { formatTime } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
@@ -39,8 +40,23 @@ export async function GET(req: NextRequest) {
     const appointmentLink = baseUrl ? `${baseUrl}/cita/${apt.token}` : ""
     const clientName = apt.user.name || "Cliente"
     const timeStr = formatTime(apt.date)
+    const channels = apt.notificationChannels?.split(",") ?? ["whatsapp", "email"]
+    let notified = false
 
-    if (apt.user.email) {
+    // WhatsApp reminder
+    if (apt.user.phone && channels.includes("whatsapp")) {
+      try {
+        const msg = buildReminderMessage(clientName, apt.service.name, timeStr, shopName)
+        await sendWhatsAppMessage(apt.user.phone, msg)
+        console.log("💬 WhatsApp recordatorio 1h:", apt.user.phone)
+        notified = true
+      } catch (err: any) {
+        console.error("❌ Error WhatsApp:", err.message)
+      }
+    }
+
+    // Email reminder
+    if (apt.user.email && channels.includes("email")) {
       try {
         await sendReminderEmail({
           to: apt.user.email,
@@ -51,21 +67,20 @@ export async function GET(req: NextRequest) {
           appointmentLink,
         })
         console.log("📩 Email recordatorio 1h:", apt.user.email)
-        await prisma.appointment.update({
-          where: { id: apt.id },
-          data: { notified: true },
-        })
-        sent++
+        notified = true
       } catch (err: any) {
         console.error("❌ Error email:", err.message)
       }
-    } else {
-      // Sin email — marcar para no reintentar
+    }
+
+    // Mark as notified if at least one channel succeeded (or if client has no contact info)
+    const hasNoContact = !apt.user.phone && !apt.user.email
+    if (notified || hasNoContact) {
       await prisma.appointment.update({
         where: { id: apt.id },
         data: { notified: true },
       })
-      console.warn("⚠️ Sin email:", apt.id)
+      if (notified) sent++
     }
   }
 
