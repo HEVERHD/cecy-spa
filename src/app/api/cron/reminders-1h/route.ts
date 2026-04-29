@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { sendReminderEmail } from "@/lib/resend"
-import { sendWhatsAppMessage, buildReminderMessage } from "@/lib/twilio"
+import { sendWhatsAppMessage, sendWhatsAppWithTemplate, buildReminderMessage } from "@/lib/twilio"
 import { formatTime } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
@@ -43,11 +43,21 @@ export async function GET(req: NextRequest) {
     const channels = apt.notificationChannels?.split(",") ?? ["whatsapp", "email"]
     let notified = false
 
-    // WhatsApp reminder
+    // WhatsApp reminder (uses approved Meta template)
     if (apt.user.phone && channels.includes("whatsapp")) {
+      const templateSid = process.env.TWILIO_TEMPLATE_REMINDER_1H
       try {
-        const msg = buildReminderMessage(clientName, apt.service.name, timeStr, shopName)
-        await sendWhatsAppMessage(apt.user.phone, msg)
+        if (templateSid) {
+          await sendWhatsAppWithTemplate(apt.user.phone, templateSid, {
+            "1": clientName,
+            "2": apt.service.name,
+            "3": timeStr,
+            "4": shopName,
+          })
+        } else {
+          const msg = buildReminderMessage(clientName, apt.service.name, timeStr, shopName)
+          await sendWhatsAppMessage(apt.user.phone, msg)
+        }
         console.log("💬 WhatsApp recordatorio 1h:", apt.user.phone)
         notified = true
       } catch (err: any) {

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import { sendWhatsAppMessage, sendSMS, buildConfirmationMessage, buildStatusConfirmedMessage, buildLoyaltyMessage } from "@/lib/twilio"
+import { sendWhatsAppMessage, sendWhatsAppWithTemplate, sendSMS, buildConfirmationMessage, buildStatusConfirmedMessage, buildLoyaltyMessage } from "@/lib/twilio"
 import { formatDate, formatTime, formatCurrency, parseColombia, getColombiaTime, getColombiaDateStr, getColombiaDayOfWeek, to12Hour } from "@/lib/utils"
 import { sendPushToBarber, sendPushToAdmins } from "@/lib/push"
 import { autoScheduleFromWaitlist } from "@/lib/waitlist"
@@ -278,18 +278,31 @@ export async function POST(req: NextRequest) {
   // Channels selected by the user (default: whatsapp + email)
   const channels: string[] = body.notificationChannels ?? ["whatsapp", "email"]
 
-  // WhatsApp confirmation
+  // WhatsApp confirmation (uses approved Meta template)
   if (user.phone && channels.includes("whatsapp")) {
+    const templateSid = process.env.TWILIO_TEMPLATE_CONFIRMATION
     try {
-      const whatsAppMsg = buildConfirmationMessage(
-        user.name || "Cliente",
-        appointment.service.name,
-        formatDate(appointment.date),
-        formatTime(appointment.date),
-        shopName,
-        appointmentLink,
-      )
-      await sendWhatsAppMessage(user.phone, whatsAppMsg)
+      if (templateSid) {
+        await sendWhatsAppWithTemplate(user.phone, templateSid, {
+          "1": user.name || "Cliente",
+          "2": shopName,
+          "3": appointment.service.name,
+          "4": formatDate(appointment.date),
+          "5": formatTime(appointment.date),
+          "6": appointmentLink,
+        })
+      } else {
+        // Fallback: free-form (dev / no template configured)
+        const msg = buildConfirmationMessage(
+          user.name || "Cliente",
+          appointment.service.name,
+          formatDate(appointment.date),
+          formatTime(appointment.date),
+          shopName,
+          appointmentLink,
+        )
+        await sendWhatsAppMessage(user.phone, msg)
+      }
     } catch (error) {
       console.error("Error sending WhatsApp to client:", error)
     }

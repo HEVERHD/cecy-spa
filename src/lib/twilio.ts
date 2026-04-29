@@ -23,6 +23,32 @@ function toWhatsApp(to: string): string {
 }
 
 // ── Core send ─────────────────────────────────────────────────────────────────
+/** Send a WhatsApp message using a Twilio Content Template (approved by Meta). */
+export async function sendWhatsAppWithTemplate(
+  to: string,
+  contentSid: string,
+  contentVariables: Record<string, string>
+): Promise<void> {
+  const client = getClient()
+  const dest = toWhatsApp(to)
+  if (!client) {
+    console.log(`[WhatsApp Template Mock] → ${dest} | ${contentSid}`, contentVariables)
+    return
+  }
+  try {
+    const msg = await client.messages.create({
+      from: WHATSAPP_FROM,
+      to: dest,
+      contentSid,
+      contentVariables: JSON.stringify(contentVariables),
+    })
+    console.log(`[WhatsApp Template ✓] ${dest} | SID: ${msg.sid}`)
+  } catch (err: any) {
+    console.error(`[WhatsApp Template ✗] ${dest} | ${err.message}`)
+    throw err
+  }
+}
+
 /** Send a free-form WhatsApp message via Twilio. */
 export async function sendWhatsAppMessage(to: string, message: string): Promise<void> {
   const client = getClient()
