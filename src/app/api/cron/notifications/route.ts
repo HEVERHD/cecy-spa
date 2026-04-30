@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { sendWhatsAppMessage, buildReminderMessage } from "@/lib/twilio"
+import { sendWhatsAppWithTemplate, buildReminderMessage } from "@/lib/twilio"
 import { formatCurrency, formatDate, formatTime, getColombiaDateStr } from "@/lib/utils"
 import { sendConfirmationEmail } from "@/lib/resend"
 
@@ -65,16 +65,20 @@ export async function GET(req: NextRequest) {
     const channels = appointment.notificationChannels?.split(",") ?? ["whatsapp", "email"]
     let success = false
 
-    // ── WhatsApp ────────────────────────────────────────────────
+    // ── WhatsApp (template requerido fuera de ventana 24h) ───────
     if (appointment.user.phone && channels.includes("whatsapp")) {
+      const templateSid = process.env.TWILIO_TEMPLATE_REMINDER_1H
       try {
-        const message = buildReminderMessage(
-          appointment.user.name || "Cliente",
-          appointment.service.name,
-          formatTime(appointment.date),
-          shopName
-        )
-        await sendWhatsAppMessage(appointment.user.phone, message)
+        if (templateSid) {
+          await sendWhatsAppWithTemplate(appointment.user.phone, templateSid, {
+            "1": appointment.user.name || "Cliente",
+            "2": appointment.service.name,
+            "3": formatTime(appointment.date),
+            "4": shopName,
+          })
+        } else {
+          console.warn("[Cron] TWILIO_TEMPLATE_REMINDER_1H no configurado — omitiendo WhatsApp")
+        }
         sent++
         success = true
       } catch (error) {

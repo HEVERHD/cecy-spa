@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { sendReminderEmail } from "@/lib/resend"
-import { sendWhatsAppMessage, sendWhatsAppWithTemplate, buildReminderMessage } from "@/lib/twilio"
+import { sendWhatsAppWithTemplate } from "@/lib/twilio"
 import { formatTime } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
@@ -43,25 +43,24 @@ export async function GET(req: NextRequest) {
     const channels = apt.notificationChannels?.split(",") ?? ["whatsapp", "email"]
     let notified = false
 
-    // WhatsApp reminder (uses approved Meta template)
+    // WhatsApp reminder — requires an approved Meta template (error 63016 if free-form)
     if (apt.user.phone && channels.includes("whatsapp")) {
       const templateSid = process.env.TWILIO_TEMPLATE_REMINDER_1H
-      try {
-        if (templateSid) {
+      if (!templateSid) {
+        console.warn("⚠️ TWILIO_TEMPLATE_REMINDER_1H not set — skipping WhatsApp reminder")
+      } else {
+        try {
           await sendWhatsAppWithTemplate(apt.user.phone, templateSid, {
             "1": clientName,
             "2": apt.service.name,
             "3": timeStr,
             "4": shopName,
           })
-        } else {
-          const msg = buildReminderMessage(clientName, apt.service.name, timeStr, shopName)
-          await sendWhatsAppMessage(apt.user.phone, msg)
+          console.log("💬 WhatsApp recordatorio 1h:", apt.user.phone)
+          notified = true
+        } catch (err: any) {
+          console.error("❌ Error WhatsApp:", err.message)
         }
-        console.log("💬 WhatsApp recordatorio 1h:", apt.user.phone)
-        notified = true
-      } catch (err: any) {
-        console.error("❌ Error WhatsApp:", err.message)
       }
     }
 
