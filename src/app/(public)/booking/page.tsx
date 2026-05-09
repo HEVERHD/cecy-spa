@@ -49,6 +49,13 @@ function toLocalDateStr(date: Date): string {
   return new Intl.DateTimeFormat("sv-SE", { timeZone: COL_TZ }).format(date)
 }
 
+function formatDuration(minutes: number): string {
+  if (minutes < 60) return `${minutes} min`
+  const h = Math.floor(minutes / 60)
+  const m = minutes % 60
+  return m === 0 ? `${minutes} min · ${h}h` : `${minutes} min · ${h}h ${m}min`
+}
+
 function formatTime(slot: string): string {
   const [h, m] = slot.split(":").map(Number)
   const period = h >= 12 ? "PM" : "AM"
@@ -459,7 +466,7 @@ export default function BookingPage() {
                       )}
                       <div className="flex items-center gap-1.5 mt-2.5">
                         <Clock size={12} className="text-white/25" />
-                        <span className="text-xs text-white/30">{service.duration} min</span>
+                        <span className="text-xs text-white/30">{formatDuration(service.duration)}</span>
                       </div>
                     </div>
                     <span className="font-black text-[#00bcd4] text-lg shrink-0">{formatPrice(service.price)}</span>
