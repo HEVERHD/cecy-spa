@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { sendWhatsAppMessage, sendWhatsAppTemplateWithSMSFallback } from "@/lib/twilio"
+import { sendWhatsAppMessage, sendWhatsAppWithTemplate, sendWhatsAppTemplateWithSMSFallback } from "@/lib/twilio"
 import { formatDate, formatTime } from "@/lib/utils"
 import { sendPushToBarber } from "@/lib/push"
 import { autoScheduleFromWaitlist } from "@/lib/waitlist"
@@ -67,6 +67,24 @@ export async function POST(req: NextRequest) {
     }
   } catch (error) {
     console.error("Error notifying barber:", error)
+  }
+
+  // WhatsApp a la administradora (template aprobado por Meta)
+  const adminPhone = process.env.ADMIN_WHATSAPP_NUMBER
+  const adminCancelTpl = process.env.TWILIO_TEMPLATE_ADMIN_CANCEL
+  if (adminPhone) {
+    if (adminCancelTpl) {
+      sendWhatsAppWithTemplate(adminPhone, adminCancelTpl, {
+        "1": updated.user.name || "Cliente",
+        "2": updated.service.name,
+        "3": formatDate(updated.date),
+        "4": formatTime(updated.date),
+      }).catch((err) => console.error("[Admin WhatsApp] Error cancelación:", err))
+    } else {
+      sendWhatsAppMessage(adminPhone,
+        `❌ Cita cancelada\n\n👤 ${updated.user.name || "Cliente"}\n💆 ${updated.service.name}\n📅 ${formatDate(updated.date)}\n🕐 ${formatTime(updated.date)}`
+      ).catch((err) => console.error("[Admin WhatsApp] Error cancelación:", err))
+    }
   }
 
   // Push notification to the assigned barber

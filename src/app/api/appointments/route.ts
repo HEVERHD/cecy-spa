@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import { sendWhatsAppMessage, sendWhatsAppWithTemplate, sendSMS, buildConfirmationMessage, buildStatusConfirmedMessage, buildLoyaltyMessage } from "@/lib/twilio"
+import { sendWhatsAppMessage, sendWhatsAppWithTemplate, sendSMS, buildConfirmationMessage, buildBarberNotification, buildStatusConfirmedMessage, buildLoyaltyMessage } from "@/lib/twilio"
 import { formatDate, formatTime, formatCurrency, parseColombia, getColombiaTime, getColombiaDateStr, getColombiaDayOfWeek, to12Hour } from "@/lib/utils"
 import { sendPushToBarber, sendPushToAdmins } from "@/lib/push"
 import { autoScheduleFromWaitlist } from "@/lib/waitlist"
@@ -333,6 +333,30 @@ export async function POST(req: NextRequest) {
   }
   sendPushToBarber(appointment.barber.id, pushPayload).catch(() => {})
   sendPushToAdmins(pushPayload, appointment.barber.id).catch(() => {})
+
+  // WhatsApp a la administradora (template aprobado por Meta)
+  const adminPhone = process.env.ADMIN_WHATSAPP_NUMBER
+  const adminNewTpl = process.env.TWILIO_TEMPLATE_ADMIN_NEW
+  if (adminPhone) {
+    if (adminNewTpl) {
+      sendWhatsAppWithTemplate(adminPhone, adminNewTpl, {
+        "1": user.name || "Cliente",
+        "2": appointment.service.name,
+        "3": formatDate(appointment.date),
+        "4": formatTime(appointment.date),
+        "5": formatCurrency(appointment.service.price),
+      }).catch((err) => console.error("[Admin WhatsApp] Error nueva cita:", err))
+    } else {
+      sendWhatsAppMessage(adminPhone, buildBarberNotification(
+        user.name || "Cliente",
+        appointment.service.name,
+        formatDate(appointment.date),
+        formatTime(appointment.date),
+        formatCurrency(appointment.service.price),
+        body.bookedBy || "CLIENT",
+      )).catch((err) => console.error("[Admin WhatsApp] Error nueva cita:", err))
+    }
+  }
 
   return NextResponse.json(appointment, { status: 201 })
 }
