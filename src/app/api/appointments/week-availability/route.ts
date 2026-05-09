@@ -60,7 +60,8 @@ export async function GET(req: NextRequest) {
     return h * 60 + m
   }
 
-  const availability: Record<string, "available" | "full" | "off"> = {}
+  const FEW_THRESHOLD = 4 // 4 o menos slots → "pocas horas"
+  const availability: Record<string, "available" | "few" | "full" | "off"> = {}
 
   for (const dateStr of dates) {
     const dayStart = parseColombia(dateStr + "T00:00:00")
@@ -101,8 +102,8 @@ export async function GET(req: NextRequest) {
       return d >= dayStart && d < dayEnd
     })
 
-    // Scan slots — stop as soon as we find one available slot
-    let hasAvailable = false
+    // Scan slots — count available slots (up to FEW_THRESHOLD+1 to classify)
+    let availableCount = 0
     for (let m = startMin; m + service.duration <= endMin; m += 15) {
       const slotStart = m
       const slotEnd = m + service.duration
@@ -130,11 +131,14 @@ export async function GET(req: NextRequest) {
         })
       if (isBlocked) continue
 
-      hasAvailable = true
-      break
+      availableCount++
+      if (availableCount > FEW_THRESHOLD) break // No need to count further
     }
 
-    availability[dateStr] = hasAvailable ? "available" : "full"
+    availability[dateStr] =
+      availableCount === 0 ? "full"
+      : availableCount <= FEW_THRESHOLD ? "few"
+      : "available"
   }
 
   return NextResponse.json({ availability })

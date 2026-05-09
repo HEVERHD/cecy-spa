@@ -97,7 +97,7 @@ export default function BookingPage() {
   const [weekStart, setWeekStart] = useState(() => getWeekStart(new Date()))
   const [shopName, setShopName] = useState("Mi Spa")
   const [rememberMe, setRememberMe] = useState(false)
-  const [weekAvailability, setWeekAvailability] = useState<Record<string, "available" | "full" | "off">>({})
+  const [weekAvailability, setWeekAvailability] = useState<Record<string, "available" | "few" | "full" | "off">>({})
 
   // ── Data fetching ──────────────────────────────────────────
   // Pre-fill client info from localStorage on first render
@@ -536,13 +536,32 @@ export default function BookingPage() {
                       {!isPast && avail === "available" && (
                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                       )}
+                      {!isPast && avail === "few" && (
+                        <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                      )}
                       {!isPast && avail === "full" && (
-                        <div className="w-1.5 h-1.5 rounded-full bg-red-400/70" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-white/25" />
                       )}
                     </div>
                   </div>
                 )
               })}
+            </div>
+
+            {/* Legend */}
+            <div className="flex items-center justify-center gap-4 mt-3 mb-4">
+              <div className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <span className="text-[10px] text-white/35">Disponible</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                <span className="text-[10px] text-white/35">Pocas horas</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-white/25" />
+                <span className="text-[10px] text-white/35">Completo</span>
+              </div>
             </div>
 
             {/* Divider */}
@@ -588,8 +607,12 @@ export default function BookingPage() {
                 )}
               </div>
             ) : (
-              <div className="grid grid-cols-4 gap-2">
-                {slots.map((slot) => {
+              (() => {
+                const morning   = slots.filter((s) => parseInt(s) < 12)
+                const afternoon = slots.filter((s) => { const h = parseInt(s); return h >= 12 && h < 18 })
+                const evening   = slots.filter((s) => parseInt(s) >= 18)
+
+                const SlotButton = ({ slot }: { slot: string }) => {
                   const [h, m] = slot.split(":").map(Number)
                   const period = h >= 12 ? "PM" : "AM"
                   const hour = h % 12 || 12
@@ -597,7 +620,6 @@ export default function BookingPage() {
                   const isSelected = selectedTime === slot
                   return (
                     <button
-                      key={slot}
                       onClick={() => { setSelectedTime(slot); setTimeout(() => setStep("info"), 150) }}
                       className={`py-3 rounded-xl border transition flex flex-col items-center gap-0.5
                         ${isSelected
@@ -609,8 +631,31 @@ export default function BookingPage() {
                       <span className={`text-[10px] leading-tight ${isSelected ? "text-white/70" : "text-white/30"}`}>{period}</span>
                     </button>
                   )
-                })}
-              </div>
+                }
+
+                const Section = ({ label, icon, sectionSlots }: { label: string; icon: string; sectionSlots: string[] }) => {
+                  if (sectionSlots.length === 0) return null
+                  return (
+                    <div className="mb-5">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-base leading-none">{icon}</span>
+                        <span className="text-[11px] font-bold text-white/35 uppercase tracking-widest">{label}</span>
+                      </div>
+                      <div className="grid grid-cols-4 gap-2">
+                        {sectionSlots.map((slot) => <SlotButton key={slot} slot={slot} />)}
+                      </div>
+                    </div>
+                  )
+                }
+
+                return (
+                  <div>
+                    <Section label="Mañana"  icon="🌅" sectionSlots={morning} />
+                    <Section label="Tarde"   icon="☀️" sectionSlots={afternoon} />
+                    <Section label="Noche"   icon="🌙" sectionSlots={evening} />
+                  </div>
+                )
+              })()
             )}
 
             {/* Nav */}
