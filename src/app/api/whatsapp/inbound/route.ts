@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { sendWhatsAppMessage } from "@/lib/twilio"
+import { sendWhatsAppMessage, sendWhatsAppWithTemplate } from "@/lib/twilio"
 import { prisma } from "@/lib/prisma"
 
 const ADMIN_NUMBER = process.env.ADMIN_WHATSAPP_NUMBER || "+573102848135"
@@ -85,14 +85,22 @@ export async function POST(req: NextRequest) {
       // DB lookup failed — fall back to number only
     }
 
-    const forwardMsg =
-      `📨 *Mensaje de cliente*\n` +
-      `👤 ${clientLabel}\n\n` +
-      `"${body}"\n\n` +
-      `↩️ Responde:\nREPLY ${displayNumber} Tu respuesta aquí`
+    const relaySid = process.env.TWILIO_TEMPLATE_RELAY_CLIENT
 
     try {
-      await sendWhatsAppMessage(ADMIN_NUMBER, forwardMsg)
+      if (relaySid) {
+        await sendWhatsAppWithTemplate(ADMIN_NUMBER, relaySid, {
+          "1": clientLabel,
+          "2": body,
+          "3": displayNumber,
+        })
+      } else {
+        // Fallback free-form (solo funciona si hay sesión abierta)
+        await sendWhatsAppMessage(
+          ADMIN_NUMBER,
+          `📨 Mensaje de ${clientLabel}\n\n"${body}"\n\n↩️ Responde:\nREPLY ${displayNumber} Tu respuesta aquí`
+        )
+      }
       console.log(`[WA Relay] ${senderNumber} → admin: reenviado`)
     } catch (err: any) {
       console.error(`[WA Relay] Error reenviando al admin: ${err.message}`)
