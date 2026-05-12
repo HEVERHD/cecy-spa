@@ -65,7 +65,7 @@ const TL_END = 24     // 12 AM (midnight)
 function getColombiaMinute(date: Date): number {
   return parseInt(new Intl.DateTimeFormat("en-US", { minute: "numeric", timeZone: COL_TZ }).format(date))
 }
-const TL_TOP_OFFSET = 12 // px de padding para que el label de la primera hora no quede cortado
+const TL_TOP_OFFSET = 28 // px de padding para que el label de la primera hora no quede cortado
 function timeToY(h: number, m: number): number {
   return ((h - TL_START) * 60 + m) / 60 * HOUR_HEIGHT + TL_TOP_OFFSET
 }
