@@ -65,8 +65,9 @@ const TL_END = 24     // 12 AM (midnight)
 function getColombiaMinute(date: Date): number {
   return parseInt(new Intl.DateTimeFormat("en-US", { minute: "numeric", timeZone: COL_TZ }).format(date))
 }
+const TL_TOP_OFFSET = 12 // px de padding para que el label de la primera hora no quede cortado
 function timeToY(h: number, m: number): number {
-  return ((h - TL_START) * 60 + m) / 60 * HOUR_HEIGHT
+  return ((h - TL_START) * 60 + m) / 60 * HOUR_HEIGHT + TL_TOP_OFFSET
 }
 function aptEndTime(apt: { date: string; service: { duration: number } }): Date {
   return new Date(new Date(apt.date).getTime() + apt.service.duration * 60000)
@@ -806,14 +807,14 @@ export default function AppointmentsPage() {
           ) : (
             <div
               className="relative ml-12"
-              style={{ height: (TL_END - TL_START) * HOUR_HEIGHT }}
+              style={{ height: (TL_END - TL_START) * HOUR_HEIGHT + TL_TOP_OFFSET }}
             >
               {/* Hour grid lines + labels */}
               {Array.from({ length: TL_END - TL_START + 1 }, (_, i) => i + TL_START).map((hour) => (
                 <div
                   key={hour}
                   className="absolute left-0 right-0 border-t border-[#0e2530]/60"
-                  style={{ top: (hour - TL_START) * HOUR_HEIGHT }}
+                  style={{ top: (hour - TL_START) * HOUR_HEIGHT + TL_TOP_OFFSET }}
                 >
                   <span className="absolute -left-11 -top-2.5 text-[10px] text-white/25 w-10 text-right pr-1">
                     {hourTo12(hour)}
@@ -1347,13 +1348,13 @@ export default function AppointmentsPage() {
                   <p className="text-white/30 text-sm">Sin citas para este día</p>
                 </div>
               ) : (
-                <div className="relative ml-16" style={{ height: (TL_END - TL_START) * HOUR_HEIGHT }}>
+                <div className="relative ml-16" style={{ height: (TL_END - TL_START) * HOUR_HEIGHT + TL_TOP_OFFSET }}>
                   {/* Hour grid lines + labels */}
                   {Array.from({ length: TL_END - TL_START + 1 }, (_, i) => i + TL_START).map((hour) => (
                     <div
                       key={hour}
                       className="absolute left-0 right-0 border-t border-[#0e2530]/60"
-                      style={{ top: (hour - TL_START) * HOUR_HEIGHT }}
+                      style={{ top: (hour - TL_START) * HOUR_HEIGHT + TL_TOP_OFFSET }}
                     >
                       <span className="absolute -left-14 -top-2.5 text-xs text-white/25 w-12 text-right pr-2">
                         {hourTo12(hour)}
