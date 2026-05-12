@@ -27,7 +27,7 @@ const STATUS_MAP: Record<string, { label: string; color: string; dot: string }> 
 }
 
 const DAYS_ES = ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"]
-const HOURS = Array.from({ length: 17 }, (_, i) => i + 7) // 7:00 - 23:00
+const HOURS = Array.from({ length: 19 }, (_, i) => i + 5) // 5:00 - 23:00
 
 const COL_TZ = "America/Bogota"
 
@@ -59,7 +59,7 @@ function getWeekDays(dateStr: string) {
 
 // ── Real-time timeline constants ────────────────────────────
 const HOUR_HEIGHT = 84 // px per hour
-const TL_START = 7    // 7 AM
+const TL_START = 5    // 5 AM
 const TL_END = 24     // 12 AM (midnight)
 
 function getColombiaMinute(date: Date): number {
@@ -1026,7 +1026,7 @@ export default function AppointmentsPage() {
                     onClick={() => { setActionApt(null); setCompletionApt(actionApt) }}
                     className="w-full py-3 rounded-xl bg-green-900/30 text-green-400 font-medium text-sm hover:bg-green-900/50 transition"
                   >
-                    💈 Marcar como completada
+                    🪷 Marcar como completada
                   </button>
                   <button
                     onClick={() => { updateStatus(actionApt.id, "NO_SHOW"); setActionApt(null) }}
@@ -1207,7 +1207,7 @@ export default function AppointmentsPage() {
             <div className="px-5 pt-2 pb-4 border-b border-[#0e2530]">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-bold text-white text-base">💈 ¡Listo el corte!</p>
+                  <p className="font-bold text-white text-base">🪷 ¡Listo tu servicio!</p>
                   <p className="text-xs text-white/40 mt-0.5">
                     {completionApt.user.name || "Cliente"} · {completionApt.service.name}
                   </p>

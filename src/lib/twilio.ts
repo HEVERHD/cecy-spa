@@ -121,6 +121,7 @@ export function buildConfirmationMessage(
   if (appointmentLink) {
     msg += `\n\n🔗 Ver / cancelar:\n${appointmentLink}`
   }
+  msg += `\n\n📱 ¿Dudas? Escríbenos al WhatsApp:\n3244476797`
   return msg
 }
 

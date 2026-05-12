@@ -417,7 +417,7 @@ export default function BookingPage() {
               <p className="text-xs font-bold text-[#00bcd4] tracking-[0.2em] uppercase mb-2">
                 {barbers.length > 1 ? "Paso 2" : "Paso 1"}
               </p>
-              <h2 className="text-2xl font-black">Elige tu servicio</h2>
+              <h2 className="text-2xl font-black">Escoge tu servicio</h2>
             </div>
 
             {/* Search bar */}

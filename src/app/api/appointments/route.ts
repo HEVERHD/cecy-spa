@@ -373,7 +373,7 @@ export async function PATCH(req: NextRequest) {
   if (body.date && !body.status) {
     const updated = await prisma.appointment.update({
       where: { id: body.id },
-      data: { date: new Date(body.date), status: "CONFIRMED", notified: false },
+      data: { date: parseColombia(body.date), status: "CONFIRMED", notified: false },
       include: { service: true, user: true, barber: { select: { id: true, name: true } } },
     })
 
