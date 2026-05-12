@@ -143,7 +143,7 @@ export default async function Home() {
                 Nuestros servicios
               </p>
               <h2 className="text-4xl md:text-5xl font-black leading-tight">
-                Elige tu corte
+                ¿Qué quieres hoy?
               </h2>
             </div>
             <Link
@@ -156,7 +156,7 @@ export default async function Home() {
           </div>
 
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
-            {services.map((service: (typeof services)[number], i: number) => (
+            {services.slice(0, 3).map((service: (typeof services)[number], i: number) => (
               <div
                 key={service.id}
                 className={`relative group rounded-2xl p-7 border transition-all duration-300 hover:-translate-y-1 ${
@@ -204,6 +204,19 @@ export default async function Home() {
               </div>
             ))}
           </div>
+
+          {/* CTA ver todos */}
+          {services.length > 3 && (
+            <div className="mt-10 text-center">
+              <Link
+                href="/booking"
+                className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 text-white font-semibold transition-all duration-300 group"
+              >
+                Ver los {services.length} servicios
+                <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
