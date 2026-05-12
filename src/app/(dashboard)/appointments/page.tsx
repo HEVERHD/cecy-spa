@@ -161,6 +161,15 @@ export default function AppointmentsPage() {
   const [uploadTitle, setUploadTitle] = useState("")
   const [uploadUploading, setUploadUploading] = useState(false)
   const photoInputRef = useRef<HTMLInputElement>(null)
+  const timelineNowRef = useRef<HTMLDivElement>(null)
+
+  // Auto-scroll to current time line on load / date change
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      timelineNowRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [selectedDate])
   const { toast } = useToast()
   const { data: session } = useSession()
   const role = (session?.user as any)?.role || "BARBER"
@@ -820,7 +829,7 @@ export default function AppointmentsPage() {
                 const y = timeToY(nowH, nowM)
                 const timeLabel = now.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit", hour12: true, timeZone: COL_TZ })
                 return (
-                  <div className="absolute left-0 right-0 z-20 flex items-center" style={{ top: y }}>
+                  <div ref={timelineNowRef} className="absolute left-0 right-0 z-20 flex items-center" style={{ top: y }}>
                     <div className="w-2 h-2 rounded-full bg-red-500 -ml-1 flex-shrink-0" />
                     <div className="flex-1 h-px bg-red-500" />
                     <span className="text-[9px] text-red-400 px-1 bg-[#0a1520] flex-shrink-0">{timeLabel}</span>
@@ -1362,7 +1371,7 @@ export default function AppointmentsPage() {
                       hour: "2-digit", minute: "2-digit", hour12: true, timeZone: COL_TZ,
                     })
                     return (
-                      <div className="absolute left-0 right-0 z-20 flex items-center" style={{ top: y }}>
+                      <div ref={timelineNowRef} className="absolute left-0 right-0 z-20 flex items-center" style={{ top: y }}>
                         <div className="w-2.5 h-2.5 rounded-full bg-red-500 -ml-1.5 flex-shrink-0" />
                         <div className="flex-1 h-px bg-red-500" />
                         <span className="text-xs text-red-400 px-2 bg-[#0a1520] flex-shrink-0">{timeLabel}</span>
