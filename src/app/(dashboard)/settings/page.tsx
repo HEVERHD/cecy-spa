@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react"
 import { QRCodeSVG } from "qrcode.react"
 import { useToast } from "@/components/ui/toast"
 import { PushSubscribeButton } from "@/components/ui/push-subscribe-button"
+import { PhoneInput } from "@/components/ui/phone-input"
 
 const DAYS = [
   { value: "0", label: "Domingo" },
@@ -277,12 +278,11 @@ export default function SettingsPage() {
             </div>
             <div>
               <label className="text-sm font-medium text-white/60">WhatsApp del profesional</label>
-              <input
-                type="tel"
+              <PhoneInput
                 value={settings.phone}
-                onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
-                placeholder="+57 3001234567"
-                className="w-full mt-1 p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40"
+                onChange={(v) => setSettings({ ...settings, phone: v })}
+                placeholder="3001234567"
+                className="w-full mt-1"
               />
             </div>
             <div>

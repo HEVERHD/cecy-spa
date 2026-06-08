@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { useToast } from "@/components/ui/toast"
 import { Trash2, UserPlus, X, Camera, KeyRound } from "lucide-react"
+import { PhoneInput } from "@/components/ui/phone-input"
 
 type User = {
   id: string
@@ -252,12 +253,11 @@ export default function UsersPage() {
               </div>
               <div>
                 <label className="text-xs font-semibold text-white/40 uppercase tracking-wider block mb-1.5">Teléfono</label>
-                <input
-                  type="tel"
+                <PhoneInput
                   value={newUser.phone}
-                  onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })}
-                  placeholder="+57 300 123 4567"
-                  className="w-full p-3 bg-[#080f16] border border-[#0e2530] rounded-xl text-white placeholder-white/25 focus:border-[#00bcd4] focus:outline-none text-sm"
+                  onChange={(v) => setNewUser({ ...newUser, phone: v })}
+                  placeholder="300 123 4567"
+                  className="w-full"
                 />
               </div>
               <div>

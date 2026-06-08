@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useToast } from "@/components/ui/toast"
+import { PhoneInput } from "@/components/ui/phone-input"
 
 type Client = {
   id: string
@@ -281,12 +282,11 @@ export default function ClientsPage() {
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40 text-sm"
             />
-            <input
-              type="tel"
-              placeholder="WhatsApp (+57...) *"
+            <PhoneInput
               value={form.phone}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              className="p-3 border border-[#0e2530] rounded-xl focus:border-[#00bcd4] focus:outline-none bg-[#080f16] text-white placeholder-white/40 text-sm"
+              onChange={(v) => setForm({ ...form, phone: v })}
+              placeholder="300 123 4567"
+              className="w-full"
             />
             <input
               type="email"

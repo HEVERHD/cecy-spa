@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeft, Clock, Scissors, ChevronLeft, ChevronRight, Search } from "lucide-react"
+import { PhoneInput } from "@/components/ui/phone-input"
 
 type Barber = {
   id: string
@@ -591,7 +592,7 @@ export default function BookingPage() {
                   <div className="text-left space-y-3">
                     <p className="text-sm text-white/50 font-medium mb-3">Lista de espera</p>
                     <input type="text" placeholder="Tu nombre" value={waitlistName} onChange={(e) => setWaitlistName(e.target.value)} className={inputCls} />
-                    <input type="tel" placeholder="+57 3001234567" value={waitlistPhone} onChange={(e) => setWaitlistPhone(e.target.value)} className={inputCls} />
+                    <PhoneInput value={waitlistPhone} onChange={setWaitlistPhone} placeholder="3001234567" bg="bg-[#151515]" border="border-white/12" padding="p-3.5" className="w-full" />
                     <div className="flex gap-3">
                       <button onClick={() => setShowWaitlist(false)} className="flex-1 py-3 rounded-xl border border-white/12 text-white/50 hover:text-white transition text-sm">Cancelar</button>
                       <button onClick={handleWaitlistSubmit} disabled={waitlistSubmitting || !waitlistName || !waitlistPhone} className="flex-1 py-3 rounded-xl bg-[#00bcd4] text-white font-medium hover:bg-[#0097a7] transition disabled:opacity-50 text-sm">
@@ -718,7 +719,7 @@ export default function BookingPage() {
               </div>
               <div>
                 <label className="text-xs font-semibold text-white/40 uppercase tracking-wider block mb-2">WhatsApp *</label>
-                <input type="tel" value={clientPhone} onChange={(e) => setClientPhone(e.target.value)} placeholder="+57 300 123 4567" className={inputCls} />
+                <PhoneInput value={clientPhone} onChange={setClientPhone} placeholder="300 123 4567" bg="bg-[#151515]" border="border-white/12" padding="p-3.5" className="w-full" />
               </div>
               <div>
                 <label className="text-xs font-semibold text-white/40 uppercase tracking-wider block mb-2">Email <span className="normal-case font-normal text-white/20">(opcional)</span></label>
