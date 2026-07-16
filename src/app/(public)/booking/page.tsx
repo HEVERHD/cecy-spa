@@ -321,6 +321,22 @@ export default function BookingPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/40 to-black/75" />
       </div>
 
+      {/* ── SERVICIO SUSPENDIDO ── */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-6" style={{ background: "rgba(0,0,0,0.88)", backdropFilter: "blur(8px)" }}>
+        <div style={{ background: "#0d0d0d", border: "2px solid #dc2626", borderRadius: "20px", padding: "40px 32px", maxWidth: "420px", width: "100%", textAlign: "center", boxShadow: "0 0 60px rgba(220,38,38,0.3)" }}>
+          <div style={{ fontSize: "64px", marginBottom: "16px" }}>🚫</div>
+          <h1 style={{ color: "#ef4444", fontWeight: 900, fontSize: "22px", marginBottom: "12px", lineHeight: 1.3 }}>
+            SERVICIO SUSPENDIDO
+          </h1>
+          <p style={{ color: "#fde68a", fontWeight: 700, fontSize: "15px", marginBottom: "8px" }}>
+            Las citas no están disponibles en este momento.
+          </p>
+          <p style={{ color: "#9ca3af", fontSize: "13px", lineHeight: 1.6 }}>
+            La mensualidad del sistema no ha sido cancelada. Contacta al establecimiento directamente para más información.
+          </p>
+        </div>
+      </div>
+
       {/* Ambient glow */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-[#00bcd4]/8 rounded-full blur-[120px] pointer-events-none z-10" />
 
