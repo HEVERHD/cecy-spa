@@ -4,7 +4,6 @@ import "./globals.css"
 import { Providers } from "@/components/shared/providers"
 import { PWARegister } from "@/components/shared/pwa-register"
 import { PWAInstallPrompt } from "@/components/shared/pwa-install-prompt"
-import { PaymentBanner } from "@/components/shared/payment-banner"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -67,8 +66,6 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/logo.png" />
       </head>
       <body className={inter.className}>
-        <PaymentBanner />
-        <div style={{ height: "88px" }} aria-hidden="true" />
         <Providers>{children}</Providers>
         <PWARegister />
         <PWAInstallPrompt />
